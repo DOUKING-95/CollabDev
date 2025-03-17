@@ -1,0 +1,10 @@
+feature-mobile-ui par 
+User Story : UI/UX mobile 
+En tant qu’utilisateur de CollabDev , je veux pouvoir utilisé l’application  facilement sur  mon téléphone , afin de pouvoir avoir des idées de projet n’importe où.
+
+Definition of Done :
+L'application doit être responsive et parfaitement fonctionnelle sur différents types de téléphones (iOS et Android).
+Les actions principales doivent être accessibles en un ou deux clics/taps ( voir les idées de projets, ajouter un projet, interagir avec d'autres utilisateurs).
+L'application doit offrir une expérience fluide, sans lenteur ou plantage.
+Des mécanismes de feedback doivent être mis en place pour recueillir les impressions des utilisateurs concernant l'expérience mobile (via un formulaire ou une section dédiée).
+L’application doit présenter une hiérarchie visuelle claire et cohérente (par exemple, mise en avant des actions principales).
