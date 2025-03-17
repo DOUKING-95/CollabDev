@@ -1,0 +1,21 @@
+Nous nous mettons sur le bureau:
+cd desktop
+Création du dossier de travail sur le bureau:
+mkdir CollabDev
+Nous nous positionnons sur notre dossier CollabDev:
+cd CollabDev
+Nous allons importer nos fichiers du dépôt distant github vers notre dépôt local CollabDev sur le bureau:
+git clone https://github.com/DOUKING-95/CollabDev.git
+
+Vérification de l'importation du dépôt distant:
+cd CollabDev
+ls -a
+
+Création de la branche:
+git checkout -b setup-project
+
+Vérification de la création de la branche:
+git branch
+
+Crétion d'un fichier sur la branch setup-project:
+touch setup.txt
