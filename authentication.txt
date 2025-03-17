@@ -1,0 +1,12 @@
+Authentification (Inscription, connexion)
+Inscription
+User story : En tant qu’utilisateur je veux pouvoir m'inscrire.
+DoD : Saisir un adresse email format email (@gmail.com),
+saisir un mot de passe (minimum 8 caractère dont une lettre majuscule un caractère spécial et un chiffre),
+saisir un nom d’utilisateur, un message d’erreur apparaît si l’un des champs n’a pas été rempli,
+si tout est correct orientation vers la page d'accueil.
+connexion
+User story : En tant qu’utilisateur je veux pouvoir me connecter.
+DoD : Saisir une adresse email valide, saisir un mot de passe valide,
+redirection  vers la page d’accueil,
+sinon apparition d’un message d’erreur pour indiquer le champ contenant les données incorrectes.
