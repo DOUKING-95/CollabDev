@@ -1,0 +1,16 @@
+Système de récompenses (pièces) 
+User story :
+En tant que développeur
+Je souhaite pouvoir gagner des pièces en fonction de mon niveau (Débutant, Intermédiaire, Avancé),
+Afin de pouvoir utiliser ces pièces pour accéder à d'autres projets et fonctionnalités sur la plateforme **CollabDev**. 
+Definition of Done (DoD) :
+-  L'utilisateur peut voir son solde de pièces sur son tableau de bord.
+-  L'utilisateur gagne des pièces en fonction des tâches réalisées et débloque des niveau :
+-  Niveau Débutant : X pièces
+-  Niveau Intermédiaire : Y pièces
+-  Niveau Avancé : Z pièces
+-  L'utilisateur peut utiliser ses pièces pour débloquer de nouveaux projets ou accéder à des fonctionnalités spécifiques.
+-  L'utilisateur est informé lorsqu'il a gagné des pièces, par une notification sur son tableau de bord.
+-  La logique d'attribution des pièces en fonction du niveau est clairement documentée et disponible pour consultation.
+-  Le système de récompenses est testé et vérifié sur l'interface de l'utilisateur
+
