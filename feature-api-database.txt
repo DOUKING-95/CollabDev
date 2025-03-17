@@ -1,0 +1,13 @@
+Base de données et API
+
+User Story : Base de données et API
+En tant que développeur,
+ Je veux qu'une base de données et une API gèrent les utilisateurs, les projets et les contributions,
+ Afin que les développeurs puissent s'inscrire, soumettre du code et gagner des récompenses en fonction de leur niveau.
+Definition of Done (DoD)
+La base de données est structurée avec les tables nécessaires (utilisateurs, projets, contributions, niveaux, récompenses).
+L'API REST permet d'ajouter, modifier, récupérer et supprimer des utilisateurs, projets et contributions.
+L'authentification et l'autorisation sont mises en place (JWT ou OAuth).
+La documentation API est disponible (Swagger ou Postman).
+Les tests unitaires et d’intégration sont réalisés avec un taux de couverture acceptable.
+Les performances et la sécurité sont vérifiées.
