@@ -1,0 +1,49 @@
+
+Création et gestion des projets
+User Stories
+Proposition d’un projet
+
+
+En tant qu'utilisateur, je veux pouvoir proposer une idée de projet en renseignant son nom, domaine et description afin que les développeurs puissent y contribuer.
+Consultation et sélection d’un projet
+
+
+En tant que développeur, je veux pouvoir consulter la liste des projets disponibles et en choisir un en fonction de mon niveau et de mes compétences.
+Développement et soumission d’une fonctionnalité
+
+
+En tant que développeur, je veux pouvoir proposer ou sélectionner une fonctionnalité, travailler dessus et soumettre mon code pour validation.
+Validation et revue de code
+
+
+En tant que développeur intermédiaire ou avancé, je veux pouvoir relire, commenter et valider les fonctionnalités soumises afin de garantir la qualité du projet.
+(A retirer)
+Attribution des récompenses
+
+
+En tant que développeur, je veux gagner des pièces après la validation de mes contributions afin d’accéder à des projets de niveau supérieur.
+
+Définition of Done (DoD)
+Proposition d’un projet
+Un utilisateur doit pouvoir proposer des idées de projets en renseignant son nom, son domaine et une description pour chaque projet.
+L’utilisateur doit pouvoir voir automatiquement le projet soumis dans la liste publique avec son statut (en attente, en cours, terminé).
+L’utilisateur doit recevoir une notification pour son projet lorsqu’un développeur commence à contribuer.
+Sélection et développement d’une fonctionnalité
+Il faut permettre aux développeurs de consulter la liste des fonctionnalités et de sélectionner une tâche librement.
+Les développeurs doivent soumettre leurs fonctionnalités avec un commentaire explicatif et voir son statut (attente de validation).
+Validation et revue de code
+Il faut restreindre l’accès aux fonctionnalités en attente aux développeurs intermédiaires et avancés.
+Il faut autoriser ces développeurs à relire, commenter et valider ou demander des modifications.
+Il faut notifier l’auteur en cas de validation ou de retour et mettre à jour le statut de la fonctionnalité.
+
+(A retiré si cette partie figure dans les autres fonctionnalités)
+Attribution des récompenses
+Il faut attribuer des pièces aux développeurs pour chaque fonctionnalité validée.
+Il faut également récompenser les validateurs pour leur contribution à la revue du code.
+Il faut permettre l’utilisation des pièces pour débloquer des projets de niveau supérieur.
+Finalisation et amélioration des projets
+Il faut marquer un projet comme terminé lorsque toutes ses fonctionnalités sont validées.
+Il faut conserver le projet visible pour consultation et autoriser sa reprise ou amélioration.
+Il faut notifier le créateur initial du projet en cas de mise à jour ou d’évolution.
+Il faut considérer une tâche comme "Done" uniquement lorsque tous ces critères sont respectés sans erreur.
+
