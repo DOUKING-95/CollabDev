@@ -1,0 +1,19 @@
+feature-web-ui
+User Story : 
+En tant qu' utilisateur,
+Je veux une interface claire, simple à utiliser et intuitive,
+Afin de prendre en main facilement mon espace utilisateur et naviguer sans confusion.
+Définition (DoD) :
+Les tests utilisateurs montrent que les utilisateurs peuvent facilement naviguer dans l'application sans assistance.
+
+
+L'interface est validée pour sa clarté sur des résolutions d'écran variées et sur des appareils mobiles.
+
+
+Le design est conforme aux principes d'accessibilité, notamment pour les utilisateurs ayant des besoins spécifiques.
+
+
+Les retours des utilisateurs après un premier usage montrent une satisfaction concernant la simplicité et l'intuitivité de l'interface.
+
+
+L’interface et l’expérience utilisateur ont été testées à l'aide de prototypes interactifs avant la mise en production
