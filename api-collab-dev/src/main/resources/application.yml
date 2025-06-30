@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: api-collab-dev
+
+
+
+# Configuration de Port et context path de API
+server:
+  port: 8080
+  servlet:
+    context-path: api/collab-dev/v1
+
+
