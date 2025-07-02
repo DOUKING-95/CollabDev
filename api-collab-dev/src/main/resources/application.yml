@@ -3,9 +3,9 @@ spring:
     name: api-collab-dev
   # base de donnee configuration
   datasource:
-    url: jdbc:mysql://localhost:3306/collabdevDB
-    username: root
-    password: rootUser
+    url: jdbc:mysql://localhost:3306/collabdevdb
+    username: hamza
+    password: hamzasanmo
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -15,8 +15,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
-
-
 
 
 # Configuration de Port et context path de API
