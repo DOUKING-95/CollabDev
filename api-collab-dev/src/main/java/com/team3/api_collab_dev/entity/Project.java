@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -47,10 +48,28 @@ public class Project {
 
     private Level level;
 
+    private int coins;
+
     private String githubLink;
 
-    @OneToMany(mappedBy = "project")
-    private List<Task> tasks;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Task> tasks = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "project_members",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "profil_id")
+    )
+    private List<Profil> members = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "project_pending_profiles",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "profil_id")
+    )
+    private List<Profil> pendingProfiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Comment> comments;
