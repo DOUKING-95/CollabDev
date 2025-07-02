@@ -35,25 +35,25 @@ public class UserController {
         return  ResponseEntity.status(HttpStatus.CREATED).body(this.userService.createUser(user));
     }
 
-    @PostMapping("/login")
+    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserResponseDTO> login(@RequestBody @Valid LoginDto login) {
         User user = userService.login(login.email(), login.password());
         UserResponseDTO response = userMapper.userToDto(user);
         return ResponseEntity.ok(response);
     }
     @ResponseStatus(HttpStatus.ACCEPTED)
-    @PutMapping(path = "/changePassword/{userId}" , consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{userId}/changePassword" , consumes = MediaType.APPLICATION_JSON_VALUE)
     public  ResponseEntity<ApiReponse> changePassword(@PathVariable(name = "userId") Long userId, @RequestBody @Valid ChangePasswordDTO passwordDTO){
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse("200",
-                "Success",
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse(String.valueOf(HttpStatus.ACCEPTED.value()),
+                HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.userService.changePassword(userId, passwordDTO)));
     }
 
     @ResponseStatus(HttpStatus.ACCEPTED)
     @PutMapping(path = "/updateUserInfo/{userId}" , consumes = MediaType.APPLICATION_JSON_VALUE)
     public  ResponseEntity<ApiReponse> updateUserInfo(@PathVariable(name = "userId") Long userId, @RequestBody @Valid UserUpdateDTO updateDTO){
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse("200",
-                "Success",
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse(String.valueOf(HttpStatus.ACCEPTED.value()),
+                HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.userService.updateUserInfo(userId, updateDTO)));
     }
 

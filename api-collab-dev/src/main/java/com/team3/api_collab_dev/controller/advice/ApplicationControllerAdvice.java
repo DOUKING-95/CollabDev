@@ -10,6 +10,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
 
@@ -36,7 +37,7 @@ public class ApplicationControllerAdvice {
     }
 
     @ExceptionHandler({RuntimeException.class, EntityNotFoundException.class})
-    public ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException except, HttpServletRequest request) {
+    public @ResponseBody ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException except, HttpServletRequest request) {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(LocalDateTime.now(),
                 String.valueOf(HttpStatus.BAD_REQUEST.value()),
