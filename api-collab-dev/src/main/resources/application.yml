@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/collabdevDB
     username: root
-    password: rootUser
+    password: black.out
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
