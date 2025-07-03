@@ -43,6 +43,7 @@ public class Project {
     @OneToOne
     private User manager;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     private Level level;
@@ -63,5 +64,10 @@ public class Project {
         this.createdDate = LocalDate.now();
     }
 
-
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

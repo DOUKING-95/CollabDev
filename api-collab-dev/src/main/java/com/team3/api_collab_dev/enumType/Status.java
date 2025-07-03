@@ -1,7 +1,12 @@
 package com.team3.api_collab_dev.enumType;
 
 public enum Status {
+    PENDING,
     IN_PROGRESS,
-    DONE
+    AWAITING_VALIDATION,
+    APPROVED,
+    REJECTED
+
+
 
 }
