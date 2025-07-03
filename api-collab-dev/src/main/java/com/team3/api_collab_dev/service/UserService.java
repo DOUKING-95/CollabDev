@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private UserRepo userRepo;
-    private PasswordEncoder passwordEncoder;
+    //private PasswordEncoder passwordEncoder;
     private UserMapper userMapper;
 
 
@@ -28,7 +28,7 @@ public class UserService {
         User user = new User();
         user.setPseudo(userDto.speudo());
         user.setEmail(userDto.email());
-        user.setPassword(passwordEncoder.encode(userDto.password()));
+        //user.setPassword(passwordEncoder.encode(userDto.password()));
         user.setRole(userDto.role());
         return  this.userRepo.save(user);
     }
@@ -49,11 +49,11 @@ public class UserService {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User non trouver"));
 
-        if (!passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
+        /*if (!passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Mot de passe incorrect");
         }
 
-        user.setPassword(passwordEncoder.encode(dto.newPassword()));
+        user.setPassword(passwordEncoder.encode(dto.newPassword()));*/
 
         userRepo.save(user);
         return  "Mot de passe modifier avec success ";
@@ -69,9 +69,9 @@ public class UserService {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
 
-        if (!passwordEncoder.matches(password, user.getPassword())) {
+       /* if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException("Mot de passe incorrect");
-        }
+        }*/
 
         return user;
     }

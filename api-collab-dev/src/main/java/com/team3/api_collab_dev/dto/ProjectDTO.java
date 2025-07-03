@@ -2,7 +2,10 @@ package com.team3.api_collab_dev.dto;
 
 import com.team3.api_collab_dev.enumType.Level;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@NoArgsConstructor
 public class ProjectDTO {
 
     private Long id;
