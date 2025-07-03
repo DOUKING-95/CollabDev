@@ -26,3 +26,19 @@ server:
     context-path: /api/collab-dev/v1
 
 
+#Configuration du server SMTP
+  spring:
+    mail:
+      host: smtp.example.com
+      port: 587
+      username: hamzasanmo@gmail.com
+      password: joqn jmbw itsg gkde
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true
+
+
+
