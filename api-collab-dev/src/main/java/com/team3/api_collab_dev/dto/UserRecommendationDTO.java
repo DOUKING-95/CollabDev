@@ -1,29 +1,25 @@
 package com.team3.api_collab_dev.dto;
 
-import com.team3.api_collab_dev.entity.Profil;
-import com.team3.api_collab_dev.entity.Task;
-import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Level;
+import com.team3.api_collab_dev.enumType.ProfilType;
 import lombok.Data;
-
-import java.util.List;
 
 // DTO pour la réponse
 @Data
 public class UserRecommendationDTO {
     private Long id;
-    private User user;
+    private String pseudo;
     private Level level;
     private double coins;
-    private List<Task> tasks;
-    private Profil profil;
+    private int validatedProjects;
+    private ProfilType profilName;
 
-    public UserRecommendationDTO(Long id, User user, Level level, double coins, List<Task> tasks, Profil profil) {
+    public UserRecommendationDTO(Long id, String pseudo, Level level, double coins, int validatedProjects, ProfilType role) {
         this.id = id;
-        this.user = user;
+        this.pseudo = pseudo;
         this.level = level;
         this.coins = coins;
-        this.tasks = tasks;
-        this.profil = profil;
+        this.validatedProjects = validatedProjects;
+        this.profilName = role;
     }
 }

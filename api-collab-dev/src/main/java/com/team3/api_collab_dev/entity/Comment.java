@@ -25,7 +25,7 @@ public class Comment {
     @OneToOne
     private User author;
 
-    @OneToOne
+    @ManyToOne
     private Project project;
 
     @Column(nullable = false)
