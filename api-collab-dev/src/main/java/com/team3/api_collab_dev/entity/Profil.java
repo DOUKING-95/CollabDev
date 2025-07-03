@@ -32,6 +32,8 @@ public class Profil {
 
     private  double coins;
 
+    private int validatedProjects;
+
     @OneToOne
     private Badge badge;
 
