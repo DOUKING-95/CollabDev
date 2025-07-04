@@ -28,7 +28,7 @@ public class MailService implements MailSender {
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("noreply@collab.dev.com");
+        message.setFrom("dembeleseydou053@gmail.com");
 
         send(message);
     }
