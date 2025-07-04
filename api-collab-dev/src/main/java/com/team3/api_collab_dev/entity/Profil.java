@@ -24,7 +24,8 @@ public class Profil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -38,8 +39,11 @@ public class Profil {
     @Enumerated(EnumType.STRING)
     private ProfilType profilName;
 
-    @OneToMany(mappedBy = "profil")
+    @OneToMany(mappedBy = "profil",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> tasks;
+
+    @ManyToMany(mappedBy = "contributionRequests")
+    private List<Project> requestedProjects;
 
 
     private LocalDate createdDate;

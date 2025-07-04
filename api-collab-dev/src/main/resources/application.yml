@@ -1,13 +1,13 @@
 spring:
   application:
     name: api-collab-dev
-  # base de donnee configuration
+# base de donnee configuration
   datasource:
     url: jdbc:mysql://localhost:3306/collabdevDB
     username: root
     password: rootUser
     driver-class-name: com.mysql.cj.jdbc.Driver
-
+#Configuratio de hibernate
   jpa:
     hibernate:
       ddl-auto: update
