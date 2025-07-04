@@ -36,7 +36,7 @@ public class Project {
     @Enumerated(EnumType.STRING)
     private Domain domaine;
 
-    private String specification;
+    private String specification; //cahier de charges
 
     @OneToOne
     private User author;

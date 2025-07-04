@@ -17,15 +17,13 @@ import java.util.Map;
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "projects")
+
 public class ProjectController {
 
     private ProjectService projectService;
 
-    public void filtreProject (Project project, Level level) {
-
-    }
-
     @GetMapping("/{projectId}/pending-members")
+    //Methode qui prend l'id et renvoie une type de donnée special sous forme de dictionnaire
     public ResponseEntity<Map<String, List<UserRecommendationDTO>>> getPendingMembers(@PathVariable Long projectId) {
         try {
             // 1. Appel du service pour obtenir les recommandations
