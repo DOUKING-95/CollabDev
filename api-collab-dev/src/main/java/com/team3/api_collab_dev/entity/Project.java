@@ -43,14 +43,18 @@ public class Project {
     @OneToOne
     private User manager;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Enumerated(EnumType.STRING)
     private Level level;
 
     private String githubLink;
 
     @OneToMany(mappedBy = "project")
     private List<Task> tasks;
+
+    private double coins;
 
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Comment> comments;
