@@ -31,6 +31,9 @@ public class User {
     @Column(nullable = false)
     private RoleType role;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private  List<Profil> profils;
+
     private LocalDate createdDate;
 
     @PrePersist

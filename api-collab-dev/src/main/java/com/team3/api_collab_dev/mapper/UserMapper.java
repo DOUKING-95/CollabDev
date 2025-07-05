@@ -33,5 +33,14 @@ public class UserMapper {
 
     }
 
+    public UserCreateDTO userToCreateDto(User user){
+        return  new UserCreateDTO(
+                user.getPseudo(),
+                user.getEmail(),
+                user.getPassword(),
+                user.getRole()
+        );
+    }
+
 
 }

@@ -44,8 +44,10 @@ public class Project {
     @OneToOne
     private User manager;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Enumerated(EnumType.STRING)
     private Level level;
 
     private int coins;
@@ -71,11 +73,24 @@ public class Project {
     )
     private List<Profil> pendingProfiles = new ArrayList<>();
 
+    private double coins;
+
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Comment> comments;
 
+    @ManyToMany
+    @JoinTable(
+            name = "project_contribution_requests",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "profil_id")
+    )
+    private List<Profil> contributionRequests;
+
 
     private LocalDate createdDate;
+
+    public Project(String title, String description, Domain domain, String specification, User author) {
+    }
 
     @PrePersist
     protected void onCreate() {

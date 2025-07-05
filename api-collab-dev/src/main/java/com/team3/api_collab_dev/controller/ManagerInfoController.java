@@ -22,11 +22,11 @@ public class ManagerInfoController {
 
     private ManagerInfoService managerInfoService;
 
-    public  ResponseEntity<ApiReponse> getAllManagerInfo(){
+    public  ResponseEntity<ApiReponse<?>> getAllManagerInfo(){
         List<ManagerInfo> managerInfos = new ArrayList<>();
 
         this.managerInfoService.getAllManagerInfos().forEach(managerInfos :: add);
-         return  ResponseEntity.status(HttpStatus.ACCEPTED).body( new ApiReponse(
+         return  ResponseEntity.status(HttpStatus.ACCEPTED).body( new ApiReponse<>(
                  String.valueOf(HttpStatus.ACCEPTED.value()),
                  HttpStatus.ACCEPTED.getReasonPhrase(),
                  managerInfos
@@ -36,8 +36,8 @@ public class ManagerInfoController {
 
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiReponse> createManagerInfo(@RequestBody ManagerInfo managerInfo){
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body( new ApiReponse(
+    public ResponseEntity<ApiReponse<?>> createManagerInfo(@RequestBody ManagerInfo managerInfo){
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body( new ApiReponse<>(
                String.valueOf( HttpStatus.ACCEPTED.value()),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.managerInfoService.saveManager(managerInfo)

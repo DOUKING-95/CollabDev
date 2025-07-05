@@ -24,37 +24,66 @@ public class UserController {
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<User>> getUsers(){
+    public ResponseEntity<ApiReponse<?>> getUsers(){
         List<User> users = new ArrayList<>();
         this.userService.getAllUsers().forEach(users::add);
-        return ResponseEntity.ok(users);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        users
+                )
+        );
     }
-    @PostMapping
-    public  ResponseEntity<User> createUser(@RequestBody @Valid UserCreateDTO user){
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public  ResponseEntity<ApiReponse<?>> createUser(@RequestBody @Valid UserCreateDTO user){
 
-        return  ResponseEntity.status(HttpStatus.CREATED).body(this.userService.createUser(user));
+        return  ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.CREATED.value()),
+                        HttpStatus.CREATED.getReasonPhrase(),
+                        this.userService.createUser(user)
+                )
+        );
     }
 
-    @PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<UserResponseDTO> login(@RequestBody @Valid LoginDto login) {
+    @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiReponse<?>> login(@RequestBody @Valid LoginDto login) {
         User user = userService.login(login.email(), login.password());
-        UserResponseDTO response = userMapper.userToDto(user);
-        return ResponseEntity.ok(response);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.userService.createUser(this.userMapper.userToCreateDto(user))
+                )
+        );
     }
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(value = HttpStatus.ACCEPTED, code = HttpStatus.ACCEPTED)
     @PutMapping(path = "/{userId}/changePassword" , consumes = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<ApiReponse> changePassword(@PathVariable(name = "userId") Long userId, @RequestBody @Valid ChangePasswordDTO passwordDTO){
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse(String.valueOf(HttpStatus.ACCEPTED.value()),
+    public  ResponseEntity<ApiReponse<?>> changePassword(@PathVariable(name = "userId") Long userId, @RequestBody @Valid ChangePasswordDTO passwordDTO){
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.userService.changePassword(userId, passwordDTO)));
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
+    @ResponseStatus(value = HttpStatus.ACCEPTED,code = HttpStatus.ACCEPTED)
     @PutMapping(path = "/updateUserInfo/{userId}" , consumes = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<ApiReponse> updateUserInfo(@PathVariable(name = "userId") Long userId, @RequestBody @Valid UserUpdateDTO updateDTO){
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse(String.valueOf(HttpStatus.ACCEPTED.value()),
+    public  ResponseEntity<ApiReponse<?>> updateUserInfo(@PathVariable(name = "userId") Long userId, @RequestBody @Valid UserUpdateDTO updateDTO){
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.userService.updateUserInfo(userId, updateDTO)));
     }
 
+    @GetMapping(path = "/{userId}")
+    public  ResponseEntity<ApiReponse<?>> getUserById(@PathVariable(name = "userId") Long userId){
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.userService.getUserById(userId)
+                )
+        );
+
+    }
 }

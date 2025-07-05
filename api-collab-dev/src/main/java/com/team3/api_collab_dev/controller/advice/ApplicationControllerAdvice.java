@@ -1,6 +1,9 @@
 package com.team3.api_collab_dev.controller.advice;
 
 
+import com.team3.api_collab_dev.Exception.ExistSameEmailException;
+import com.team3.api_collab_dev.Exception.IncorrectEmailException;
+import com.team3.api_collab_dev.Exception.IncorrectPasswordException;
 import com.team3.api_collab_dev.dto.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +39,7 @@ public class ApplicationControllerAdvice {
 
     }
 
-    @ExceptionHandler({RuntimeException.class, EntityNotFoundException.class})
+    @ExceptionHandler({RuntimeException.class, EntityNotFoundException.class, ExistSameEmailException.class, IncorrectEmailException.class, IncorrectPasswordException.class})
     public @ResponseBody ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException except, HttpServletRequest request) {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(LocalDateTime.now(),

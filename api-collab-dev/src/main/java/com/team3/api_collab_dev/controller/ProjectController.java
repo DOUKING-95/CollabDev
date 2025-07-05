@@ -1,28 +1,62 @@
 package com.team3.api_collab_dev.controller;
 
 
+
 import com.team3.api_collab_dev.dto.ProjectDTO;
-import com.team3.api_collab_dev.dto.UserRecommendationDTO;
+
 import com.team3.api_collab_dev.entity.Project;
-import com.team3.api_collab_dev.enumType.Level;
+
 import com.team3.api_collab_dev.service.ProjectService;
-import com.team3.api_collab_dev.service.RecommendationService;
+
 import lombok.AllArgsConstructor;
+import com.team3.api_collab_dev.dto.ApiReponse;
+import com.team3.api_collab_dev.dto.ProjectDto;
+import com.team3.api_collab_dev.entity.Project;
+import com.team3.api_collab_dev.mapper.ProjectMapper;
+import com.team3.api_collab_dev.service.ProjectService;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import java.util.Map;
+import com.team3.api_collab_dev.service.RecommendationService;
+import com.team3.api_collab_dev.enumType.Level;
+import com.team3.api_collab_dev.dto.UserRecommendationDTO;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
-@RestController
+
+
+
+
+   
+
+
+
 @AllArgsConstructor
+@RestController
 @RequestMapping(path = "projects")
-
 public class ProjectController {
 
     private ProjectService projectService;
+    private ProjectMapper projectMapper;
 
-    @GetMapping("/{projectId}/pending-members")
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiReponse<?>> getAllProject(){
+
+        return  ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(  new ApiReponse<>(
+                      String.valueOf(  HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getAllProjects()
+
+                )
+        );
+    }
+  
+   @GetMapping("/{projectId}/pending-members")
     //Methode qui prend l'id et renvoie une type de donnée special sous forme de dictionnaire
     public ResponseEntity<Map<String, List<UserRecommendationDTO>>> getPendingMembers(@PathVariable Long projectId) {
         try {
@@ -47,5 +81,29 @@ public class ProjectController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
         }
+
+    @PostMapping
+    public  ResponseEntity<ApiReponse<?>> createProject(@RequestBody ProjectDto projectDto){
+        Project project = projectMapper.apply(projectDto);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(
+
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.CREATED.value()),
+                        HttpStatus.CREATED.getReasonPhrase(),
+                        this.projectService.saveProject(project)
+                )
+        );
+    }
+
+    @GetMapping(path = "/{userId}")
+    public ResponseEntity<ApiReponse<?>>  getProjectById(@PathVariable(name = "userId") Long projectId){
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.findProjectById(projectId)
+                )
+        );
+
     }
 }
