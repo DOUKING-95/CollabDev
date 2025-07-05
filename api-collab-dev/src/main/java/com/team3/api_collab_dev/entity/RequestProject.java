@@ -5,31 +5,27 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDate;
 
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "comment")
-public class Comment {
+@Table(name = "requestProjet")
 
+public class RequestProject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    private User author;
-
     @ManyToOne
+    @JoinColumn(name = "project_Id", nullable = false)
     private Project project;
 
-    @Column(nullable = false)
-    private String content;
-
+    @ManyToOne
+    @JoinColumn(name = "profil_Id", nullable = false)
+    private Profil profil;
 
     private LocalDate createdDate;
 
@@ -37,5 +33,4 @@ public class Comment {
     protected void onCreate() {
         this.createdDate = LocalDate.now();
     }
-
 }
