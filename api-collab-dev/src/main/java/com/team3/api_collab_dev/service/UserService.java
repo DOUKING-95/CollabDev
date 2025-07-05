@@ -2,16 +2,11 @@ package com.team3.api_collab_dev.service;
 
 
 import com.team3.api_collab_dev.Exception.ExistSameEmailException;
-import com.team3.api_collab_dev.Exception.IncorrectEmailException;
 import com.team3.api_collab_dev.Exception.IncorrectPasswordException;
 import com.team3.api_collab_dev.dto.ChangePasswordDTO;
 import com.team3.api_collab_dev.dto.UserCreateDTO;
 import com.team3.api_collab_dev.dto.UserUpdateDTO;
-import com.team3.api_collab_dev.entity.Profil;
-import com.team3.api_collab_dev.entity.Project;
-import com.team3.api_collab_dev.entity.Task;
 import com.team3.api_collab_dev.entity.User;
-import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;

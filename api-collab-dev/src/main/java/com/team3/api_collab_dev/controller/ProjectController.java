@@ -25,8 +25,6 @@ import com.team3.api_collab_dev.dto.UserRecommendationDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 
 
 
