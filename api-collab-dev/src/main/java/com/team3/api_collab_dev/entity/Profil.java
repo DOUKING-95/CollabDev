@@ -12,7 +12,6 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -32,6 +31,8 @@ public class Profil {
     private Level level;
 
     private  double coins;
+
+    private int validatedProjects;
 
     @OneToOne
     private Badge badge;
