@@ -62,7 +62,7 @@ public class ConfigureProjectService {
     //Ajouter un profil à la liste d'attente
     public Project addToPendingProfiles(Long projectId, Long profileId){
         Project project = configureProjectRepo.findById(projectId).
-                orElseThrow(() -> new EntityNotFoundException("Projet non trouver avec l'ID : "+profileId));
+                orElseThrow(() -> new EntityNotFoundException("Projet non trouver avec l'ID : "+projectId));
         Profil profil = profilRepo.findById(profileId)
                 .orElseThrow(() -> new EntityNotFoundException("Profil on trouvé avec l'Id : "+profileId));
         return configureProjectRepo.save(project);
