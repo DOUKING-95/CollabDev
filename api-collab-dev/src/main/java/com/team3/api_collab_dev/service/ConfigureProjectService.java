@@ -65,6 +65,7 @@ public class ConfigureProjectService {
                 orElseThrow(() -> new EntityNotFoundException("Projet non trouver avec l'ID : "+projectId));
         Profil profil = profilRepo.findById(profileId)
                 .orElseThrow(() -> new EntityNotFoundException("Profil on trouvé avec l'Id : "+profileId));
+        project.getPendingProfiles().add(profil);
         return configureProjectRepo.save(project);
     }
 
