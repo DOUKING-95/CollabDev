@@ -25,7 +25,7 @@ import java.util.Optional;
 public class UserService {
 
     private UserRepo userRepo;
-    //private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
     private UserMapper userMapper;
     private ProfilRepo profilRepo;
     private TaskRepo taskRepo;
@@ -41,7 +41,7 @@ public class UserService {
         User user = new User();
         user.setPseudo(userDto.speudo());
         user.setEmail(userDto.email());
-        //user.setPassword(passwordEncoder.encode(userDto.password()));
+        user.setPassword(passwordEncoder.encode(userDto.password()));
         user.setRole(userDto.role());
         this.userRepo.save(user);
         return " :) Utilsateur ===" + userDto.speudo() + "=== créer avec succes";
@@ -60,21 +60,7 @@ public class UserService {
     }
 
 
-    public String changePassword(Long userId, ChangePasswordDTO dto) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new EntityNotFoundException("User non trouver"));
 
-        if (!passwordEncoder.matches(dto.oldPassword(), user.getPassword())) {
-            throw new IllegalArgumentException("Mot de passe incorrect");
-        }
-
-        user.setPassword(passwordEncoder.encode(dto.newPassword()));
-
-        userRepo.save(user);
-
-        return " :) Vos infos ont été misent à jour avec succes";
-
-    }
 
     public Iterable<User> getAllUsers(){
         return  this.userRepo.findAll();

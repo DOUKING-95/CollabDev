@@ -17,6 +17,7 @@ public class AdminController {
     private AdminService adminService;
 
 
+
     @PostMapping(value = "/attributeCoinsToManager", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> attributeManagerCoins(@RequestParam Long projectId, @RequestBody  double coins){
 

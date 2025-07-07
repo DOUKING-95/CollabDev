@@ -2,10 +2,12 @@ package com.team3.api_collab_dev.mapper;
 
 import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Project;
+import org.springframework.stereotype.Component;
 
 
 import java.util.function.Function;
 
+@Component
 public class ProjectMapper implements Function<ProjectDto, Project> {
 
     @Override

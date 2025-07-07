@@ -1,35 +1,31 @@
 package com.team3.api_collab_dev.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-public class MailService implements MailSender {
+public class MailService {
 
-    @Autowired
-    private MailSender mailSender;
+    private final JavaMailSender javaMailSender;
 
-    @Override
-    public void send(SimpleMailMessage simpleMessage) throws MailException {
-        mailSender.send(simpleMessage);
+    public MailService(JavaMailSender javaMailSender) {
+        this.javaMailSender = javaMailSender;
     }
-
-    @Override
-    public void send(SimpleMailMessage... simpleMessages) throws MailException {
-        mailSender.send(simpleMessages);
-    }
-
 
     public void sendEmail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-        message.setFrom("dembeleseydou053@gmail.com");
 
-        send(message);
+
+        try {
+            javaMailSender.send(message);
+        } catch (MailException e) {
+            // log.error("Erreur lors de l'envoi du mail", e);
+            throw e;
+        }
     }
 }
