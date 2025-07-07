@@ -1,7 +1,6 @@
 package com.team3.api_collab_dev.service;
 
 
-import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.repository.ProjectRepo;
@@ -21,23 +20,17 @@ public class ProjectService {
     private ProjectRepo projectRepo;
 
 
-  /**  public List<ProjectDto> filterProjectsByLevel(Level level) {
+    public List<Project> filterProjectsByLevel(Level level) {
         // Étape 1 : Récupérer tous les projets
         List<Project> projects = (List<Project>) projectRepo.findAll();
 
         // Étape 2 : Filtrer par niveau
-        List<ProjectDto> filteredProjects = projects.stream()
-                .filter(project -> project.getLevel() == level)
-                .map(project -> new ProjectDto(
-                        project.getId(),
-                        project.getTitle(),
-                        project.getLevel()
-                ))
-                .collect(Collectors.toList());
+        List<Project> filteredProjects = projects.stream()
+                .filter(project -> project.getLevel() == level).toList();
 
         // Étape 3 : Retourner la liste filtrée
         return filteredProjects;
-    }*/
+    }
 
     public Project saveProject(Project project){
         return  this.projectRepo.save(project);
