@@ -24,7 +24,7 @@ public class AdminController {
          return  ResponseEntity.status(HttpStatus.ACCEPTED).body(this.adminService.attributeManagerCoins(projectId, coins));
     }
 
-    @PutMapping(path = "attributeManagerToProject", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "attributeManagerToProject")
     public ResponseEntity<ApiReponse<?>> attributeManagerToProject(@RequestParam Long projectId, @RequestParam Long managerId){
 
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(

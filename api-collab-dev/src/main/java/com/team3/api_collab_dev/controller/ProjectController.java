@@ -41,7 +41,7 @@ public class ProjectController {
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.CREATED.value()),
                         HttpStatus.CREATED.getReasonPhrase(),
-                        this.projectService.saveProject(project)
+                        this.projectService.saveProject(projectDto)
                 )
         );
     }

@@ -91,7 +91,13 @@ public class Project {
     private LocalDate createdDate;
 
     public Project(String title, String description, Domain domain, String specification, User author) {
+        this.title = title;
+        this.description = description;
+        this.domaine = domain;
+        this.specification = specification;
+        this.author = author;
     }
+
 
     @PrePersist
     protected void onCreate() {

@@ -8,11 +8,13 @@ import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
 @AllArgsConstructor
 @Service
+@Slf4j
 public class AdminService {
 
     private UserRepo userRepo;
@@ -55,15 +57,21 @@ public class AdminService {
         User manager = userRepo.findById(managerId)
                 .orElseThrow(() -> new EntityNotFoundException("Aucun manager trouver avec ce id" + managerId));
 
-        if (project.getManager() != null) {
+
+
+        if (project.getManager() == null) {
 
             project.setManager(manager);
             this.projectRepo.save(project);
 
-        } else return "Le projet a déjà un Manager";
+        } else
+        {
+            log.info("++++++++++++++++++++++++++++++++++++++++"+project.getManager().getPseudo());
+            return "Le projet a déjà un Manager";
+        }
 
 
-        return " :) Felicitation Mr/Mmme " + manager.getPseudo() + "vous une manager du projet " + project.getTitle();
+        return " :) Felicitation Mr/Mmme " + manager.getPseudo() + " vous une manager du projet " + project.getTitle();
     }
 
 
@@ -71,7 +79,6 @@ public class AdminService {
         // Étape 1 : récupérer le projet
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé"));
-
         project.setStatus(Status.VALIDATED);
         this.projectRepo.save(project);
 

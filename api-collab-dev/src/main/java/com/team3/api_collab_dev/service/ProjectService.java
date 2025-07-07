@@ -1,9 +1,13 @@
 package com.team3.api_collab_dev.service;
 
 
+import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Project;
+import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Level;
+import com.team3.api_collab_dev.mapper.ProjectMapper;
 import com.team3.api_collab_dev.repository.ProjectRepo;
+import com.team3.api_collab_dev.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +22,8 @@ import java.util.List;
 public class ProjectService {
 
     private ProjectRepo projectRepo;
+    private ProjectMapper projectMapper;
+    private UserRepo userRepo;
 
 
     public List<Project> filterProjectsByLevel(Level level) {
@@ -32,10 +38,17 @@ public class ProjectService {
         return filteredProjects;
     }
 
-    public Project saveProject(Project project){
-        return  this.projectRepo.save(project);
+    public Project saveProject(ProjectDto projectDto) {
 
+        User author = userRepo.findById(projectDto.author().getId())
+                .orElseThrow(() -> new EntityNotFoundException("Auteur introuvable avec l'id " + projectDto.author().getId()));
+
+        Project project = projectMapper.apply(projectDto);
+        project.setAuthor(author); // Remplacer l'auteur DTO par l'auteur récupéré depuis la base
+
+        return projectRepo.save(project);
     }
+
 
     public List<Project> getAllProjects(){
         List<Project> projects = new ArrayList<>();

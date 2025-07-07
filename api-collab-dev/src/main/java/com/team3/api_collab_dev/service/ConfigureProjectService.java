@@ -36,16 +36,8 @@ public class ConfigureProjectService {
         project.setLevel(updatedProject.getLevel());
         project.setSpecification(updatedProject.getSpecification());
         project.setGithubLink(updatedProject.getGithubLink());
-
-        if(updatedProject.getTasks() != null){
-            updatedProject.getTasks().clear();
-
-            for (Task task : updatedProject.getTasks()){
-                task.setProject(project);
-                project.getTasks().add(task);
-            }
-        }
-
+        project.setStatus(updatedProject.getStatus());
+        project.setTasks(updatedProject.getTasks());
         //Calculer le nombre de coins
         project.setCoins(calculateCoins(project.getLevel()));
 
