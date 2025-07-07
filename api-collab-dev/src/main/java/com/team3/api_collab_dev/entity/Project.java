@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -50,7 +51,7 @@ public class Project {
     @Enumerated(EnumType.STRING)
     private Level level;
 
-    private int coins;
+
 
     private String githubLink;
 
