@@ -2,6 +2,7 @@ package com.team3.api_collab_dev.controller;
 
 import com.team3.api_collab_dev.dto.*;
 import com.team3.api_collab_dev.entity.User;
+import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.service.UserService;
 import jakarta.validation.Valid;
@@ -85,5 +86,17 @@ public class UserController {
                 )
         );
 
+    }
+    //TODO: A tester cette endpoint demain
+    @PutMapping(path = "joinProjectWithProfilName")
+    private ResponseEntity<ApiReponse<?>> joinProjectWithProfilName (Long userId, ProfilType profilType, Long projectId){
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.userService.joinProjectWithProfilName(userId,profilType,projectId)
+                )
+        );
     }
 }

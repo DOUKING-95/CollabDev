@@ -7,10 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,13 +31,23 @@ public class ManagerInfoController {
 
     }
 
-
+//TODO: A Tester cette end point demain
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> createManagerInfo(@RequestBody ManagerInfo managerInfo){
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body( new ApiReponse<>(
                String.valueOf( HttpStatus.ACCEPTED.value()),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.managerInfoService.saveManager(managerInfo)
+        ));
+    }
+    //TODO: A Tester cette end point fais par moi
+    @PutMapping(path = "selectProfilAndAddToProject")
+    public  ResponseEntity<ApiReponse<?>> selectProfilAndAddToProject (@RequestParam Long profilId, @RequestParam Long projectId){
+
+        return  ResponseEntity.status(HttpStatus.ACCEPTED).body( new ApiReponse<>(
+                String.valueOf( HttpStatus.ACCEPTED.value()),
+                HttpStatus.ACCEPTED.getReasonPhrase(),
+                this.managerInfoService.selectProfilAndAddToProject(profilId, projectId)
         ));
     }
 }

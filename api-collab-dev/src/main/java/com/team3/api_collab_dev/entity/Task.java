@@ -34,8 +34,10 @@ public class Task {
     @Column(nullable = false)
     private String taskName;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Enumerated(EnumType.STRING)
     private  boolean isValid;
 
 

@@ -2,10 +2,12 @@ package com.team3.api_collab_dev.service;
 
 
 import com.team3.api_collab_dev.dto.ProjectDto;
+import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.mapper.ProjectMapper;
+import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.team3.api_collab_dev.enumType.Level.*;
 
 
 @AllArgsConstructor
@@ -24,6 +28,7 @@ public class ProjectService {
     private ProjectRepo projectRepo;
     private ProjectMapper projectMapper;
     private UserRepo userRepo;
+    private ProfilRepo profilRepo;
 
 
     public List<Project> filterProjectsByLevel(Level level) {
@@ -49,6 +54,11 @@ public class ProjectService {
         return projectRepo.save(project);
     }
 
+    public Project getProject(Long id){
+        return projectRepo.findById(id).
+                orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : "+id));
+    }
+
 
     public List<Project> getAllProjects(){
         List<Project> projects = new ArrayList<>();
@@ -62,6 +72,49 @@ public class ProjectService {
         return projectRepo.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Pas de projet avec cet ID : " + projectId));
 
+    }
+
+    public Project updateProject(Long id, Project updatedProject, List<Long> selectedProfileIds){
+        //Vérifier si le projet existe
+        Project project = projectRepo.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Projet no trouvé avec l'ID : "+id));
+
+        //Mettre à jour les champs
+        project.setLevel(updatedProject.getLevel());
+        project.setSpecification(updatedProject.getSpecification());
+        project.setGithubLink(updatedProject.getGithubLink());
+        project.setStatus(updatedProject.getStatus());
+        project.setTasks(updatedProject.getTasks());
+        //Calculer le nombre de coins
+        project.setCoins(attributeCoinsByLevel(project.getLevel()));
+
+        //Ajouter les profils sélectionnés comme membres
+        if(selectedProfileIds != null ){
+            List<Profil> selectedProfiles = (List<Profil>) profilRepo.findAllById(selectedProfileIds);
+            project.getMembers().addAll(selectedProfiles);
+            project.getPendingProfiles().removeAll(selectedProfiles);
+        }
+        return projectRepo.save(project);
+    }
+
+    public Project addToPendingProfiles(Long projectId, Long profileId){
+        Project project = projectRepo.findById(projectId).
+                orElseThrow(() -> new EntityNotFoundException("Projet non trouver avec l'ID : "+projectId));
+        Profil profil = profilRepo.findById(profileId)
+                .orElseThrow(() -> new EntityNotFoundException("Profil on trouvé avec l'Id : "+profileId));
+        project.getPendingProfiles().add(profil);
+        return projectRepo.save(project);
+    }
+
+    private int attributeCoinsByLevel(Level level) {
+        if (level.equals(BEGINNER)) {
+            return 5;
+        } else if (level.equals(INTERMEDIATE)) {
+            return 10;
+        } else if (level.equals(ADVANCED)) {
+            return 15;
+        }
+        throw new IllegalArgumentException("Niveau inconnu");
     }
 
 

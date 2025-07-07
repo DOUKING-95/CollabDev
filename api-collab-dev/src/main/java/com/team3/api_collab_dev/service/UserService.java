@@ -6,7 +6,11 @@ import com.team3.api_collab_dev.Exception.IncorrectPasswordException;
 import com.team3.api_collab_dev.dto.ChangePasswordDTO;
 import com.team3.api_collab_dev.dto.UserCreateDTO;
 import com.team3.api_collab_dev.dto.UserUpdateDTO;
+import com.team3.api_collab_dev.entity.Profil;
+import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
+import com.team3.api_collab_dev.enumType.Level;
+import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
@@ -17,6 +21,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -28,7 +33,7 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     private UserMapper userMapper;
     private ProfilRepo profilRepo;
-    private TaskRepo taskRepo;
+
     private ProjectRepo projectRepo;
 
 
@@ -89,14 +94,55 @@ public class UserService {
             throw new IllegalArgumentException(" Votre  mot de passe incorrect ! :) Merci de réesayez ");
         }
 
-        user.setPassword(passwordEncoder.encode(dto.newPassword()));
+        if (Objects.equals(dto.newPassword(), dto.confirmPassword())){
+            user.setPassword(passwordEncoder.encode(dto.newPassword()));
 
-        userRepo.save(user);
-        return  " :) Votre mot de passe à été  modifier avec success ";
+            userRepo.save(user);
+            return  " :) Votre mot de passe à été  modifier avec success ";
+        }
+
+        return  " :) Merci de confirmer votre mot de passe  ";
     }
 
 
     public  User getUserById(Long userId){
         return this.userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException(" :) Oooops aucun utilisateur trouver avec l'id " + userId));
+    }
+
+    public String joinProjectWithProfilName(Long userId, ProfilType profilName, Long projectId) {
+
+
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("User non trouvé avec l'Id : " + userId));
+
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'Id : " + projectId));
+
+
+        Optional<Profil> profilOptional = profilRepo.findByUserIdAndProfilName(userId, profilName.toString());
+
+        Profil profil;
+        if (profilOptional.isPresent()) {
+            profil = profilOptional.get();
+        } else {
+
+            profil = new Profil();
+            profil.setUser(user);
+            profil.setProfilName(profilName);
+            profil.setLevel(Level.BEGINNER);
+            profil.setCoins(0);
+            profil.setValidatedProjects(0);
+            profil = profilRepo.save(profil);
+        }
+
+
+        if (!project.getContributionRequests().contains(profil)) {
+            project.getContributionRequests().add(profil);
+        }
+
+
+        projectRepo.save(project);
+
+        return "Profil associé avec succès au projet";
     }
 }
