@@ -1,5 +1,6 @@
 package com.team3.api_collab_dev.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -36,7 +37,8 @@ public class User {
      private  String password;
 
      @OneToMany(mappedBy = "author" , fetch = FetchType.LAZY, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-     private List<Project> projects;
+     @JsonManagedReference
+     private List<Project> projets;
 
      @OneToMany(mappedBy = "user",fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
      private  List<Profil> profils;
@@ -47,7 +49,6 @@ public class User {
     @PrePersist
     protected void onCreate() {
         this.createdDate = LocalDate.now();
+
     }
-
-
 }

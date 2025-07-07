@@ -1,5 +1,6 @@
 package com.team3.api_collab_dev.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.team3.api_collab_dev.enumType.Domain;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.Status;
@@ -37,15 +38,21 @@ public class Project {
 
     private String specification;
 
+    @ManyToOne
+    @JsonBackReference
+    private User gestionnaire;
+
     @OneToOne
     private User author;
 
     @OneToOne
     private User manager;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Enumerated(EnumType.STRING)
     private Level level;
 
     private String githubLink;
@@ -64,10 +71,4 @@ public class Project {
         this.createdDate = LocalDate.now();
     }
 
-    public Status getStatus() {
-        return status;
-    }
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 }
