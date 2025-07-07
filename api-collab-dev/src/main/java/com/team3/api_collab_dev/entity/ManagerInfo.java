@@ -7,15 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
-
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "manager-info")
+@Table(name = "manager_info") // Changé pour éviter les problèmes avec le tiret
 public class ManagerInfo {
 
     @Id
@@ -23,14 +21,14 @@ public class ManagerInfo {
     private Long id;
 
     @OneToOne
-    private  User manager;
+    @JoinColumn(name = "user_id", nullable = false)
+    private User manager;
 
     @Column(nullable = false, unique = true)
     private String githubLink;
 
     @Column(nullable = false)
-    private  String pathCv;
-
+    private String pathCv;
 
     private LocalDate createdDate;
 
