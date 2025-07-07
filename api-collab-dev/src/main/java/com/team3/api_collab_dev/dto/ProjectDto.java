@@ -1,21 +1,20 @@
 package com.team3.api_collab_dev.dto;
 
-import com.team3.api_collab_dev.entity.User;
-import com.team3.api_collab_dev.enumType.Domain;
-import jakarta.validation.constraints.NotBlank;
+import com.team3.api_collab_dev.enumType.Level;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public record ProjectDto(
+@Data
+@NoArgsConstructor
+public class ProjectDTO {
 
-        @NotBlank
-        String title,
+    private Long id;
+    private String title;
+    private Level level;
 
-        @NotBlank
-        String description,
-
-        @NotBlank
-        Domain domain,
-        String specification,
-
-        @NotBlank
-        User author) {
+    public ProjectDTO(Long id, String title, Level level) {
+        this.id = id;
+        this.title = title;
+        this.level = level;
+    }
 }
