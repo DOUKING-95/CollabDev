@@ -8,13 +8,13 @@
 
 2 :)> Comminuquer bien entre vous demander avant de faire des chose et qui affecter les projet et sont evolution.
 
-4 :)> Assayez a maxi d'être Appliquer au developpement c'est de là tout prend sens .
+4 :)> Essayez a maxi d'être Appliquer au developpement c'est de là tout prend sens .
 
-5 :)> (🚨🚨🚨[NE FAITE PAS DE PUSH SUR LA BRANCH PRINCIPALE ])
+5 :)> (🚨🚨🚨[NE FAITE PAS DE PUSH SUR LA BRANCH (Main) PRINCIPALE ])
 
 6 :)> 🚨🚨🚨 [NE FAITE PAS DE PUSH SANS VERIFIER LE CODE PAR UN AUTRE MEMBRE]
 7 :)> [🚨🚨🚨 QUAND VOUS UTILISER IA ESSAYER TOUJOURS DE COMPRENDRE LE CODE AVANT DE L'AJOUTER A NOTRE PROJET] Okey ? .
 
- 8 :)> Soyez Soyez Appliquer un Projet Consequant donc encore une fois soyez appliquer 
- 
- +====================================MERCI======================================+
+8 :)> Soyez Soyez Appliquer un Projet Consequant donc encore une fois soyez appliquer
+
++====================================MERCI======================================+

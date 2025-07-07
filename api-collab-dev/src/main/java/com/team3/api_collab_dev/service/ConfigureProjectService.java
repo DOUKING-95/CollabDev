@@ -1,9 +1,9 @@
 package com.team3.api_collab_dev.service;
 
-import com.team3.api_collab_dev.entity.Badge;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.Task;
+import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.repository.ConfigureProjectRepo;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.TaskRepo;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import com.team3.api_collab_dev.enumType.Level;
 
 import static com.team3.api_collab_dev.enumType.Level.*;
 
@@ -52,7 +51,7 @@ public class ConfigureProjectService {
 
         //Ajouter les profils sélectionnés comme membres
         if(selectedProfileIds != null ){
-            List<Profil> selectedProfiles = profilRepo.findAllById(selectedProfileIds);
+            List<Profil> selectedProfiles = (List<Profil>) profilRepo.findAllById(selectedProfileIds);
             project.getMembers().addAll(selectedProfiles);
             project.getPendingProfiles().removeAll(selectedProfiles);
         }

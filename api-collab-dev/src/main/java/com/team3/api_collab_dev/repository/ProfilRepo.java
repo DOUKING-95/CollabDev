@@ -1,7 +1,15 @@
 package com.team3.api_collab_dev.repository;
 
 import com.team3.api_collab_dev.entity.Profil;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.team3.api_collab_dev.enumType.ProfilType;
+import com.team3.api_collab_dev.enumType.RoleType;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ProfilRepo extends JpaRepository<Profil, Long> {
+import java.util.Optional;
+
+@Repository
+public interface ProfilRepo  extends CrudRepository<Profil, Long> {
+
+    Optional<Profil> findByUserIdAndProfilType(Long userId, String roleType);
 }

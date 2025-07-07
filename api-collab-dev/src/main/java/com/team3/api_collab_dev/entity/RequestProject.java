@@ -1,43 +1,31 @@
 package com.team3.api_collab_dev.entity;
 
-import com.team3.api_collab_dev.enumType.Status;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.time.LocalDate;
 
-
-@Entity
-@Table(name = "task")
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-public class Task {
+@Entity
+@Table(name = "requestProjet")
+
+public class RequestProject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "profil_id")
-    private Profil profil;
-
-    @ManyToOne
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_Id", nullable = false)
     private Project project;
 
-    private double coins;
-
-    @Column(nullable = false)
-    private String taskName;
-
-    private Status status;
-
-    private  boolean isValid;
-
+    @ManyToOne
+    @JoinColumn(name = "profil_Id", nullable = false)
+    private Profil profil;
 
     private LocalDate createdDate;
 
@@ -46,4 +34,3 @@ public class Task {
         this.createdDate = LocalDate.now();
     }
 }
-

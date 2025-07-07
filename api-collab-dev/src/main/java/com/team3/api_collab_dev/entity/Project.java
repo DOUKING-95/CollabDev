@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -36,7 +37,7 @@ public class Project {
     @Enumerated(EnumType.STRING)
     private Domain domaine;
 
-    private String specification;
+    private String specification; //cahier de charges
 
     @OneToOne
     private User author;
@@ -44,11 +45,13 @@ public class Project {
     @OneToOne
     private User manager;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Enumerated(EnumType.STRING)
     private Level level;
 
-    private int coins;
+
 
     private String githubLink;
 
@@ -71,11 +74,24 @@ public class Project {
     )
     private List<Profil> pendingProfiles = new ArrayList<>();
 
+    private double coins;
+
     @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     List<Comment> comments;
 
+    @ManyToMany
+    @JoinTable(
+            name = "project_contribution_requests",
+            joinColumns = @JoinColumn(name = "project_id"),
+            inverseJoinColumns = @JoinColumn(name = "profil_id")
+    )
+    private List<Profil> contributionRequests;
+
 
     private LocalDate createdDate;
+
+    public Project(String title, String description, Domain domain, String specification, User author) {
+    }
 
     @PrePersist
     protected void onCreate() {

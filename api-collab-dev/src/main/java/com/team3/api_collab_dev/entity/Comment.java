@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 
 @Getter
@@ -25,7 +24,7 @@ public class Comment {
     @OneToOne
     private User author;
 
-    @OneToOne
+    @ManyToOne
     private Project project;
 
     @Column(nullable = false)

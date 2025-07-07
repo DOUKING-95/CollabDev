@@ -1,13 +1,16 @@
+# Configuration principale Spring
 spring:
   application:
     name: api-collab-dev
-  # base de donnee configuration
+
+  # Configuration de la base de données
   datasource:
     url: jdbc:mysql://localhost:3306/collabdevDB
     username: root
-    password: black.out
+    password: ""
     driver-class-name: com.mysql.cj.jdbc.Driver
 
+  # Configuration de JPA / Hibernate
   jpa:
     hibernate:
       ddl-auto: update
@@ -16,13 +19,21 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  # Configuration du serveur SMTP (envoi d'e-mails)
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hamzasanmo@gmail.com
+    password: joqn jmbw itsg gkde
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
-
-
-# Configuration de Port et context path de API
+# Configuration du serveur (port et context path)
 server:
   port: 8080
   servlet:
     context-path: /api/collab-dev/v1
-
-

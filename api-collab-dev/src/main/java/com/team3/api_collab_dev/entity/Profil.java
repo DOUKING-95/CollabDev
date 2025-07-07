@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
-
 
 @Getter
 @Setter
@@ -24,7 +22,8 @@ public class Profil {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Enumerated(EnumType.STRING)
@@ -32,14 +31,19 @@ public class Profil {
 
     private  double coins;
 
+    private int validatedProjects;
+
     @OneToOne
     private Badge badge;
 
     @Enumerated(EnumType.STRING)
     private ProfilType profilName;
 
-    @OneToMany(mappedBy = "profil")
+    @OneToMany(mappedBy = "profil",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Task> tasks;
+
+    @ManyToMany(mappedBy = "contributionRequests")
+    private List<Project> requestedProjects;
 
 
     private LocalDate createdDate;
