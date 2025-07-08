@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
@@ -87,15 +88,22 @@ public class UserController {
         );
 
     }
-    //TODO: A tester cette endpoint demain
-    @PutMapping(path = "joinProjectWithProfilName")
-    private ResponseEntity<ApiReponse<?>> joinProjectWithProfilName (Long userId, ProfilType profilType, Long projectId){
+    // TODO: A tester cette endpoint demain
+    @PostMapping (path = "/joinProjectWithProfilName")
+    private ResponseEntity<ApiReponse<?>> joinProjectWithProfilName (@RequestParam Long userId, @RequestParam ProfilType profilName, @RequestParam Long projectId){
 
+
+        ProfilType type;
+        try {
+            type = ProfilType.valueOf(profilName.toString().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("ProfilType invalide : " + profilName + ". Valeurs autorisées : " + Arrays.toString(ProfilType.values()));
+        }
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.userService.joinProjectWithProfilName(userId,profilType,projectId)
+                        this.userService.joinProjectWithProfilName(userId,profilName,projectId)
                 )
         );
     }

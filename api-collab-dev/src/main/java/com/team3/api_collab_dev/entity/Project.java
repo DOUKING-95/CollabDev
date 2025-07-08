@@ -39,10 +39,12 @@ public class Project {
 
     private String specification; //cahier de charges
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "author_id")
     private User author;
 
-    @OneToOne
+    @ManyToOne
+    @JoinColumn(name = "manager_id")
     private User manager;
 
     @Enumerated(EnumType.STRING)

@@ -7,6 +7,7 @@ import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Domain;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.Status;
+import com.team3.api_collab_dev.enumType.ValidationType;
 
 import java.util.List;
 
@@ -46,14 +47,14 @@ public class DataMock {
         task1.setTaskName("Créer l'API");
         task1.setCoins(20);
         task1.setStatus(Status.DONE);
-        task1.setValid(false);
+        task1.setIsValid(ValidationType.INVALID);
         // project et profil à associer ensuite
 
         Task task2 = new Task();
         task2.setTaskName("Intégrer Swagger");
         task2.setCoins(10);
         task2.setStatus(Status.IN_PROGRESS);
-        task2.setValid(true);
+        task2.setIsValid(ValidationType.VALID);
 
         List<Task> taskList = List.of(task1, task2);
 

@@ -108,7 +108,7 @@ public class UserService {
     public  User getUserById(Long userId){
         return this.userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException(" :) Oooops aucun utilisateur trouver avec l'id " + userId));
     }
-
+    // add this members to contribution request  with his profil
     public String joinProjectWithProfilName(Long userId, ProfilType profilName, Long projectId) {
 
 

@@ -30,7 +30,7 @@ public class ProjectService {
     private UserRepo userRepo;
     private ProfilRepo profilRepo;
 
-
+    // TODO: A Tester cette endpoint fais par hamza
     public List<Project> filterProjectsByLevel(Level level) {
         // Étape 1 : Récupérer tous les projets
         List<Project> projects = (List<Project>) projectRepo.findAll();

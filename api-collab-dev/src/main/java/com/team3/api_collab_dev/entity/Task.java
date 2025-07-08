@@ -1,6 +1,7 @@
 package com.team3.api_collab_dev.entity;
 
 import com.team3.api_collab_dev.enumType.Status;
+import com.team3.api_collab_dev.enumType.ValidationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,7 +39,7 @@ public class Task {
     private Status status;
 
     @Enumerated(EnumType.STRING)
-    private  boolean isValid;
+    private ValidationType isValid;
 
 
     private LocalDate createdDate;
