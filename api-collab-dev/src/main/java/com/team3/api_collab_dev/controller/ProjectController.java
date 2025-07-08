@@ -62,8 +62,8 @@ public class ProjectController {
                 )
         );
     }
-
-    @PutMapping("/{id}")
+    // configuration du projet
+    @PutMapping("/configureProject/{id}")
     public Project updateProject(@PathVariable Long id,
                                  @Valid @RequestBody Project project,
                                  @RequestParam(required = false) List<Long> selectedProfileIds) {
@@ -72,6 +72,7 @@ public class ProjectController {
 
     //TODO: A Tester cette endpoint  fais sekou keita
     // Endpoint POST pour ajouter un profil à la liste d’attente
+
     @PostMapping("/{id}/join")
     public Project addToPendingProfiles(@PathVariable Long id,
                                         @RequestBody Long profileId) {
@@ -79,12 +80,7 @@ public class ProjectController {
     }
 
 
-    //TODO: A Tester cette endpoint  fais sekou keita
-    // Endpoint GET pour récupérer les détails d’un projet
-    @GetMapping("/{id}")
-    public Project getProject(@PathVariable Long id) {
-        return projectService.getProject(id);
-    }
+
 //TODO : A Tester pour demain matin
     @PutMapping(path = "/{projectId}")
     public ResponseEntity<ApiReponse<?>> makeComment(@PathVariable(name = "projectId") Long projectId, @RequestBody Comment comment) {

@@ -15,6 +15,7 @@ public record ProjectDto(
 
         @NotBlank
         Domain domain,
+
         String specification,
 
         @NotBlank

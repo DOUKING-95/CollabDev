@@ -75,13 +75,12 @@ public class UserService {
 
     public User login(String email, String password) {
         User user = userRepo.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Cet email est incorrect ! :) Merci de réverifier  "));
+             .orElseThrow(() -> new RuntimeException("Cet email est incorrect ! :) Merci de réverifier  "));
 
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IncorrectPasswordException("Mot de passe incorrect ! :) Merci réverifier");
         }
-
 
         return user;
     }
@@ -100,8 +99,11 @@ public class UserService {
             userRepo.save(user);
             return  " :) Votre mot de passe à été  modifier avec success ";
         }
+        else {
+            return  " :) Les mots de passe ne sont pas identiques  ";
+        }
 
-        return  " :) Merci de confirmer votre mot de passe  ";
+
     }
 
 

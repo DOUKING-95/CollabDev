@@ -22,7 +22,7 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    private UserMapper userMapper;
+
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -56,7 +56,7 @@ public class UserController {
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.userService.createUser(this.userMapper.userToCreateDto(user))
+                        this.userService.login(login.email(),login.password())
                 )
         );
     }
@@ -90,15 +90,10 @@ public class UserController {
     }
     // TODO: A tester cette endpoint demain
     @PostMapping (path = "/joinProjectWithProfilName")
-    private ResponseEntity<ApiReponse<?>> joinProjectWithProfilName (@RequestParam Long userId, @RequestParam ProfilType profilName, @RequestParam Long projectId){
+    private ResponseEntity<ApiReponse<?>> joinProjectWithProfilName (@RequestParam Long userId, @RequestParam("profilName") ProfilType profilName, @RequestParam Long projectId){
 
 
-        ProfilType type;
-        try {
-            type = ProfilType.valueOf(profilName.toString().toUpperCase());
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("ProfilType invalide : " + profilName + ". Valeurs autorisées : " + Arrays.toString(ProfilType.values()));
-        }
+
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
