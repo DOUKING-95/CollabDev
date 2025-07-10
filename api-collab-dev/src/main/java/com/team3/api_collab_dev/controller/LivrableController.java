@@ -1,6 +1,5 @@
 package com.team3.api_collab_dev.controller;
 
-
 import com.team3.api_collab_dev.dto.LivrableRequestDTO;
 import com.team3.api_collab_dev.dto.LivrableResponseDTO;
 import com.team3.api_collab_dev.entity.Livrable;
@@ -10,26 +9,33 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/livrables")
 @RequiredArgsConstructor
 public class LivrableController {
 
-    private final LivrableService service;
+    private final LivrableService livrableService;
 
-    @PostMapping("/soumettre")
-    public ResponseEntity<?> soumettre(@RequestBody LivrableRequestDTO dto) {
-        Livrable livrable = service.soumettreLivrable(dto);
-        return ResponseEntity.ok(Map.of(
-                "message", "Livrable soumis avec succès",
-                "livrableId", livrable.getId()
-        ));
+    // Gestionnaire crée un livrable (status EN_COURS)
+    @PostMapping("/creer")
+    public ResponseEntity<LivrableResponseDTO> creerLivrable(@RequestBody LivrableRequestDTO dto) {
+        LivrableResponseDTO response = livrableService.creerLivrable(dto);
+        return ResponseEntity.ok(response);
+    }
+    // Contributeur soumet le livrable (status TERMINE)
+    @PutMapping("/{id}/soumettre")
+    public ResponseEntity<LivrableResponseDTO> soumettreLivrable(@PathVariable Long id) {
+        LivrableResponseDTO response = livrableService.soumettreLivrable(id);
+        return ResponseEntity.ok(response);
     }
 
+
+    // Liste livrables d’un gestionnaire
     @GetMapping("/gestionnaire/{id}")
-    public List<LivrableResponseDTO> getLivrablesPourGestionnaire(@PathVariable Long id) {
-        return service.getLivrablesPourGestionnaire(id);
+    public ResponseEntity<List<LivrableResponseDTO>> getLivrablesPourGestionnaire(@PathVariable Long id) {
+        List<LivrableResponseDTO> livrables = livrableService.getLivrablesPourGestionnaire(id);
+        return ResponseEntity.ok(livrables);
     }
+
 }

@@ -5,17 +5,13 @@ import com.team3.api_collab_dev.enumType.Domain;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.Status;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity

@@ -7,5 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface ChangeStatusRepository extends JpaRepository<Project,Long> {
-    public List<Project> findByGestionnaireIdAndStatus(Long gestionnaireId, Status status);
+    List<Project> findByManagerIdAndStatus(Long managerId, Status status);
+
 }

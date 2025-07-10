@@ -3,7 +3,7 @@ spring:
     name: api-collab-dev
   # base de donnee configuration
   datasource:
-    url: jdbc:mysql://localhost:3306/collabdevDB
+    url: jdbc:mysql://localhost:3306/collabdev
     username: elinkalika
     password: elinka123
     driver-class-name: com.mysql.cj.jdbc.Driver
