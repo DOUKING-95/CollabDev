@@ -47,4 +47,22 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
+
+    @PutMapping("/submitTask/{taskId}")
+    public ResponseEntity<Map<String, Object>> submitTask(
+            @PathVariable Long taskId,
+            @RequestHeader("X-User-Id") Long contributorId) {
+
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String result = taskService.submitTask(taskId, contributorId);
+            response.put("code", String.valueOf(HttpStatus.OK.value()));
+            response.put("message", result);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("code", "400");
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        }
+    }
 }
