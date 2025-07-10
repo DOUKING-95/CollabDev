@@ -117,11 +117,20 @@ public class UserService {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'Id : " + projectId));
 
+
+
+
         Optional<Profil> profilOptional = profilRepo.findByUserIdAndProfilName(userId, profilName);
+
+
+
 
         Profil profil;
         if (profilOptional.isPresent()) {
             profil = profilOptional.get();
+
+
+
         } else {
             profil = new Profil();
             profil.setUser(user);
@@ -132,9 +141,15 @@ public class UserService {
             profil = profilRepo.save(profil);
         }
 
-        if (!project.getPendingProfiles().contains(profil)) {
-            project.getPendingProfiles().add(profil);
-        }
+
+        if (profil.getLevel() == project.getLevel() && profil.getCoins() >= project.getCoins()){
+
+            if (!project.getPendingProfiles().contains(profil)) {
+                project.getPendingProfiles().add(profil);
+            }
+        } else return "Vous n'avez pas remplis les conditions d'adhésion pour ce projet :) Pas le niveau requis ou pas de piéce requis";
+
+
 
         projectRepo.save(project);
 
