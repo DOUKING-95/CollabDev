@@ -41,7 +41,6 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private ValidationType isValid;
 
-
     private LocalDate createdDate;
 
     @PrePersist

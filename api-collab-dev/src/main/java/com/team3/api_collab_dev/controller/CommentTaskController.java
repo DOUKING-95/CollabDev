@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("commentTasks")
+@RequestMapping("/tasks/{taskId}/comment-tasks")
 public class CommentTaskController {
 
     @Autowired
@@ -17,17 +17,18 @@ public class CommentTaskController {
     @PostMapping
     public CommentTask addComment(
             @PathVariable Long taskId,
-            @RequestBody AddCommenTaskRequest request){
+            @RequestBody AddCommentTaskRequest request){
     return commentTaskService.addComment(taskId, request.getContent(), request.getUserId());
     }
-
-    public List<CommentTask> getComments(@PathVariable Long taskId){
+    @GetMapping
+    public List<CommentTask> getComments(@PathVariable Long taskId) {
         return commentTaskService.getCommentsByTask(taskId);
     }
+
 }
 
 //Classe pour gérer la requête POST
-class AddCommenTaskRequest{
+class AddCommentTaskRequest{
     private String content;
     private Long userId;
 

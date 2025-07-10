@@ -74,7 +74,7 @@ public class ProjectService {
 
     }
 
-    public Project updateProject(Long id, Project updatedProject, List<Long> selectedProfileIds, User projectAuthor){
+    public Project updateProject(Long id, Project updatedProject, List<Long> selectedProfileIds){
         //Vérifier si le projet existe
         Project project = projectRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Projet no trouvé avec l'ID : "+id));
