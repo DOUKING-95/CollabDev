@@ -10,5 +10,5 @@ public class ApiCollabDevApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(ApiCollabDevApplication.class, args);
 	}
-
 }
+
