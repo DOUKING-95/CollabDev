@@ -14,12 +14,12 @@ public class UserRecommendationDTO {
     private int validatedProjects;
     private ProfilType profilName;
 
-    public UserRecommendationDTO(Long id, String pseudo, Level level, double coins, int validatedProjects, ProfilType role) {
+    public UserRecommendationDTO(Long id, String pseudo, Level level, double coins, int validatedProjects, ProfilType profilType) {
         this.id = id;
         this.pseudo = pseudo;
         this.level = level;
         this.coins = coins;
         this.validatedProjects = validatedProjects;
-        this.profilName = role;
+        this.profilName = profilType;
     }
 }

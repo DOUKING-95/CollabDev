@@ -28,7 +28,7 @@ public class RecommendationService {
     }
 
     // Méthode principale qui retourne les membres recommandés pour un projet donné
-    public static Map<String, List<UserRecommendationDTO>> recommendPendingMembers(Long projectId) {
+    public  Map<String, List<UserRecommendationDTO>> recommendPendingMembers(Long projectId) {
         // 1. Récupération du projet depuis la base de données
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new IllegalArgumentException("Project not found: " + projectId));
@@ -52,7 +52,7 @@ public class RecommendationService {
             );
 
             // Répartition des profils selon leur type
-            if (profile.getProfilName() == ProfilType.DEVELOPPER) {
+            if (profile.getProfilName() == ProfilType.DEVELOPER) {
                 developers.add(dto);
             } else if (profile.getProfilName() == ProfilType.DESIGNER) {
                 designers.add(dto);
@@ -69,6 +69,8 @@ public class RecommendationService {
         result.put("designers", sortedDesigners);
         return result;
     }
+
+
 
     // Méthode utilitaire pour trier les profils selon plusieurs critères
     private static List<UserRecommendationDTO> sortByCriteria(List<UserRecommendationDTO> profiles) {

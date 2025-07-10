@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface ProfilRepo  extends CrudRepository<Profil, Long> {
 
-    Optional<Profil> findByUserIdAndProfilName(Long userId, String roleType);
+    Optional<Profil> findByUserIdAndProfilName(Long userId, ProfilType roleType);
 }

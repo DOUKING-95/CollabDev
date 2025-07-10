@@ -2,8 +2,9 @@ package com.team3.api_collab_dev.controller;
 
 import com.team3.api_collab_dev.dto.*;
 import com.team3.api_collab_dev.entity.User;
+
+
 import com.team3.api_collab_dev.enumType.ProfilType;
-import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -24,9 +25,8 @@ public class UserController {
     private UserService userService;
 
 
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiReponse<?>> getUsers(){
+    public ResponseEntity<ApiReponse<?>> getUsers() {
         List<User> users = new ArrayList<>();
         this.userService.getAllUsers().forEach(users::add);
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
@@ -37,10 +37,11 @@ public class UserController {
                 )
         );
     }
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<ApiReponse<?>> createUser(@RequestBody @Valid UserCreateDTO user){
 
-        return  ResponseEntity.status(HttpStatus.CREATED).body(
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiReponse<?>> createUser(@RequestBody @Valid UserCreateDTO user) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.CREATED.value()),
                         HttpStatus.CREATED.getReasonPhrase(),
@@ -56,28 +57,29 @@ public class UserController {
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.userService.login(login.email(),login.password())
+                        this.userService.login(login.email(), login.password())
                 )
         );
     }
+
     @ResponseStatus(value = HttpStatus.ACCEPTED, code = HttpStatus.ACCEPTED)
-    @PutMapping(path = "/{userId}/changePassword" , consumes = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<ApiReponse<?>> changePassword(@PathVariable(name = "userId") Long userId, @RequestBody @Valid ChangePasswordDTO passwordDTO){
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
+    @PutMapping(path = "/{userId}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiReponse<?>> changePassword(@PathVariable(name = "userId") Long userId, @RequestBody @Valid ChangePasswordDTO passwordDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.userService.changePassword(userId, passwordDTO)));
     }
 
-    @ResponseStatus(value = HttpStatus.ACCEPTED,code = HttpStatus.ACCEPTED)
-    @PutMapping(path = "/updateUserInfo/{userId}" , consumes = MediaType.APPLICATION_JSON_VALUE)
-    public  ResponseEntity<ApiReponse<?>> updateUserInfo(@PathVariable(name = "userId") Long userId, @RequestBody @Valid UserUpdateDTO updateDTO){
-        return  ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
+    @ResponseStatus(value = HttpStatus.ACCEPTED, code = HttpStatus.ACCEPTED)
+    @PutMapping(path = "/updateUserInfo/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiReponse<?>> updateUserInfo(@PathVariable(name = "userId") Long userId, @RequestBody @Valid UserUpdateDTO updateDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.userService.updateUserInfo(userId, updateDTO)));
     }
 
     @GetMapping(path = "/{userId}")
-    public  ResponseEntity<ApiReponse<?>> getUserById(@PathVariable(name = "userId") Long userId){
+    public ResponseEntity<ApiReponse<?>> getUserById(@PathVariable(name = "userId") Long userId) {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
@@ -88,9 +90,11 @@ public class UserController {
         );
 
     }
-    // TODO: A tester cette endpoint demain
-    @PostMapping (path = "/joinProjectWithProfilName")
-    private ResponseEntity<ApiReponse<?>> joinProjectWithProfilName (@RequestParam Long userId, @RequestParam("profilName") ProfilType profilName, @RequestParam Long projectId){
+
+    @PostMapping(path = "/joinProjectWithProfilName")
+    private ResponseEntity<ApiReponse<?>> joinProjectWithProfilName(
+            @RequestBody JoinRequestDto dto) {
+
 
 
 
@@ -98,8 +102,11 @@ public class UserController {
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.userService.joinProjectWithProfilName(userId,profilName,projectId)
+                        this.userService.joinProjectWithProfilName(dto.getUserId(), dto.getProfilType(), dto.getProjectId())
                 )
         );
     }
+
+
 }
+

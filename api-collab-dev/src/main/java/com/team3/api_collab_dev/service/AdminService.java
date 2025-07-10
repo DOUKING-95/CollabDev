@@ -39,7 +39,7 @@ public class AdminService {
         }
 
 
-        Profil managerProfil = profilRepo.findByUserIdAndProfilName(manager.getId(), ProfilType.MANAGER.toString())
+        Profil managerProfil = profilRepo.findByUserIdAndProfilName(manager.getId(), ProfilType.MANAGER)
                 .orElseThrow(() -> new EntityNotFoundException("Le manager n'a pas de profil"));
 
         managerProfil.setCoins(managerProfil.getCoins() + coins);

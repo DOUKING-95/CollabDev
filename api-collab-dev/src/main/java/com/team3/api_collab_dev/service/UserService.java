@@ -3,9 +3,7 @@ package com.team3.api_collab_dev.service;
 
 import com.team3.api_collab_dev.Exception.ExistSameEmailException;
 import com.team3.api_collab_dev.Exception.IncorrectPasswordException;
-import com.team3.api_collab_dev.dto.ChangePasswordDTO;
-import com.team3.api_collab_dev.dto.UserCreateDTO;
-import com.team3.api_collab_dev.dto.UserUpdateDTO;
+import com.team3.api_collab_dev.dto.*;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
@@ -110,24 +108,21 @@ public class UserService {
     public  User getUserById(Long userId){
         return this.userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException(" :) Oooops aucun utilisateur trouver avec l'id " + userId));
     }
+
     // add this members to contribution request  with his profil
     public String joinProjectWithProfilName(Long userId, ProfilType profilName, Long projectId) {
-
-
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("User non trouvé avec l'Id : " + userId));
 
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'Id : " + projectId));
 
-
-        Optional<Profil> profilOptional = profilRepo.findByUserIdAndProfilName(userId, profilName.toString());
+        Optional<Profil> profilOptional = profilRepo.findByUserIdAndProfilName(userId, profilName);
 
         Profil profil;
         if (profilOptional.isPresent()) {
             profil = profilOptional.get();
         } else {
-
             profil = new Profil();
             profil.setUser(user);
             profil.setProfilName(profilName);
@@ -137,11 +132,9 @@ public class UserService {
             profil = profilRepo.save(profil);
         }
 
-
-        if (!project.getContributionRequests().contains(profil)) {
-            project.getContributionRequests().add(profil);
+        if (!project.getPendingProfiles().contains(profil)) {
+            project.getPendingProfiles().add(profil);
         }
-
 
         projectRepo.save(project);
 
