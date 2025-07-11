@@ -1,5 +1,6 @@
 package com.team3.api_collab_dev.entity;
 
+import com.team3.api_collab_dev.enumType.BadgeType;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.ProfilType;
 import jakarta.persistence.*;
@@ -34,7 +35,7 @@ public class Profil {
     private int validatedProjects;
 
     @OneToOne
-    private Badge badge;
+    private BadgeType badge;
 
     @Enumerated(EnumType.STRING)
     private ProfilType profilName;

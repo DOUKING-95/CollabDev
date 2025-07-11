@@ -1,12 +1,12 @@
 package com.team3.api_collab_dev.service;
 
-import com.team3.api_collab_dev.entity.ManagerInfo;
-import com.team3.api_collab_dev.entity.Profil;
-import com.team3.api_collab_dev.entity.Project;
-import com.team3.api_collab_dev.entity.User;
+import com.team3.api_collab_dev.entity.*;
+import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.repository.*;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,11 +17,12 @@ public class ManagerInfoService {
 
     private ManagerInfoRepo managerInfoRepo;
     private UserRepo userRepo;
-
-
+    private final UserRepo userRepository;
+    private final TaskRepo taskRepo ;
+    private final ProfilRepo profilRepo;
     private ProjectRepo projectRepo;
 
-    private ProfilRepo profilRepo;
+
 
 
     public  Iterable<ManagerInfo> getAllManagerInfos(){
@@ -64,5 +65,29 @@ public class ManagerInfoService {
 
         return String.format("Le profil %s a été ajouté au projet %s avec succès.", profil.getUser().getPseudo(), project.getTitle());
     }
+
+
+
+    @Transactional
+    public Profil assignPoints(Long taskId, Long userId) {
+        Task task = taskRepo.findById(taskId).orElseThrow(
+                () -> new IllegalArgumentException("Tâche non trouvée")
+        );
+
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalArgumentException("Utilisateur non trouvé")
+        );
+
+        if (task.getStatus() != Status.VALIDATED) {
+            throw new IllegalStateException("La tâche doit être approuvée pour attribuer des points");
+        }
+
+        Project project = task.getProject();
+
+        Profil profil = task.getProfil();
+        profil.setCoins(profil.getCoins() + project.getCoins());
+        return profilRepo.save(profil);
+    }
+
 
 }

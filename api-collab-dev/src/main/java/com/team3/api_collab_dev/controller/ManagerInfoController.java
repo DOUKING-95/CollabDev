@@ -50,4 +50,15 @@ public class ManagerInfoController {
                 this.managerInfoService.selectProfilAndAddToProject(profilId, projectId)
         ));
     }
+
+    @PostMapping("/assign")
+    public ResponseEntity<String> assignPoints(
+            @RequestParam Long contributionId,
+            @RequestParam Long userId) {
+        managerInfoService.assignPoints(contributionId,userId );
+        return ResponseEntity.ok("Points attribués avec succès");
+    }
+
+
+
 }
