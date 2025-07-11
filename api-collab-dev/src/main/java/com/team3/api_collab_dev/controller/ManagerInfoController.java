@@ -41,7 +41,7 @@ public class ManagerInfoController {
         ));
     }
     //TODO: A Tester cette end point fais par moi
-    @PutMapping(path = "selectProfilAndAddToProject")
+    @PutMapping(path = "/selectProfilAndAddToProject")
     public  ResponseEntity<ApiReponse<?>> selectProfilAndAddToProject (@RequestParam Long profilId, @RequestParam Long projectId){
 
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body( new ApiReponse<>(

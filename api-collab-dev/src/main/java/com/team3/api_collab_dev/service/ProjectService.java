@@ -1,11 +1,13 @@
 package com.team3.api_collab_dev.service;
 
 
+import com.team3.api_collab_dev.dto.FilterProjectResponse;
 import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Level;
+import com.team3.api_collab_dev.mapper.FilterProjectMapper;
 import com.team3.api_collab_dev.mapper.ProjectMapper;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
@@ -29,9 +31,10 @@ public class ProjectService {
     private ProjectMapper projectMapper;
     private UserRepo userRepo;
     private ProfilRepo profilRepo;
+    private FilterProjectMapper filterProjectMapper;
 
     // TODO: A Tester cette endpoint fais par hamza
-    public List<Project> filterProjectsByLevel(Level level) {
+    public List<FilterProjectResponse> filterProjectsByLevel(Level level) {
         // Étape 1 : Récupérer tous les projets
         List<Project> projects = (List<Project>) projectRepo.findAll();
 
@@ -40,7 +43,7 @@ public class ProjectService {
                 .filter(project -> project.getLevel() == level).toList();
 
         // Étape 3 : Retourner la liste filtrée
-        return filteredProjects;
+        return filteredProjects.stream().map(project -> filterProjectMapper.apply(project) ).toList();
     }
 
     public Project saveProject(ProjectDto projectDto) {
