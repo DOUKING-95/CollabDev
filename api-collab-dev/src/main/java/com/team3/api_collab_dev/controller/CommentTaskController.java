@@ -1,11 +1,13 @@
 package com.team3.api_collab_dev.controller;
 
+import com.team3.api_collab_dev.dto.CommentTaskDTO;
 import com.team3.api_collab_dev.entity.CommentTask;
 import com.team3.api_collab_dev.service.CommentTaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks/{taskId}/comment-tasks")
@@ -15,14 +17,34 @@ public class CommentTaskController {
     private CommentTaskService commentTaskService;
 
     @PostMapping
-    public CommentTask addComment(
+    public CommentTaskDTO addComment(
             @PathVariable Long taskId,
             @RequestBody AddCommentTaskRequest request){
-    return commentTaskService.addComment(taskId, request.getContent(), request.getUserId());
+        CommentTask commentTask = commentTaskService
+                .addComment(taskId, request.getContent(), request.getUserId());
+        return new CommentTaskDTO(
+                commentTask.getId(),
+                commentTask.getContent(),
+                commentTask.getTask().getId(),
+                commentTask.getCommenter().getId(),
+                commentTask.getCommenter().getPseudo(),
+                commentTask.getCreatedDate()
+        );
+
     }
     @GetMapping
-    public List<CommentTask> getComments(@PathVariable Long taskId) {
-        return commentTaskService.getCommentsByTask(taskId);
+    public List<CommentTaskDTO> getComments(@PathVariable Long taskId) {
+        List<CommentTask> commentTasks = commentTaskService.getCommentsByTask(taskId);
+        return commentTasks.stream()
+                .map(commentTask-> new CommentTaskDTO(
+                        commentTask.getId(),
+                        commentTask.getContent(),
+                        commentTask.getTask().getId(),
+                        commentTask.getCommenter().getId(),
+                        commentTask.getCommenter().getPseudo(),
+                        commentTask.getCreatedDate()
+
+                )).collect(Collectors.toList());
     }
 
 }
