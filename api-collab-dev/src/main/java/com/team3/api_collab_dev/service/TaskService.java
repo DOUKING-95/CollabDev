@@ -1,5 +1,6 @@
 package com.team3.api_collab_dev.service;
 
+import com.team3.api_collab_dev.dto.AssignTasksDTO;
 import com.team3.api_collab_dev.dto.CreateTasksDTO;
 import com.team3.api_collab_dev.dto.TaskInputDTO;
 import com.team3.api_collab_dev.entity.Profil;
@@ -66,6 +67,61 @@ public class TaskService {
         // 6. Retourne une confirmation
         return "Tâches créées avec succès pour le projet ID : " + tasksDTO.projectId();
     }
+
+    public String assignTasksToProfil(Long userId, AssignTasksDTO assignDTO) {
+        // 1. Vérification des autorisations
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec l'Id : " + userId));
+        Profil profilManager = (Profil) profilRepo.findByUserId(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Profil non trouvé pour l'utilisateur ID : " + userId));
+        if (!profilManager.getProfilName().equals(ProfilType.MANAGER)) {
+            throw new SecurityException("Seuls les managers peuvent attribuer des tâches.");
+        }
+        Project project =
+                projectRepo.findById(assignDTO.projectId())
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'Id : " + assignDTO.projectId()));
+        if (project.getManager() == null || !project.getManager().getId().equals(userId)) {
+            throw new SecurityException("Projet inexistant ou manager non associé");
+        }
+
+        // 2. Validation des entrées
+        Profil profilCible = profilRepo.findById(assignDTO.profilIdCible())
+                .orElseThrow(() -> new EntityNotFoundException("Profil cible non trouvé avec l'Id : " + assignDTO.profilIdCible()));
+        if (!project.getMembers().contains(profilCible) ) {
+            throw new SecurityException("Profil cible non associé au projet");
+        }
+       if (profilCible.getProfilName() != ProfilType.DEVELOPER && profilCible.getProfilName() != ProfilType.DESIGNER){
+           throw  new IllegalArgumentException("Seuls les Developpeurs | Designers peuvent récevoirs des tâches !");
+       }
+
+        // 3. Attribution des tâches
+        int tasksAssigned = 0;
+        for (Long taskId : assignDTO.taskIds()) {
+            Task task = taskRepo.findById(taskId)
+                    .orElseThrow(() -> new EntityNotFoundException("Tâche inexistante avec l'Id : " + taskId));
+            if (task.getProject().getId().equals(project.getId())) {
+                if (task.getProfil() != null) {
+                    throw new IllegalStateException("Tâche déjà attribuée avec l'Id : " + taskId);
+                }
+                task.setProfil(profilCible);
+                profilCible.getTasks().add(task);
+                task.setStatus(Status.IN_PROGRESS);
+                tasksAssigned++;
+            } else {
+                throw new IllegalArgumentException("Tâche avec l'Id : " + taskId + " non associée au projet");
+            }
+        }
+
+        // 4. Persistance
+        projectRepo.save(project);
+        profilRepo.save(profilCible);
+
+        // 5. Réponse
+        return "Tâches attribuées avec succès au profil ID : " + profilCible.getId() +
+                " pour le projet ID : " + project.getId() + " (Nombre : " + tasksAssigned + ")";
+    }
+
+
 
     public String submitTask(Long taskId, Long contributorId) {
 
