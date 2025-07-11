@@ -66,4 +66,24 @@ public class TaskService {
         // 6. Retourne une confirmation
         return "Tâches créées avec succès pour le projet ID : " + tasksDTO.projectId();
     }
+
+    public String submitTask(Long taskId, Long contributorId) {
+
+        Task task = taskRepo.findById(taskId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Tâche non trouvée avec l'Id : " + taskId));
+
+        // Vérifie que le profil de la tâche appartient bien à ce contributeur
+        if (task.getProfil() == null || task.getProfil().getUser() == null ||
+                !task.getProfil().getUser().getId().equals(contributorId)) {
+            throw new SecurityException("Seul le contributeur assigné peut soumettre cette tâche.");
+        }
+
+        task.setStatus(Status.DONE); // ou Status.TERMINE selon ton enum
+        task.setCreatedDate(LocalDate.now()); // ou un champ comme dateLivraison si dispo
+
+        taskRepo.save(task);
+
+        return "Tâche ID " + taskId + " soumise avec succès.";
+    }
 }
