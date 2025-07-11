@@ -4,7 +4,6 @@ import com.team3.api_collab_dev.dto.ApiReponse;
 import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Comment;
 import com.team3.api_collab_dev.entity.Project;
-import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.mapper.ProjectMapper;
 import com.team3.api_collab_dev.service.CommentService;
 import com.team3.api_collab_dev.service.ProjectService;
@@ -71,7 +70,7 @@ public class ProjectController {
         return projectService.updateProject(id, project, selectedProfileIds);
     }
 
-    //TODO: A Tester cette endpoint  fais sekou keita
+    // TODO: A Tester cette endpoint  fais sekou keita
     // Endpoint POST pour ajouter un profil à la liste d’attente
 
     @PostMapping("/{id}/join")
@@ -82,7 +81,6 @@ public class ProjectController {
 
 
 
-//TODO : A Tester pour demain matin
     @PutMapping(path = "/{projectId}")
     public ResponseEntity<ApiReponse<?>> makeComment(@PathVariable(name = "projectId") Long projectId, @RequestBody Comment comment) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
@@ -93,8 +91,11 @@ public class ProjectController {
 
         );
 
+
     }
 
 
 
 }
+
+
