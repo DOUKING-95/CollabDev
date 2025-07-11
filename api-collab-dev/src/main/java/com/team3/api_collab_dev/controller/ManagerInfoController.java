@@ -51,11 +51,12 @@ public class ManagerInfoController {
         ));
     }
 
-    @PostMapping("/assign")
+    @PostMapping("/assignCoins")
     public ResponseEntity<String> assignPoints(
-            @RequestParam Long contributionId,
+            @RequestParam Long taskId,
             @RequestParam Long userId) {
-        managerInfoService.assignPoints(contributionId,userId );
+
+        managerInfoService.assignPoints( taskId );
         return ResponseEntity.ok("Points attribués avec succès");
     }
 

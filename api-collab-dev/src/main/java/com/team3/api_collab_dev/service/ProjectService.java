@@ -111,11 +111,15 @@ public class ProjectService {
 
     private int attributeCoinsByLevel(Level level) {
         if (level.equals(BEGINNER)) {
-            return 5;
+            return 20;
         } else if (level.equals(INTERMEDIATE)) {
-            return 10;
-        } else if (level.equals(ADVANCED)) {
-            return 15;
+            return 30;
+        }
+     else if (level.equals(FREE)) {
+        return 10;
+    }
+        else if (level.equals(ADVANCED)) {
+            return 45;
         }
         throw new IllegalArgumentException("Niveau inconnu");
     }

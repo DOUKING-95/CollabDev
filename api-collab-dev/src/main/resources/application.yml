@@ -47,3 +47,7 @@ vapid:
     key: TA_PRIVATE_KEY
   subject: mailto:ton@email.com
 
+logging:
+  level:
+    com.team3.api_collab_dev : DEBUG
+    org.springframework.web : DEBUG

@@ -136,7 +136,7 @@ public class UserService {
             profil.setUser(user);
             profil.setProfilName(profilName);
             profil.setLevel(Level.BEGINNER);
-            profil.setCoins(0);
+            profil.setCoins(50);
             profil.setValidatedProjects(0);
             profil = profilRepo.save(profil);
         }
