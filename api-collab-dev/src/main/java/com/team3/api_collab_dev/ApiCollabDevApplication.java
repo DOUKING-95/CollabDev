@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 public class ApiCollabDevApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(ApiCollabDevApplication.class, args);
 	}

@@ -6,9 +6,16 @@ import com.team3.api_collab_dev.enumType.RoleType;
 import com.team3.api_collab_dev.repository.UserRepo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import nl.martijndwars.webpush.Utils;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.interfaces.ECPrivateKey;
+import java.security.interfaces.ECPublicKey;
+import java.util.Base64;
 
 @Service
 @AllArgsConstructor
@@ -36,6 +43,21 @@ public class CreateAdminService implements CommandLineRunner {
             log.info(" Ooops :)  Admin existe déjà Merci ! ");
 
         }
+
+        //----------------------------------------------------------------------
+
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
+        keyGen.initialize(256);
+        KeyPair keyPair = keyGen.generateKeyPair();
+
+        ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
+        ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
+
+        String pubKeyBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString(publicKey.getEncoded());
+        String privKeyBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString(privateKey.getEncoded());
+
+        System.out.println("Clé publique : " + pubKeyBase64);
+        System.out.println("Clé privée  : " + privKeyBase64);
     }
 }
 

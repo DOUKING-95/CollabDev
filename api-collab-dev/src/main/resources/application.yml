@@ -40,4 +40,10 @@ server:
     # Configuration du chemin pour le stockage des fichiers dans le bureau :) douking ^_~ 😎😎
 file:
   upload-dir: C:/Users/Kalandew20/Desktop/uploads
+vapid:
+  public:
+    key: TA_PUBLIC_KEY
+  private:
+    key: TA_PRIVATE_KEY
+  subject: mailto:ton@email.com
 

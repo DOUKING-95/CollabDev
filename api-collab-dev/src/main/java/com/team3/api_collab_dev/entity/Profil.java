@@ -34,7 +34,8 @@ public class Profil {
 
     private int validatedProjects;
 
-    @OneToOne
+    @Enumerated(EnumType.STRING)
+
     private BadgeType badge;
 
     @Enumerated(EnumType.STRING)
