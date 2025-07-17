@@ -5,6 +5,7 @@ import com.team3.api_collab_dev.entity.User;
 
 
 import com.team3.api_collab_dev.enumType.ProfilType;
+import com.team3.api_collab_dev.service.MailService;
 import com.team3.api_collab_dev.service.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private MailService mailService;
 
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -38,8 +40,10 @@ public class UserController {
         );
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping( consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> createUser(@RequestBody @Valid UserCreateDTO user) {
+
+        this.mailService.sendEmail(user.email(),"CollabDev API",String.format("Votre compte a été créer avec success sur CollabDev Mr/Mme  %s ",user.speudo()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiReponse<>(

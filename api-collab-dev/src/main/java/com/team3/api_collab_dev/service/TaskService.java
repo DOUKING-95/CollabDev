@@ -37,7 +37,7 @@ public class TaskService {
         // 1. Vérifie si l'utilisateur a un profil manager
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec l'Id : " + userId));
-        Profil profil = (Profil) profilRepo.findByUserId(userId)
+        Profil profil = (Profil) profilRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Profil non trouvé pour l'utilisateur ID : " + userId));
         if (!profil.getProfilName().equals(ProfilType.MANAGER)) {
             throw new SecurityException("Seuls les managers peuvent créer des tâches.");
@@ -72,7 +72,7 @@ public class TaskService {
         // 1. Vérification des autorisations
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec l'Id : " + userId));
-        Profil profilManager = (Profil) profilRepo.findByUserId(userId)
+        Profil profilManager = (Profil) profilRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Profil non trouvé pour l'utilisateur ID : " + userId));
         if (!profilManager.getProfilName().equals(ProfilType.MANAGER)) {
             throw new SecurityException("Seuls les managers peuvent attribuer des tâches.");

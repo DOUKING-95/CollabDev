@@ -3,20 +3,32 @@ package com.team3.api_collab_dev.controller;
 import com.team3.api_collab_dev.dto.ApiReponse;
 import com.team3.api_collab_dev.dto.AssignTasksDTO;
 import com.team3.api_collab_dev.dto.CreateTasksDTO;
+import com.team3.api_collab_dev.entity.Profil;
+import com.team3.api_collab_dev.entity.Task;
+import com.team3.api_collab_dev.repository.ProfilRepo;
+import com.team3.api_collab_dev.repository.TaskRepo;
+import com.team3.api_collab_dev.service.MailService;
 import com.team3.api_collab_dev.service.TaskService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
 
     private final TaskService taskService;
+    private MailService mailService;
+    private ProfilRepo profilRepo;
+    private TaskRepo taskRepo;
 
     public TaskController(TaskService taskService) {
         this.taskService = taskService;
@@ -71,8 +83,8 @@ public class TaskController {
 
     @PostMapping(value = "/assignTask", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> assignTasksToProfil(
-            @RequestBody AssignTasksDTO assignDTO, // Reçoit les données JSON pour l'attribution
-            @RequestParam("xUserId") Long userId) { // ID de l'utilisateur connecté (simulé)
+            @RequestBody AssignTasksDTO assignDTO,
+            @RequestParam("xUserId") Long userId) {
         // Vérifie si les données sont valides
         if (assignDTO == null || assignDTO.projectId() == null || assignDTO.profilIdCible() == null || assignDTO.taskIds() == null || assignDTO.taskIds().isEmpty()) {
             Map<String, Object> response = new HashMap<>();
@@ -94,6 +106,18 @@ public class TaskController {
             response.put("code", String.valueOf(HttpStatus.OK.value()));
             response.put("message", HttpStatus.OK.getReasonPhrase());
             response.put("data", result);
+
+            Iterable<Task> assignedTask = this.taskRepo.findAllById(assignDTO.taskIds());
+            List<String> taskTitles = new ArrayList<>();
+            assignedTask.forEach((task -> taskTitles.add(task.getTaskName())));
+
+            Profil targetProfil = this.profilRepo.findById(assignDTO.profilIdCible())
+                    .orElseThrow(()-> new EntityNotFoundException("Profil non trouver avec id " + assignDTO.profilIdCible()));
+
+            String email = targetProfil.getUser().getEmail();
+
+
+            this.mailService.sendEmail(email, "CollabDev API", String.format("Une nouvelle tâche vous a été assigner %s", String.join("|", taskTitles)));
             return ResponseEntity.ok().body(
                     new ApiReponse<>(
                             String.valueOf(HttpStatus.ACCEPTED.value()),

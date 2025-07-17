@@ -1,7 +1,9 @@
 package com.team3.api_collab_dev.controller;
 
 import com.team3.api_collab_dev.dto.ApiReponse;
+import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.service.AdminService;
+import com.team3.api_collab_dev.service.MailService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class AdminController {
 
     private AdminService adminService;
+    private MailService mailService;
+    private ProjectRepo projectRepo;
 
 
 
