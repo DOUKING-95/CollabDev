@@ -123,6 +123,11 @@ public class ProjectService {
         }
         throw new IllegalArgumentException("Niveau inconnu");
     }
+    public  List<Profil> getAllPendingProfil(Long projectId){
+        Project project = projectRepo.findById(projectId).orElseThrow( ()-> new  EntityNotFoundException("Pas de project trouver avec cette id" + projectId));
+
+        return  project.getPendingProfiles();
+    }
 
 
 }

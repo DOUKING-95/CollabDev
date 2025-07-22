@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @AllArgsConstructor
@@ -89,6 +90,19 @@ public class ProjectController {
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
                         this.commentService.makeComment(projectId, comment))
+
+        );
+
+
+    }
+
+    @GetMapping(path = "/{projectId}/pendingProfil")
+    public ResponseEntity<ApiReponse<?>> getPendingProfil(@PathVariable(name = "projectId") Long projectId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getAllPendingProfil(projectId).stream().filter(profil -> Objects.equals(profil.getProfilName().toString(), "DESIGNER")))
 
         );
 

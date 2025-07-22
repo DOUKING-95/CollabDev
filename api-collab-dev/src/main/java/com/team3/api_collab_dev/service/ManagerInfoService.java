@@ -56,20 +56,12 @@ public class ManagerInfoService {
             return String.format("Le profil %d est déjà membre du projet %d.", profilId, projectId);
         }
 
-
-
         project.getMembers().add(profil);
-
-
 
           profil.setCoins( profil.getCoins() - project.getCoins() );
           project.getPendingProfiles().remove(profil);
           projectRepo.save(project);
           return String.format("Le profil %s a été ajouté au projet %s avec succès.", profil.getUser().getPseudo(), project.getTitle());
-
-
-
-
 
     }
 
