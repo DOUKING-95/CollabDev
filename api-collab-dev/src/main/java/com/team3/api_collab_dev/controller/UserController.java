@@ -7,6 +7,7 @@ import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.service.MailService;
 import com.team3.api_collab_dev.service.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping(path = "users")
+@Tag(name = "User", description = "Manage User ")
 public class UserController {
 
     private UserService userService;

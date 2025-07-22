@@ -4,6 +4,7 @@ import com.team3.api_collab_dev.dto.ApiReponse;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.service.ProjectService;
 import com.team3.api_collab_dev.service.RecommendationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,12 +13,13 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(path = "systems")
 @AllArgsConstructor
+@Tag(name = "System", description = "Manage System recommendation ")
 public class SystemController {
 
     private RecommendationService recommendationService;
     private ProjectService projectService;
 
-    @GetMapping(path = "/projectReconmendation")
+    @GetMapping(path = "/projectRecommendation")
     public ResponseEntity<ApiReponse<?>> projectReconmendation(
             @RequestParam Long projectId){
 

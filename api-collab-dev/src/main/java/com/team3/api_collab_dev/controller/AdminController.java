@@ -8,11 +8,15 @@ import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.repository.UserRepo;
 import com.team3.api_collab_dev.service.AdminService;
+
 import com.team3.api_collab_dev.service.MailService;
 import jakarta.persistence.EntityNotFoundException;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping(path = "admin")
+@Tag(name = "Admin", description = "Admin management Task ")
 public class AdminController {
 
     private AdminService adminService;

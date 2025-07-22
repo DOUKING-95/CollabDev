@@ -9,7 +9,11 @@ import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.TaskRepo;
 import com.team3.api_collab_dev.service.MailService;
 import com.team3.api_collab_dev.service.TaskService;
+
 import jakarta.persistence.EntityNotFoundException;
+
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
+@Tag(name = "`Task", description = "Manage Task ")
 public class TaskController {
 
     private final TaskService taskService;

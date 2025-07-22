@@ -3,6 +3,7 @@ package com.team3.api_collab_dev.controller;
 import com.team3.api_collab_dev.dto.ApiReponse;
 import com.team3.api_collab_dev.entity.ManagerInfo;
 import com.team3.api_collab_dev.service.ManagerInfoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping(path = "managerInfo")
+@Tag(name = "Mannager", description = "Manage Manager right section(controller)")
 public class ManagerInfoController {
 
     private ManagerInfoService managerInfoService;

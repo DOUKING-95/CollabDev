@@ -3,6 +3,7 @@ package com.team3.api_collab_dev.controller;
 import com.team3.api_collab_dev.dto.CommentTaskDTO;
 import com.team3.api_collab_dev.entity.CommentTask;
 import com.team3.api_collab_dev.service.CommentTaskService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("tasksComment")
+@Tag(name = "TaskComment", description = "Task comment controller ")
 public class CommentTaskController {
 
     @Autowired

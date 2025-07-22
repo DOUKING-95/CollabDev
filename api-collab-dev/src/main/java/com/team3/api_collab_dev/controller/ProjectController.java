@@ -7,6 +7,7 @@ import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.mapper.ProjectMapper;
 import com.team3.api_collab_dev.service.CommentService;
 import com.team3.api_collab_dev.service.ProjectService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping(path = "projects")
+@Tag(name = "Project", description = "Manage project ")
 public class ProjectController {
 
     private ProjectService projectService;
@@ -63,15 +65,14 @@ public class ProjectController {
         );
     }
     // configuration du projet
-    @PutMapping("/configureProject/{id}")
+    @PutMapping("/{id}/configureProject")
     public Project updateProject(@PathVariable Long id,
                                  @Valid @RequestBody Project project,
                                  @RequestParam(required = false) List<Long> selectedProfileIds) {
         return projectService.updateProject(id, project, selectedProfileIds);
     }
 
-    // TODO: A Tester cette endpoint  fais sekou keita
-    // Endpoint POST pour ajouter un profil à la liste d’attente
+
 
     @PostMapping("/{id}/join")
     public Project addToPendingProfiles(@PathVariable Long id,
