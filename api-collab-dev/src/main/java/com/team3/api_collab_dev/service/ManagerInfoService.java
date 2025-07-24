@@ -2,6 +2,7 @@ package com.team3.api_collab_dev.service;
 
 import com.team3.api_collab_dev.entity.*;
 import com.team3.api_collab_dev.enumType.Level;
+import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.repository.*;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,15 +33,6 @@ public class ManagerInfoService {
 
     public ManagerInfo saveManager(ManagerInfo managerInfo) {
 
-        Long managerId = managerInfo.getManager() != null ? managerInfo.getManager().getId() : null;
-        if (managerId == null) {
-            throw new IllegalArgumentException("L'ID du manager est requis");
-        }
-
-        User manager = userRepo.findById(managerId)
-                .orElseThrow(() -> new EntityNotFoundException("Aucun manager trouvé avec l'ID : " + managerId));
-        managerInfo.setManager(manager);
-
         return managerInfoRepo.save(managerInfo);
     }
 
@@ -68,20 +60,30 @@ public class ManagerInfoService {
 
 
     @Transactional
-    public Profil assignPoints(Long taskId) {
+    public Profil validateTask(Long taskId,  Long managerId) {
         Task task = taskRepo.findById(taskId).orElseThrow(
                 () -> new IllegalArgumentException("Tâche non trouvée")
         );
 
+        Profil profilManager =  profilRepo.findById(managerId)
+                .orElseThrow(() -> new EntityNotFoundException("Profil non trouvé pour le manager ID : " + managerId));
 
-
-        if (task.getStatus() != Status.VALIDATED) {
-            throw new IllegalStateException("La tâche doit être approuvée pour attribuer des points");
+        if (task.getStatus() != Status.DONE) {
+            throw new IllegalStateException("La tâche doit être terminer avant d'être valider");
         }
 
         Project project = task.getProject();
 
         Profil profil = task.getProfil();
+
+        if (!profilManager.getProfilName().equals(ProfilType.MANAGER)) {
+            throw new SecurityException("Seuls les managers peuvent attribuer des coins.");
+        }
+        if (!(profilManager == project.getManager() )) {
+            throw new SecurityException("Vous n'êtes pas manager de ce projet :) Vous ne pouvez pas assigner des coins");
+        }
+
+        task.setStatus(Status.VALIDATED);
 
         if(project.getLevel() == Level.BEGINNER){
             profil.setCoins(profil.getCoins() + (project.getCoins() + 5));
@@ -112,6 +114,24 @@ public class ManagerInfoService {
 
 
     }
+public String validateProject(Long managerProfilId ,  Long projectId){
+        Profil profil = profilRepo.findById(managerProfilId)
+                .orElseThrow(()->new EntityNotFoundException(" Profil Manager non trouvé avec l'id "+managerProfilId));
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(()->new EntityNotFoundException("Projet non trouvé avec cet id "+projectId));
+        if (!(project.getManager().equals(profil))){
+            throw new RuntimeException("Vous n'êtes pas manager de ce projet");
+        }
+  for (Task task : project.getTasks()){
+      if (!(task.getStatus() == Status.VALIDATED)){
+          throw new RuntimeException("Toute les taches doivent etre valider");
+      }
+  }
+  project.setStatus(Status.DONE);
+  projectRepo.save(project);
+  return "le projet est terminer";
 
+
+}
 
 }

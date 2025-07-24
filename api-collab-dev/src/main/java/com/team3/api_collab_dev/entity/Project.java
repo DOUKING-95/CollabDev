@@ -45,7 +45,7 @@ public class Project {
 
     @ManyToOne
     @JoinColumn(name = "manager_id")
-    private User manager;
+    private Profil manager;
 
     @Enumerated(EnumType.STRING)
     private Status status;

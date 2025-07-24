@@ -53,13 +53,22 @@ public class ManagerInfoController {
         ));
     }
 
-    @PostMapping("/assignCoins")
+    @PostMapping("/validateTask")
     public ResponseEntity<String> assignPoints(
             @RequestParam Long taskId,
-            @RequestParam Long userId) {
+            @RequestParam Long managerId) {
 
-        managerInfoService.assignPoints( taskId );
+        managerInfoService.validateTask( taskId , managerId);
         return ResponseEntity.ok("Points attribués avec succès");
+    }
+
+    @PutMapping("/validateProject")
+    public ResponseEntity<String> validateProject(
+            @RequestParam Long managerId,
+            @RequestParam Long projectId){
+
+        managerInfoService.validateProject(managerId, projectId);
+        return ResponseEntity.ok("Projet valider avec succès");
     }
 
 

@@ -22,7 +22,7 @@ public class ManagerInfo {
     private Long id;
 
     @OneToOne
-    private  User manager;
+    private  Profil manager;
 
     @Column(nullable = false, unique = true)
     private String githubLink;

@@ -33,7 +33,7 @@ public class ProjectService {
     private ProfilRepo profilRepo;
     private FilterProjectMapper filterProjectMapper;
 
-    // TODO: A Tester cette endpoint fais par hamza
+
     public List<FilterProjectResponse> filterProjectsByLevel(Level level) {
         // Étape 1 : Récupérer tous les projets
         List<Project> projects = (List<Project>) projectRepo.findAll();
@@ -87,7 +87,6 @@ public class ProjectService {
         project.setSpecification(updatedProject.getSpecification());
         project.setGithubLink(updatedProject.getGithubLink());
         project.setStatus(updatedProject.getStatus());
-        project.setTasks(updatedProject.getTasks());
         //Calculer le nombre de coins
         project.setCoins(attributeCoinsByLevel(project.getLevel()));
 

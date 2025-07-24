@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,8 +24,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+
+@AllArgsConstructor
 @RestController
 @RequestMapping("/tasks")
 @Tag(name = "`Task", description = "Manage Task ")
@@ -35,14 +37,12 @@ public class TaskController {
     private ProfilRepo profilRepo;
     private TaskRepo taskRepo;
 
-    public TaskController(TaskService taskService) {
-        this.taskService = taskService;
-    }
+
 
     @PostMapping(value = "/create-Tasks", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> createTasks(
-            @RequestBody CreateTasksDTO tasksDTO, // Reçoit les données JSON des tâches
-            @RequestParam("xUserId") Long userId) { // ID de l'utilisateur connecté (simulé)
+            @RequestBody CreateTasksDTO tasksDTO,
+            @RequestParam("managerId") Long userId) {
         // Vérifie si les données sont valides
         if (tasksDTO == null || tasksDTO.projectId() == null || tasksDTO.tasks() == null || tasksDTO.tasks().isEmpty()) {
             Map<String, Object> response = new HashMap<>();
@@ -59,7 +59,7 @@ public class TaskController {
         }
 
         try {
-            String result = taskService.createTasks(userId, tasksDTO); // Appelle le service
+            String result = taskService.createTasks(userId, tasksDTO);
             Map<String, Object> response = new HashMap<>();
             response.put("code", String.valueOf(HttpStatus.CREATED.value()));
             response.put("message", HttpStatus.CREATED.getReasonPhrase());
@@ -89,7 +89,7 @@ public class TaskController {
     @PostMapping(value = "/assignTask", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> assignTasksToProfil(
             @RequestBody AssignTasksDTO assignDTO,
-            @RequestParam("xUserId") Long userId) {
+            @RequestParam("managerId") Long userId) {
         // Vérifie si les données sont valides
         if (assignDTO == null || assignDTO.projectId() == null || assignDTO.profilIdCible() == null || assignDTO.taskIds() == null || assignDTO.taskIds().isEmpty()) {
             Map<String, Object> response = new HashMap<>();
@@ -106,7 +106,7 @@ public class TaskController {
         }
 
         try {
-            String result = taskService.assignTasksToProfil(userId, assignDTO);
+            String result = taskService.assignTasksToProfil(assignDTO, userId );
             Map<String, Object> response = new HashMap<>();
             response.put("code", String.valueOf(HttpStatus.OK.value()));
             response.put("message", HttpStatus.OK.getReasonPhrase());
@@ -145,31 +145,19 @@ public class TaskController {
         }
     }
 
-    @PutMapping("/submitTask/{taskId}")
+    @PutMapping("/{taskId}/submitTask")
     public ResponseEntity<ApiReponse<?>> submitTask(
             @PathVariable Long taskId,
-            @RequestParam("xUserId") Long contributorId) {
+            @RequestParam("contributorId") Long contributorId) {
 
-        Map<String, Object> response = new HashMap<>();
-        try {
-            String result = taskService.submitTask(taskId, contributorId);
-            response.put("code", String.valueOf(HttpStatus.OK.value()));
-            response.put("message", result);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.ACCEPTED.value()),
-                            HttpStatus.ACCEPTED.getReasonPhrase(),
-                            response
-                    )
-            );
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.BAD_REQUEST.value()),
-                            HttpStatus.ACCEPTED.getReasonPhrase(),
-                            response
-                    )
-            );
-        }
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        taskService.submitTask(taskId, contributorId)
+                )
+        );
+
     }
 }

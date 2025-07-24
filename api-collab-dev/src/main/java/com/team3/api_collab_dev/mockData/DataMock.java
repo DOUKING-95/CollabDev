@@ -65,7 +65,7 @@ public class DataMock {
         project.setDomaine(Domain.AGRITECH);
         project.setSpecification("Le projet doit contenir une API REST sécurisée, Swagger, JWT et tests unitaires.");
         project.setAuthor(author);
-        project.setManager(manager);
+        //project.setManager(manager);
         project.setStatus(Status.IN_PROGRESS);
         project.setLevel(Level.INTERMEDIATE);
         project.setGithubLink("https://github.com/team3/collab-platform");

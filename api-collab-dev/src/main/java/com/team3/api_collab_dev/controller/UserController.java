@@ -1,6 +1,8 @@
 package com.team3.api_collab_dev.controller;
 
 import com.team3.api_collab_dev.dto.*;
+import com.team3.api_collab_dev.entity.ManagerInfo;
+import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.User;
 
 
@@ -14,7 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -99,7 +103,10 @@ public class UserController {
 
     @PostMapping(path = "/joinProjectWithProfilName")
     private ResponseEntity<ApiReponse<?>> joinProjectWithProfilName(
-            @RequestBody JoinRequestDto dto) {
+            @RequestParam Long projectId,
+            @RequestParam Long userId,
+            @RequestParam ProfilType profilType
+            ) throws IOException {
 
 
 
@@ -108,7 +115,38 @@ public class UserController {
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.userService.joinProjectWithProfilName(dto.getUserId(), dto.getProfilType(), dto.getProjectId())
+                        this.userService.joinProjectWithProfilName(
+                                projectId,
+                               userId,
+                               profilType
+
+                        )
+                )
+        );
+    }
+
+    @PostMapping(path = "/joinProjectAsManager")
+    private ResponseEntity<ApiReponse<?>> joinProjectAsManager(
+            @RequestParam String githubLink,
+            @ModelAttribute JoinProjectRequest request,
+            @RequestPart(value = "file", required = false) MultipartFile file
+    ) throws IOException {
+
+
+
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.userService.joinProjectAsManager(
+                                request.userId(),
+                                request.projectId(),
+                                request.profilType(),
+                                file,
+                                githubLink
+
+                        )
                 )
         );
     }

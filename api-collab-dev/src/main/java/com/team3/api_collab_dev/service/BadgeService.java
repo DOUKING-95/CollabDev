@@ -53,35 +53,35 @@ public class BadgeService {
                 log.info( "Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.INTERMEDIATE);
             }
 
-            else if (profil.getProfilName().equals(ProfilType.DEVELOPER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getCoins() >= 30) {
+            else if (profil.getProfilName().equals(ProfilType.DEVELOPER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getValidatedProjects() >= 30) {
                 profil.setLevel((Level.ADVANCED));
                 profil.setBadge(BadgeType.GREEN);
                 profilRepo.save(profil);
                 log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.ADVANCED);
             }
 
-            else if (profil.getProfilName().equals(ProfilType.DESIGNER) && profil.getLevel().equals(Level.BEGINNER) && profil.getCoins() >= 20) {
+            else if (profil.getProfilName().equals(ProfilType.DESIGNER) && profil.getLevel().equals(Level.BEGINNER) && profil.getValidatedProjects() >= 20) {
                 profil.setLevel((Level.INTERMEDIATE));
                 profil.setBadge(BadgeType.YELLOW);
                 profilRepo.save(profil);
                 log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.INTERMEDIATE);
             }
 
-            else if (profil.getProfilName().equals(ProfilType.DESIGNER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getCoins() >= 30) {
+            else if (profil.getProfilName().equals(ProfilType.DESIGNER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getValidatedProjects() >= 30) {
                 profil.setLevel((Level.ADVANCED));
                 profil.setBadge(BadgeType.GREEN);
                 profilRepo.save(profil);
                 log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.ADVANCED);
             }
 
-            else if (profil.getProfilName().equals(ProfilType.MANAGER) && profil.getLevel().equals(Level.BEGINNER) && profil.getCoins() >= 20) {
+            else if (profil.getProfilName().equals(ProfilType.MANAGER) && profil.getLevel().equals(Level.BEGINNER) && profil.getValidatedProjects() >= 20) {
                 profil.setLevel((Level.INTERMEDIATE));
                 profil.setBadge(BadgeType.YELLOW);
                 profilRepo.save(profil);
                 log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.INTERMEDIATE);
             }
 
-            else if (profil.getProfilName().equals(ProfilType.MANAGER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getCoins() >= 30) {
+            else if (profil.getProfilName().equals(ProfilType.MANAGER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getValidatedProjects() >= 30) {
                 profil.setLevel((Level.ADVANCED));
                 profil.setBadge(BadgeType.GREEN);
                 profilRepo.save(profil);

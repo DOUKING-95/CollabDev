@@ -39,14 +39,17 @@ public class ApplicationControllerAdvice {
 
     }
 
-    @ExceptionHandler({RuntimeException.class, EntityNotFoundException.class, ExistSameEmailException.class, IncorrectEmailException.class, IncorrectPasswordException.class})
+    @ExceptionHandler({RuntimeException.class, EntityNotFoundException.class, ExistSameEmailException.class, IncorrectEmailException.class, IncorrectPasswordException.class, SecurityException.class})
     public @ResponseBody ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException except, HttpServletRequest request) {
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(LocalDateTime.now(),
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ErrorResponse(
+                LocalDateTime.now(),
                 String.valueOf(HttpStatus.BAD_REQUEST.value()),
                 HttpStatus.BAD_REQUEST.getReasonPhrase(),
                 except.getMessage(),
                 request.getRequestURI()
+
         ));
 
     }
