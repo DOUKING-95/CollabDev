@@ -129,7 +129,7 @@ public String validateProject(Long managerProfilId ,  Long projectId){
   }
   project.setStatus(Status.DONE);
   projectRepo.save(project);
-  return "le projet est terminer";
+  return "Le projet est terminer";
 
 
 }

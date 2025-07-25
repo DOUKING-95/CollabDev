@@ -68,7 +68,7 @@ public class ManagerInfoController {
             @RequestParam Long projectId){
 
         managerInfoService.validateProject(managerId, projectId);
-        return ResponseEntity.ok("Projet valider avec succès");
+        return ResponseEntity.ok("Projet Terminé :) 🥳");
     }
 
 
