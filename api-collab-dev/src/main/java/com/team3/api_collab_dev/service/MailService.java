@@ -15,11 +15,11 @@ public class MailService {
     }
 
     public void sendEmail(String to, String subject, String body) {
+
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
         message.setSubject(subject);
         message.setText(body);
-
 
         try {
             javaMailSender.send(message);

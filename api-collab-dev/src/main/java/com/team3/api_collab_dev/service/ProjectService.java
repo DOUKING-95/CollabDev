@@ -8,7 +8,6 @@ import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Level;
-import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.mapper.FilterProjectMapper;
 import com.team3.api_collab_dev.mapper.ProjectMapper;
@@ -48,7 +47,7 @@ public class ProjectService {
                 .filter(project -> project.getLevel() == level).toList();
 
         // Étape 3 : Retourner la liste filtrée
-        return filteredProjects.stream().map(project -> filterProjectMapper.apply(project) ).toList();
+        return filteredProjects.stream().map(project -> filterProjectMapper.apply(project)).toList();
     }
 
     public Project saveProject(ProjectDto projectDto) {
@@ -63,34 +62,30 @@ public class ProjectService {
     }
 
 
-
-
-    public List<ProjectDto> getAllProjects(){
+    public List<ProjectDto> getAllProjects() {
         List<Project> projects = new ArrayList<>();
 
         this.projectRepo.findAll().forEach(projects::add);
 
-        return  projects.stream().map((project) ->userMapper.projectToDto(project)).toList();
+        return projects.stream().map((project) -> userMapper.projectToDto(project)).toList();
     }
 
     public ProjectDto findProjectById(Long projectId) {
         Project project = projectRepo.findById(projectId).
-                orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : "+projectId));
+                orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : " + projectId));
 
-        return  userMapper.projectToDto(project);
+        return userMapper.projectToDto(project);
     }
 
-    public ProjectDto updateProject(Long id, ConfigureProjectDto updatedProject, Long managerProfilId){
+    public ProjectDto updateProject(Long id, ConfigureProjectDto updatedProject, Long managerProfilId) {
 
         Profil profil = profilRepo.findById(managerProfilId)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec le profil d'Id : " + managerProfilId));
 
 
-
-
         //Vérifier si le projet existe
         Project project = projectRepo.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Projet no trouvé avec l'ID : "+id));
+                .orElseThrow(() -> new EntityNotFoundException("Projet no trouvé avec l'ID : " + id));
 
         if (!profil.equals(project.getManager())) {
             throw new SecurityException("Seuls le manager de ce projet  peut peut le configurer.");
@@ -108,33 +103,33 @@ public class ProjectService {
         return userMapper.projectToDto(projectRepo.save(project));
     }
 
-    public Project addToPendingProfiles(Long projectId, Long profileId){
+    public Project addToPendingProfiles(Long projectId, Long profileId) {
         Project project = projectRepo.findById(projectId).
-                orElseThrow(() -> new EntityNotFoundException("Projet non trouver avec l'ID : "+projectId));
+                orElseThrow(() -> new EntityNotFoundException("Projet non trouver avec l'ID : " + projectId));
         Profil profil = profilRepo.findById(profileId)
-                .orElseThrow(() -> new EntityNotFoundException("Profil on trouvé avec l'Id : "+profileId));
+                .orElseThrow(() -> new EntityNotFoundException("Profil on trouvé avec l'Id : " + profileId));
         project.getPendingProfiles().add(profil);
         return projectRepo.save(project);
     }
 
     private int attributeCoinsByLevel(Level level) {
+
         if (level.equals(BEGINNER)) {
             return 20;
         } else if (level.equals(INTERMEDIATE)) {
             return 30;
-        }
-     else if (level.equals(FREE)) {
-        return 10;
-    }
-        else if (level.equals(ADVANCED)) {
+        } else if (level.equals(FREE)) {
+            return 10;
+        } else if (level.equals(ADVANCED)) {
             return 45;
         }
         throw new IllegalArgumentException("Niveau inconnu");
     }
-    public  List<Profil> getAllPendingProfil(Long projectId){
-        Project project = projectRepo.findById(projectId).orElseThrow( ()-> new  EntityNotFoundException("Pas de project trouver avec cette id" + projectId));
 
-        return  project.getPendingProfiles();
+    public List<Profil> getAllPendingProfil(Long projectId) {
+        Project project = projectRepo.findById(projectId).orElseThrow(() -> new EntityNotFoundException("Pas de project trouver avec cette id" + projectId));
+
+        return project.getPendingProfiles();
     }
 
 

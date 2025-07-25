@@ -9,7 +9,6 @@ public record ProjectDto(
         String description,
         Domain domain,
         String specification,
-
         User author
 
 ) {

@@ -10,7 +10,6 @@ public record UserUpdateDTO(
         @NotBlank
         @Size(max = 50,message = "Le speudo ne peut dépasser 50 caractères")
         String speudo,
-
         @Email
         String email
         ) {

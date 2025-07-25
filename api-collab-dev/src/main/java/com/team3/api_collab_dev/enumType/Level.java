@@ -4,7 +4,6 @@ public enum Level {
     FREE,
     BEGINNER,
     INTERMEDIATE,
-
     ADVANCED
 }
 

@@ -46,18 +46,6 @@ public class CreateAdminService implements CommandLineRunner {
 
         //----------------------------------------------------------------------
 
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EC");
-        keyGen.initialize(256);
-        KeyPair keyPair = keyGen.generateKeyPair();
-
-        ECPublicKey publicKey = (ECPublicKey) keyPair.getPublic();
-        ECPrivateKey privateKey = (ECPrivateKey) keyPair.getPrivate();
-
-        String pubKeyBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString(publicKey.getEncoded());
-        String privKeyBase64 = Base64.getUrlEncoder().withoutPadding().encodeToString(privateKey.getEncoded());
-
-        System.out.println("Clé publique : " + pubKeyBase64);
-        System.out.println("Clé privée  : " + privKeyBase64);
     }
 }
 

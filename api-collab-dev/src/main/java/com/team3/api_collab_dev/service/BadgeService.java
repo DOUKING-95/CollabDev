@@ -22,17 +22,14 @@ import java.util.List;
 public class BadgeService {
 
     private BadgeRepo badgeRepo;
-    private UserService userService;
     private ProfilRepo profilRepo;
 
 
-
-
-    public Badge createBadge(Badge badge){
-        return  badgeRepo.save(badge);
+    public Badge createBadge(Badge badge) {
+        return badgeRepo.save(badge);
     }
 
-    public List<Badge> getAllBadge(){
+    public List<Badge> getAllBadge() {
 
         List<Badge> badges = new ArrayList<>();
 
@@ -40,51 +37,75 @@ public class BadgeService {
         return badges;
 
     }
-    @Scheduled(cron = "0 0 */12 * * *")
-    public void assignedBadge(){
 
+    @Scheduled(cron = "0 0 */12 * * *")
+    public void assignedBadge() {
 
         for (Profil profil : profilRepo.findAll()) {
+            if (
+                    profil.getProfilName().equals(ProfilType.DEVELOPER) &&
+                            profil.getLevel().equals(Level.BEGINNER) &&
+                            profil.getValidatedProjects() >= 20) {
 
-            if (profil.getProfilName().equals(ProfilType.DEVELOPER) && profil.getLevel().equals(Level.BEGINNER) && profil.getValidatedProjects() >= 20) {
                 profil.setLevel((Level.INTERMEDIATE));
                 profil.setBadge(BadgeType.YELLOW);
                 profilRepo.save(profil);
-                log.info( "Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.INTERMEDIATE);
-            }
 
-            else if (profil.getProfilName().equals(ProfilType.DEVELOPER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getValidatedProjects() >= 30) {
-                profil.setLevel((Level.ADVANCED));
-                profil.setBadge(BadgeType.GREEN);
-                profilRepo.save(profil);
-                log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.ADVANCED);
-            }
-
-            else if (profil.getProfilName().equals(ProfilType.DESIGNER) && profil.getLevel().equals(Level.BEGINNER) && profil.getValidatedProjects() >= 20) {
-                profil.setLevel((Level.INTERMEDIATE));
-                profil.setBadge(BadgeType.YELLOW);
-                profilRepo.save(profil);
                 log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.INTERMEDIATE);
-            }
 
-            else if (profil.getProfilName().equals(ProfilType.DESIGNER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getValidatedProjects() >= 30) {
+            } else if (
+                    profil.getProfilName().equals(ProfilType.DEVELOPER) &&
+                            profil.getLevel().equals(Level.INTERMEDIATE) &&
+                            profil.getValidatedProjects() >= 30) {
+
                 profil.setLevel((Level.ADVANCED));
                 profil.setBadge(BadgeType.GREEN);
                 profilRepo.save(profil);
-                log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.ADVANCED);
-            }
 
-            else if (profil.getProfilName().equals(ProfilType.MANAGER) && profil.getLevel().equals(Level.BEGINNER) && profil.getValidatedProjects() >= 20) {
+                log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.ADVANCED);
+
+            } else if (
+                    profil.getProfilName().equals(ProfilType.DESIGNER) &&
+                            profil.getLevel().equals(Level.BEGINNER) &&
+                            profil.getValidatedProjects() >= 20) {
+
                 profil.setLevel((Level.INTERMEDIATE));
                 profil.setBadge(BadgeType.YELLOW);
                 profilRepo.save(profil);
-                log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.INTERMEDIATE);
-            }
 
-            else if (profil.getProfilName().equals(ProfilType.MANAGER) && profil.getLevel().equals(Level.INTERMEDIATE) && profil.getValidatedProjects() >= 30) {
+                log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.INTERMEDIATE);
+
+            } else if (
+                    profil.getProfilName().equals(ProfilType.DESIGNER) &&
+                            profil.getLevel().equals(Level.INTERMEDIATE) &&
+                            profil.getValidatedProjects() >= 30) {
+
                 profil.setLevel((Level.ADVANCED));
                 profil.setBadge(BadgeType.GREEN);
                 profilRepo.save(profil);
+
+                log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.ADVANCED);
+
+            } else if (
+                    profil.getProfilName().equals(ProfilType.MANAGER) &&
+                            profil.getLevel().equals(Level.BEGINNER) &&
+                            profil.getValidatedProjects() >= 20) {
+
+                profil.setLevel((Level.INTERMEDIATE));
+                profil.setBadge(BadgeType.YELLOW);
+                profilRepo.save(profil);
+
+                log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.INTERMEDIATE);
+
+            } else if (
+                    profil.getProfilName().equals(ProfilType.MANAGER) &&
+                            profil.getLevel().equals(Level.INTERMEDIATE) &&
+                            profil.getValidatedProjects() >= 30) {
+
+                profil.setLevel((Level.ADVANCED));
+                profil.setBadge(BadgeType.GREEN);
+                profilRepo.save(profil);
+
                 log.info("Felicitations " + profil.getUser().getPseudo() + "vous avez à present le niveau" + Level.ADVANCED);
             }
 
@@ -92,10 +113,7 @@ public class BadgeService {
         }
 
 
-
-
     }
-
 
 
 }
