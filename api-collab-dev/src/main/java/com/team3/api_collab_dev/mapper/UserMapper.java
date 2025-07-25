@@ -1,9 +1,12 @@
 package com.team3.api_collab_dev.mapper;
 
+import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.dto.UserCreateDTO;
 import com.team3.api_collab_dev.dto.UserResponseDTO;
 import com.team3.api_collab_dev.dto.UserUpdateDTO;
+import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
+import com.team3.api_collab_dev.enumType.Domain;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -39,6 +42,17 @@ public class UserMapper {
                 user.getEmail(),
                 user.getPassword(),
                 user.getRole()
+        );
+    }
+
+    public ProjectDto projectToDto(Project project){
+        return  new ProjectDto(
+               project.getTitle(),
+                project.getDescription(),
+               project.getDomaine(),
+                project.getSpecification(),
+ project.getAuthor()
+
         );
     }
 

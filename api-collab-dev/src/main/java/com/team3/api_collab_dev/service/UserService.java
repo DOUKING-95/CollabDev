@@ -206,7 +206,7 @@ if (profilName == ProfilType.MANAGER){
             log.info(project.getPendingProfiles().toString());
             projectRepo.save(project);
         }
-        return "Profil associé avec succès au projet";
+        return "Demande envoyer avec  succès pour le  projet" + project.getTitle();
 
 
     } else {

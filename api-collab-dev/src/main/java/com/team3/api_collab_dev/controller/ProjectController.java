@@ -1,6 +1,7 @@
 package com.team3.api_collab_dev.controller;
 
 import com.team3.api_collab_dev.dto.ApiReponse;
+import com.team3.api_collab_dev.dto.ConfigureProjectDto;
 import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Comment;
 import com.team3.api_collab_dev.entity.Project;
@@ -43,7 +44,7 @@ public class ProjectController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiReponse<?>> createProject(@RequestBody ProjectDto projectDto) {
+    public ResponseEntity<ApiReponse<?>> createProject(@RequestBody @Valid ProjectDto projectDto) {
         Project project = projectMapper.apply(projectDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
 
@@ -67,10 +68,10 @@ public class ProjectController {
     }
     // configuration du projet
     @PutMapping("/{id}/configureProject")
-    public Project updateProject(@PathVariable Long id,
-                                 @Valid @RequestBody Project project,
-                                 @RequestParam(required = false) List<Long> selectedProfileIds) {
-        return projectService.updateProject(id, project, selectedProfileIds);
+    public ProjectDto updateProject(@PathVariable Long id,
+                                 @Valid @RequestBody ConfigureProjectDto project,
+                                 @RequestParam Long managerProfilId) {
+        return projectService.updateProject(id, project, managerProfilId);
     }
 
 

@@ -1,14 +1,18 @@
 package com.team3.api_collab_dev.service;
 
 
+import com.team3.api_collab_dev.dto.ConfigureProjectDto;
 import com.team3.api_collab_dev.dto.FilterProjectResponse;
 import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Level;
+import com.team3.api_collab_dev.enumType.ProfilType;
+import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.mapper.FilterProjectMapper;
 import com.team3.api_collab_dev.mapper.ProjectMapper;
+import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.repository.UserRepo;
@@ -32,6 +36,7 @@ public class ProjectService {
     private UserRepo userRepo;
     private ProfilRepo profilRepo;
     private FilterProjectMapper filterProjectMapper;
+    private UserMapper userMapper;
 
 
     public List<FilterProjectResponse> filterProjectsByLevel(Level level) {
@@ -57,46 +62,50 @@ public class ProjectService {
         return projectRepo.save(project);
     }
 
-    public Project getProject(Long id){
-        return projectRepo.findById(id).
-                orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : "+id));
-    }
 
 
-    public List<Project> getAllProjects(){
+
+    public List<ProjectDto> getAllProjects(){
         List<Project> projects = new ArrayList<>();
 
         this.projectRepo.findAll().forEach(projects::add);
 
-        return  projects;
+        return  projects.stream().map((project) ->userMapper.projectToDto(project)).toList();
     }
 
-    public Project findProjectById(Long projectId) {
-        return projectRepo.findById(projectId)
-                .orElseThrow(() -> new EntityNotFoundException("Pas de projet avec cet ID : " + projectId));
+    public ProjectDto findProjectById(Long projectId) {
+        Project project = projectRepo.findById(projectId).
+                orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : "+projectId));
 
+        return  userMapper.projectToDto(project);
     }
 
-    public Project updateProject(Long id, Project updatedProject, List<Long> selectedProfileIds){
+    public ProjectDto updateProject(Long id, ConfigureProjectDto updatedProject, Long managerProfilId){
+
+        Profil profil = profilRepo.findById(managerProfilId)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec le profil d'Id : " + managerProfilId));
+
+
+
+
         //Vérifier si le projet existe
         Project project = projectRepo.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Projet no trouvé avec l'ID : "+id));
 
+        if (!profil.equals(project.getManager())) {
+            throw new SecurityException("Seuls le manager de ce projet  peut peut le configurer.");
+        }
+
         //Mettre à jour les champs
-        project.setLevel(updatedProject.getLevel());
-        project.setSpecification(updatedProject.getSpecification());
-        project.setGithubLink(updatedProject.getGithubLink());
-        project.setStatus(updatedProject.getStatus());
+        project.setLevel(updatedProject.level());
+        project.setSpecification(updatedProject.specification());
+        project.setGithubLink(updatedProject.githubLink());
+        project.setStatus(Status.TODO);
         //Calculer le nombre de coins
         project.setCoins(attributeCoinsByLevel(project.getLevel()));
 
-        //Ajouter les profils sélectionnés comme membres
-        if(selectedProfileIds != null ){
-            List<Profil> selectedProfiles = (List<Profil>) profilRepo.findAllById(selectedProfileIds);
-            project.getMembers().addAll(selectedProfiles);
-            project.getPendingProfiles().removeAll(selectedProfiles);
-        }
-        return projectRepo.save(project);
+
+        return userMapper.projectToDto(projectRepo.save(project));
     }
 
     public Project addToPendingProfiles(Long projectId, Long profileId){
