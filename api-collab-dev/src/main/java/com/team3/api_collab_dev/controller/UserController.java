@@ -49,9 +49,12 @@ public class UserController {
     }
 
     @PostMapping( consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiReponse<?>> createUser(@RequestBody @Valid UserCreateDTO user) {
+    public ResponseEntity<ApiReponse<?>> createUser(
+            @RequestBody @Valid UserCreateDTO user) {
 
-        this.mailService.sendEmail(user.email(),"CollabDev API",String.format("Votre compte a été créer avec success sur CollabDev Mr/Mme  %s ",user.speudo()));
+        this.mailService.sendEmail(user.email(),
+                "CollabDev API",String.format("Votre compte a été créer avec success sur CollabDev Mr/Mme  %s ",
+                        user.speudo()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiReponse<>(
@@ -76,22 +79,29 @@ public class UserController {
 
     @ResponseStatus(value = HttpStatus.ACCEPTED, code = HttpStatus.ACCEPTED)
     @PutMapping(path = "/{userId}/changePassword", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiReponse<?>> changePassword(@PathVariable(name = "userId") Long userId, @RequestBody @Valid ChangePasswordDTO passwordDTO) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
+    public ResponseEntity<ApiReponse<?>> changePassword(
+            @PathVariable(name = "userId") Long userId,
+            @RequestBody @Valid ChangePasswordDTO passwordDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.userService.changePassword(userId, passwordDTO)));
     }
 
     @ResponseStatus(value = HttpStatus.ACCEPTED, code = HttpStatus.ACCEPTED)
     @PutMapping(path = "/updateUserInfo/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiReponse<?>> updateUserInfo(@PathVariable(name = "userId") Long userId, @RequestBody @Valid UserUpdateDTO updateDTO) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
+    public ResponseEntity<ApiReponse<?>> updateUserInfo(
+            @PathVariable(name = "userId") Long userId,
+            @RequestBody @Valid UserUpdateDTO updateDTO) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new ApiReponse<>(String.valueOf(HttpStatus.ACCEPTED.value()),
                 HttpStatus.ACCEPTED.getReasonPhrase(),
                 this.userService.updateUserInfo(userId, updateDTO)));
     }
 
     @GetMapping(path = "/{userId}")
-    public ResponseEntity<ApiReponse<?>> getUserById(@PathVariable(name = "userId") Long userId) {
+    public ResponseEntity<ApiReponse<?>> getUserById(
+            @PathVariable(name = "userId") Long userId) {
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
@@ -110,9 +120,6 @@ public class UserController {
             @RequestParam ProfilType profilType
             ) throws IOException {
 
-
-
-
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
@@ -121,7 +128,6 @@ public class UserController {
                                 projectId,
                                userId,
                                profilType
-
                         )
                 )
         );
@@ -129,13 +135,9 @@ public class UserController {
 
     @PostMapping(path = "/joinProjectAsManager")
     private ResponseEntity<ApiReponse<?>> joinProjectAsManager(
-            @RequestParam String githubLink,
             @ModelAttribute JoinProjectRequest request,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) throws IOException {
-
-
-
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
@@ -146,8 +148,7 @@ public class UserController {
                                 request.projectId(),
                                 request.profilType(),
                                 file,
-                                githubLink
-
+                                request.githubLink()
                         )
                 )
         );

@@ -30,12 +30,12 @@ public class DataMock {
         // ... autres champs si besoin
 
         // Créer quelques commentaires
-        Comment comment1 = new Comment();
+        Comment comment1 = new Comment(commentDto.user(), commentDto.project(), commentDto.content());
         comment1.setAuthor(author);
         comment1.setProject(null); // on l'associera après
         comment1.setContent("Très bon projet !");
 
-        Comment comment2 = new Comment();
+        Comment comment2 = new Comment(commentDto.user(), commentDto.project(), commentDto.content());
         comment2.setAuthor(manager);
         comment2.setProject(null); // on l'associera après
         comment2.setContent("Je valide les specs.");

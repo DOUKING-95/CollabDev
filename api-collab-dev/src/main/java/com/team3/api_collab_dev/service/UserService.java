@@ -40,9 +40,7 @@ public class UserService {
     private UserMapper userMapper;
     private ProfilRepo profilRepo;
     private ManagerInfoService managerInfoService;
-
     private FileStorageService fileStorageService;
-
     private ProjectRepo projectRepo;
 
 
@@ -66,9 +64,7 @@ public class UserService {
                 .orElseThrow(() -> new EntityNotFoundException("Pas de user avec ID: " + userId));
 
         userMapper.updateEntity(existingUser, userInfo);
-
         userRepo.save(existingUser);
-
 
         return "Information mise à jour avec succès";
     }
@@ -82,7 +78,6 @@ public class UserService {
     public User login(String email, String password) {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Cet email est incorrect ! :) Merci de réverifier  "));
-
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new IncorrectPasswordException("Mot de passe incorrect ! :) Merci réverifier");
@@ -108,7 +103,6 @@ public class UserService {
             return " :) Les mots de passe ne sont pas identiques  ";
         }
 
-
     }
 
 
@@ -116,7 +110,12 @@ public class UserService {
         return this.userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException(" :) Oooops aucun utilisateur trouver avec l'id " + userId));
     }
 
-    public String joinProjectAsManager(Long userId, Long projectId, ProfilType profilName, MultipartFile file, String githubLink) throws IOException {
+    public String joinProjectAsManager(
+            Long userId,
+            Long projectId,
+            ProfilType profilName,
+            MultipartFile file,
+            String githubLink) throws IOException {
 
         if (profilName == ProfilType.MANAGER) {
 
@@ -150,7 +149,7 @@ public class UserService {
                 managerInfo.setGithubLink(githubLink);
                 project.getPendingProfiles().add(profil);
                 log.info(project.getPendingProfiles().toString());
-               saveManagerDetail( file,managerInfo);
+                saveManagerDetail(file, managerInfo);
                 projectRepo.save(project);
                 return "Vous avez été ajouter à listre d'attente du Projet" + project.getTitle();
 
@@ -163,78 +162,73 @@ public class UserService {
 
 
     // add this members to contribution request  with his profil
-    public String joinProjectWithProfilName(Long projectId, Long userId, ProfilType profilName) throws IOException {
-if (profilName == ProfilType.MANAGER){
-    return  "Vous ne pouvez pas joindre ce projet en tant Manager :) Merci ";
+    public String joinProjectWithProfilName(
+            Long projectId, Long userId,
+            ProfilType profilName) throws IOException {
 
-} else {
-    User user = userRepo.findById(userId)
-            .orElseThrow(() -> new EntityNotFoundException("User non trouvé avec l'Id : " + userId));
+        if (profilName == ProfilType.MANAGER) {
 
-    Project project = projectRepo.findById(projectId)
-            .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'Id : " + projectId));
+            return "Vous ne pouvez pas joindre ce projet en tant Manager :) Merci ";
 
-    if (project.getManager() == null ){
-        return  "Vous ne pouvez a joindre cd projet en tant que Designer | Developeur car il na pas de Gestionnaire :) Merci ";
-    }
+        } else {
+            User user = userRepo.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User non trouvé avec l'Id : " + userId));
 
+            Project project = projectRepo.findById(projectId)
+                    .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'Id : " + projectId));
 
+            if (project.getManager() == null) {
+                return "Vous ne pouvez a joindre cd projet en tant que Designer | Developeur car il na pas de Gestionnaire :) Merci ";
+            }
 
-    Optional<Profil> profilOptional = profilRepo.findByUserIdAndProfilName(userId, profilName);
+            Optional<Profil> profilOptional = profilRepo.findByUserIdAndProfilName(userId, profilName);
 
+            Profil profil;
+            if (profilOptional.isPresent()) {
+                profil = profilOptional.get();
 
-    Profil profil;
-    if (profilOptional.isPresent()) {
-        profil = profilOptional.get();
+            } else {
+                profil = new Profil();
+                profil.setUser(user);
+                profil.setProfilName(profilName);
+                profil.setLevel(Level.BEGINNER);
+                profil.setBadge(BadgeType.RED);
+                profil.setCoins(50);
+                profil.setValidatedProjects(0);
+                profil = profilRepo.save(profil);
+            }
 
+            if (profil.getLevel() == project.getLevel() && profil.getCoins() >= project.getCoins()) {
 
-    } else {
-        profil = new Profil();
-        profil.setUser(user);
-        profil.setProfilName(profilName);
-        profil.setLevel(Level.BEGINNER);
-        profil.setBadge(BadgeType.RED);
-        profil.setCoins(50);
-        profil.setValidatedProjects(0);
-        profil = profilRepo.save(profil);
-    }
+                if (!project.getPendingProfiles().contains(profil)) {
+                    project.getPendingProfiles().add(profil);
+                    log.info(project.getPendingProfiles().toString());
+                    projectRepo.save(project);
+                }
+                return "Demande envoyer avec  succès pour le  projet" + project.getTitle();
 
-    if (profil.getLevel() == project.getLevel() && profil.getCoins() >= project.getCoins()) {
-
-        if (!project.getPendingProfiles().contains(profil)) {
-            project.getPendingProfiles().add(profil);
-            log.info(project.getPendingProfiles().toString());
-            projectRepo.save(project);
+            } else {
+                List<String> response = new ArrayList<>();
+                //  response.add("Vous n'avez pas remplis les conditions d'adhésion pour ce projet :) Pas le niveau requis ou pas de piéce requis");
+                return "Vous n'avez pas remplis les conditions d'adhésion pour ce projet :) Pas le niveau requis ou pas de piéce requis";
+                //  return response;
+            }
         }
-        return "Demande envoyer avec  succès pour le  projet" + project.getTitle();
 
-
-    } else {
-        List<String> response = new ArrayList<>();
-        //  response.add("Vous n'avez pas remplis les conditions d'adhésion pour ce projet :) Pas le niveau requis ou pas de piéce requis");
-        return "Vous n'avez pas remplis les conditions d'adhésion pour ce projet :) Pas le niveau requis ou pas de piéce requis";
-        //  return response;
-    }
-}
-
-
-
-        //
     }
 
 
-
-
-    public String saveManagerDetail(MultipartFile file, ManagerInfo managerInfo) throws IOException {
+    public String saveManagerDetail(
+            MultipartFile file,
+            ManagerInfo managerInfo) throws IOException {
 
         if (file != null && !file.isEmpty()) {
             // utiliser file.getOriginalFilename()
             String cvPath = this.fileStorageService.storeFile(file);
             managerInfo.setPathCv(cvPath);
-             this.managerInfoService.saveManager(managerInfo);
+            this.managerInfoService.saveManager(managerInfo);
             return "Info du Manager" + managerInfo.getManager().getUser().getPseudo() + "Sauvegarder avec Succes ";
-        }
-        else return  "Merci de chager un votre Cv ";
+        } else return "Merci de chager un votre Cv ";
 
 
     }

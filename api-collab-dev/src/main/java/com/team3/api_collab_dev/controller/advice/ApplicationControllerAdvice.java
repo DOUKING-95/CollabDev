@@ -21,7 +21,9 @@ import java.time.LocalDateTime;
 public class ApplicationControllerAdvice {
 
     @ExceptionHandler({MethodArgumentNotValidException.class})
-    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException except, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleValidationException(
+            MethodArgumentNotValidException except,
+            HttpServletRequest request) {
         String message = except.getBindingResult().getFieldErrors().stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .reduce((msg1, msg2) -> msg1 + "; " + msg2)
@@ -39,8 +41,16 @@ public class ApplicationControllerAdvice {
 
     }
 
-    @ExceptionHandler({RuntimeException.class, EntityNotFoundException.class, ExistSameEmailException.class, IncorrectEmailException.class, IncorrectPasswordException.class, SecurityException.class})
-    public @ResponseBody ResponseEntity<ErrorResponse> handleRuntimeException(RuntimeException except, HttpServletRequest request) {
+    @ExceptionHandler({
+            RuntimeException.class,
+            EntityNotFoundException.class,
+            ExistSameEmailException.class,
+            IncorrectEmailException.class,
+            IncorrectPasswordException.class,
+            SecurityException.class})
+    public @ResponseBody ResponseEntity<ErrorResponse> handleRuntimeException(
+            RuntimeException except,
+            HttpServletRequest request) {
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                 new ErrorResponse(

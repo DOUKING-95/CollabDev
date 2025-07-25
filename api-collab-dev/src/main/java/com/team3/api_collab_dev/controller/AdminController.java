@@ -35,13 +35,18 @@ public class AdminController {
 
 
     @PutMapping(value = "/attributeCoinsToManager")
-    public ResponseEntity<?> attributeManagerCoins(@RequestParam Long projectId, @RequestParam  double coins){
+    public ResponseEntity<?> attributeManagerCoins(
+            @RequestParam Long projectId,
+            @RequestParam  double coins){
 
-         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(this.adminService.attributeManagerCoins(projectId, coins));
+         return  ResponseEntity.status(HttpStatus.ACCEPTED)
+                 .body(this.adminService.attributeManagerCoins(projectId, coins));
     }
 
     @PutMapping(path = "attributeManagerToProject")
-    public ResponseEntity<ApiReponse<?>> attributeManagerToProject(@RequestParam Long projectId, @RequestParam Long managerId){
+    public ResponseEntity<ApiReponse<?>> attributeManagerToProject(
+            @RequestParam Long projectId,
+            @RequestParam Long managerId){
 
         Project targetProject = this.projectRepo.findById(projectId)
                 .orElseThrow(()-> new EntityNotFoundException("Aucun projet n'a été trouver avec ce id " + projectId));

@@ -1,6 +1,7 @@
 package com.team3.api_collab_dev.controller;
 
 import com.team3.api_collab_dev.dto.ApiReponse;
+import com.team3.api_collab_dev.dto.CommentDto;
 import com.team3.api_collab_dev.dto.ConfigureProjectDto;
 import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Comment;
@@ -66,31 +67,35 @@ public class ProjectController {
                 )
         );
     }
+
     // configuration du projet
     @PutMapping("/{id}/configureProject")
-    public ProjectDto updateProject(@PathVariable Long id,
-                                 @Valid @RequestBody ConfigureProjectDto project,
-                                 @RequestParam Long managerProfilId) {
+    public ProjectDto updateProject(
+            @PathVariable Long id,
+            @Valid @RequestBody ConfigureProjectDto project,
+            @RequestParam Long managerProfilId) {
         return projectService.updateProject(id, project, managerProfilId);
     }
 
 
-
     @PostMapping("/{id}/join")
-    public Project addToPendingProfiles(@PathVariable Long id,
-                                        @RequestBody Long profileId) {
+    public Project addToPendingProfiles(
+            @PathVariable Long id,
+            @RequestBody Long profileId) {
         return projectService.addToPendingProfiles(id, profileId);
     }
 
 
-
-    @PutMapping(path = "/{projectId}")
-    public ResponseEntity<ApiReponse<?>> makeComment(@PathVariable(name = "projectId") Long projectId, @RequestBody Comment comment) {
+    @PutMapping(path = "/{projectId}/makeComment")
+    public ResponseEntity<ApiReponse<?>> makeComment(
+            @PathVariable(name = "projectId") Long projectId,
+            @PathVariable Long userId,
+            @RequestBody @Valid CommentDto comment) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.commentService.makeComment(projectId, comment))
+                        this.commentService.makeComment(projectId,userId,  comment))
 
         );
 
@@ -103,13 +108,14 @@ public class ProjectController {
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.projectService.getAllPendingProfil(projectId).stream().filter(profil -> Objects.equals(profil.getProfilName().toString(), "DESIGNER")))
+                        this.projectService.getAllPendingProfil(projectId).stream()
+                        .filter(profil -> Objects.equals(profil.getProfilName()
+                        .toString(), "DESIGNER")))
 
         );
 
 
     }
-
 
 
 }

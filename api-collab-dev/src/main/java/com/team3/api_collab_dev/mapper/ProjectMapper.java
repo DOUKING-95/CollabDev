@@ -15,3 +15,5 @@ public class ProjectMapper implements Function<ProjectDto, Project> {
         return new Project(projectDto.title(), projectDto.description(), projectDto.domain(), projectDto.specification(), projectDto.author());
     }
 }
+
+

@@ -19,7 +19,8 @@ public class FileUploadController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(
+            @RequestParam("file") MultipartFile file) {
         try {
             String filePath = fileStorageService.storeFile(file);
             return ResponseEntity.ok("File uploaded successfully: " + filePath);

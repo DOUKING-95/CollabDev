@@ -35,7 +35,8 @@ public class CommentTaskController {
 
     }
     @GetMapping
-    public List<CommentTaskDTO> getComments(@PathVariable Long taskId) {
+    public List<CommentTaskDTO> getComments(
+            @PathVariable Long taskId) {
         List<CommentTask> commentTasks = commentTaskService.getCommentsByTask(taskId);
         return commentTasks.stream()
                 .map(commentTask-> new CommentTaskDTO(
