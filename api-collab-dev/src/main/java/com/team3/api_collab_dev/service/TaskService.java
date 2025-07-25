@@ -132,9 +132,12 @@ public class TaskService {
                 .orElseThrow(() -> new EntityNotFoundException(
                         "Tâche non trouvée avec l'Id : " + taskId));
 
+        Profil profil = profilRepo.findById(contributorId)
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Profil non trouvée avec l'Id : " + contributorId));
+
         // Vérifie que le profil de la tâche appartient bien à ce contributeur
-        if (task.getProfil() == null || task.getProfil().getUser() == null ||
-                !task.getProfil().getUser().getId().equals(contributorId)) {
+        if (task.getProfil() != profil) {
             throw new SecurityException("Vous assayez de soumettre une tâche qui ne vous appartient pas." );
         }
         if (task.getStatus() == Status.DONE){
