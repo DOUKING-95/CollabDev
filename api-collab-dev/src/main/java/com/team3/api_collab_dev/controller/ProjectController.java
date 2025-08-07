@@ -46,7 +46,6 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<ApiReponse<?>> createProject(@RequestBody @Valid ProjectDto projectDto) {
-        Project project = projectMapper.apply(projectDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(
 
                 new ApiReponse<>(
