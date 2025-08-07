@@ -52,9 +52,9 @@ public class UserController {
     public ResponseEntity<ApiReponse<?>> createUser(
             @RequestBody @Valid UserCreateDTO user) {
 
-        this.mailService.sendEmail(user.email(),
-                "CollabDev API",String.format("Votre compte a été créer avec success sur CollabDev Mr/Mme  %s ",
-                        user.speudo()));
+     //   this.mailService.sendEmail(user.email(),
+      //          "CollabDev API",String.format("Votre compte a été créer avec success sur CollabDev Mr/Mme  %s ",
+           //             user.speudo()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiReponse<>(

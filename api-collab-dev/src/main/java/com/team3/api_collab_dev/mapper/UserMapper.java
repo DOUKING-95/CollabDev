@@ -21,7 +21,6 @@ public class UserMapper {
         user.setPseudo(userCreateDTO.speudo());
         user.setEmail(userCreateDTO.email());
         user.setPassword(userCreateDTO.password());
-        user.setRole(userCreateDTO.role());
         return user;
     }
 
@@ -40,8 +39,8 @@ public class UserMapper {
         return new UserCreateDTO(
                 user.getPseudo(),
                 user.getEmail(),
-                user.getPassword(),
-                user.getRole()
+                user.getPassword()
+
         );
     }
 
@@ -73,6 +72,7 @@ public class UserMapper {
                 project.getComments(),
                 project.getContributionRequests(),
                 project.getCreatedDate()
+
 
         );
     }

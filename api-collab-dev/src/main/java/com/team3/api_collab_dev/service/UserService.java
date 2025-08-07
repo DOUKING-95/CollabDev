@@ -14,6 +14,7 @@ import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.BadgeType;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.ProfilType;
+import com.team3.api_collab_dev.enumType.RoleType;
 import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
@@ -56,7 +57,7 @@ public class UserService {
         user.setPseudo(userDto.speudo());
         user.setEmail(userDto.email());
         user.setPassword(passwordEncoder.encode(userDto.password()));
-        user.setRole(userDto.role());
+        user.setRole(RoleType.USER);
         this.userRepo.save(user);
         return " :) Utilsateur ===" + userDto.speudo() + "=== créer avec succes";
     }
