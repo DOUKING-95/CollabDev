@@ -18,6 +18,6 @@ public record UserCreateDTO(
 
         @NotBlank
         @Size(min = 8, message = "Le mot de passse doit superieur au egale à huit(8) caractères")
-        String password,
-        RoleType role) {
+        String password
+       ) {
 }

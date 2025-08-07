@@ -30,15 +30,15 @@ public record ProjectDto(
 
         String githubLink,
 
-
-
-        List<Long> memberIds,
-        List<Long> pendingProfileIds,
         double coins,
 
+        List<Profil> memberIds,
+        List<Profil> pendingProfileIds,
 
 
-        List<Long> contributionRequestIds,
+
+
+        List<Profil> contributionRequestIds,
 
         LocalDate createdDate
 
