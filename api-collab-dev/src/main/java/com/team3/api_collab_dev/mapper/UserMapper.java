@@ -45,13 +45,34 @@ public class UserMapper {
         );
     }
 
+    public UserResponseDTO userToUserResponseDTO(User user) {
+        return new UserResponseDTO(
+                user.getId(),
+                user.getPseudo(),
+                user.getEmail(),
+                user.getRole()
+        );
+    }
+
     public ProjectDto projectToDto(Project project) {
         return new ProjectDto(
+                project.getId(),
                 project.getTitle(),
                 project.getDescription(),
                 project.getDomaine(),
                 project.getSpecification(),
-                project.getAuthor()
+                userToUserResponseDTO(project.getAuthor()),
+                project.getManager(),
+                project.getStatus(),
+                project.getLevel(),
+                project.getGithubLink(),
+                project.getTasks(),
+                project.getMembers(),
+                project.getPendingProfiles(),
+                project.getCoins(),
+                project.getComments(),
+                project.getContributionRequests(),
+                project.getCreatedDate()
 
         );
     }

@@ -1,9 +1,12 @@
 package com.team3.api_collab_dev.entity;
 
+import com.team3.api_collab_dev.dto.UserResponseDTO;
 import com.team3.api_collab_dev.enumType.Domain;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.Status;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -92,12 +95,15 @@ public class Project {
 
     private LocalDate createdDate;
 
-    public Project(String title, String description, Domain domain, String specification, User author) {
+    public Project(String title, String description, Domain domain, String specification) {
         this.title = title;
         this.description = description;
         this.domaine = domain;
         this.specification = specification;
-        this.author = author;
+
+    }
+
+    public Project(@NotBlank(message = "Le titre du projet  est Obligatoire") String title, @NotBlank(message = "La description du projet  est Obligatoire") String description, @NotNull(message = "Veillez renseigner un domaine") Domain domain, String specification, @NotNull(message = "L'auteur est doit etre specifier") UserResponseDTO author) {
     }
 
 

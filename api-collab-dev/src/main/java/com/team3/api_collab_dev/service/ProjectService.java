@@ -50,15 +50,18 @@ public class ProjectService {
         return filteredProjects.stream().map(project -> filterProjectMapper.apply(project)).toList();
     }
 
-    public Project saveProject(ProjectDto projectDto) {
+    public ProjectDto saveProject(ProjectDto projectDto) {
 
-        User author = userRepo.findById(projectDto.author().getId())
-                .orElseThrow(() -> new EntityNotFoundException("Auteur introuvable avec l'id " + projectDto.author().getId()));
+        User author = userRepo.findById(projectDto.author().id())
+                .orElseThrow(() -> new EntityNotFoundException("Auteur introuvable avec l'id " + projectDto.author().id()));
 
         Project project = projectMapper.apply(projectDto);
         project.setAuthor(author); // Remplacer l'auteur DTO par l'auteur récupéré depuis la base
 
-        return projectRepo.save(project);
+        System.out.println("Description reçue : " + project.getDescription());
+
+         projectRepo.save(project);
+         return userMapper.projectToDto(project);
     }
 
 
@@ -67,7 +70,7 @@ public class ProjectService {
 
         this.projectRepo.findAll().forEach(projects::add);
 
-        return projects.stream().map((project) -> userMapper.projectToDto(project)).toList();
+        return projects.stream().map((project) -> this.userMapper.projectToDto(project)).toList();
     }
 
     public ProjectDto findProjectById(Long projectId) {

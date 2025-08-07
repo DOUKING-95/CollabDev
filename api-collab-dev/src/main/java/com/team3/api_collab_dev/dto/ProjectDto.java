@@ -1,6 +1,8 @@
 package com.team3.api_collab_dev.dto;
 
+import com.team3.api_collab_dev.entity.Comment;
 import com.team3.api_collab_dev.entity.Profil;
+import com.team3.api_collab_dev.entity.Task;
 import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Domain;
 import com.team3.api_collab_dev.enumType.Level;
@@ -22,30 +24,26 @@ public record ProjectDto(
         String specification,
 
         @NotNull(message = "L'auteur est doit etre specifier")
-        User author,
-        Profil managerId,        // simplifié aussi
+        UserResponseDTO author,
+        Profil managerId,
 
         Status status,
         Level level,
 
         String githubLink,
 
+        List<Task> tasks,
 
+        List<Profil> members,
+        List<Profil> pendingProfiles,
 
-        List<Long> memberIds,
-        List<Long> pendingProfileIds,
         double coins,
 
+        List<Comment> comments,
 
-
-        List<Long> contributionRequestIds,
+        List<Profil> contributionRequests,
 
         LocalDate createdDate
-
-
-          
-
-
 
 ) {
 }

@@ -67,7 +67,6 @@ public class UserController {
 
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> login(@RequestBody @Valid LoginDto login) {
-        User user = userService.login(login.email(), login.password());
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),

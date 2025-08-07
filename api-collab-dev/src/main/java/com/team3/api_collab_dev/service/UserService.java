@@ -5,6 +5,7 @@ import com.team3.api_collab_dev.Exception.ExistSameEmailException;
 import com.team3.api_collab_dev.Exception.IncorrectPasswordException;
 import com.team3.api_collab_dev.dto.ChangePasswordDTO;
 import com.team3.api_collab_dev.dto.UserCreateDTO;
+import com.team3.api_collab_dev.dto.UserResponseDTO;
 import com.team3.api_collab_dev.dto.UserUpdateDTO;
 import com.team3.api_collab_dev.entity.ManagerInfo;
 import com.team3.api_collab_dev.entity.Profil;
@@ -76,7 +77,7 @@ public class UserService {
     }
 
 
-    public User login(String email, String password) {
+    public UserResponseDTO login(String email, String password) {
         User user = userRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Cet email est incorrect ! :) Merci de réverifier  "));
 
@@ -84,7 +85,7 @@ public class UserService {
             throw new IncorrectPasswordException("Mot de passe incorrect ! :) Merci réverifier");
         }
 
-        return user;
+        return userMapper.userToDto(user);
     }
 
     public String changePassword(Long userId, ChangePasswordDTO dto) {
