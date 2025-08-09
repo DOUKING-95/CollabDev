@@ -25,25 +25,16 @@ public record ProjectDto(
 
         @NotNull(message = "L'auteur est doit etre specifier")
         UserResponseDTO author,
-        Profil managerId,
-
+        ProfilDto managerId,
         Status status,
         Level level,
-
         String githubLink,
-
-        List<Task> tasks,
-
-        List<Profil> members,
-        List<Profil> pendingProfiles,
-
+        List<TaskDto> tasks,
+        List<ProfilDto> members,
+        List<ProfilDto> pendingProfiles,
         double coins,
-
-        List<Comment> comments,
-
-        List<Profil> contributionRequests,
-
-
+        List<CommentDto> comments,
+        List<ProfilDto> contributionRequests,
         LocalDate createdDate
 
 ) {

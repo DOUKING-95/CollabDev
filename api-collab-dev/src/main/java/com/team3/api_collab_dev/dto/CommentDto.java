@@ -7,9 +7,9 @@ import jakarta.validation.constraints.NotNull;
 
 public record CommentDto(
         @NotNull(message = "Merci de specifier ID votre ID pour qu' il puisse etre associer au commentaire")
-        User user,
+        UserResponseDTO user,
         @NotNull(message = "Merci ce specifier ID du project en question")
-        Project project,
+        ProjectDto project,
 
         @NotBlank(message = "message obligatoire lors du commentaire ")
         String content

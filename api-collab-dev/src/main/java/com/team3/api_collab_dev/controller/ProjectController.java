@@ -28,7 +28,13 @@ import java.util.Objects;
 public class ProjectController {
 
     private ProjectService projectService;
-    private ProjectMapper projectMapper;
+
+
+
+
+
+
+
     private CommentService commentService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)

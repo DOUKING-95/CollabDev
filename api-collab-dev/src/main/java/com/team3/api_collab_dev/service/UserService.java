@@ -47,7 +47,7 @@ public class UserService {
     private ProjectRepo projectRepo;
 
 
-    public String createUser(UserCreateDTO userDto) {
+    public UserResponseDTO createUser(UserCreateDTO userDto) {
         Optional<User> optionalUser = this.userRepo.findByEmail(userDto.email());
 
         if (optionalUser.isPresent())
@@ -58,8 +58,8 @@ public class UserService {
         user.setEmail(userDto.email());
         user.setPassword(passwordEncoder.encode(userDto.password()));
         user.setRole(RoleType.USER);
-        this.userRepo.save(user);
-        return " :) Utilsateur ===" + userDto.speudo() + "=== créer avec succes";
+
+        return UserMapper.toDto(this.userRepo.save(user));
     }
 
     public String updateUserInfo(Long userId, UserUpdateDTO userInfo) {
@@ -73,8 +73,12 @@ public class UserService {
     }
 
 
-    public Iterable<User> getAllUsers() {
-        return this.userRepo.findAll();
+    public List<UserResponseDTO> getAllUsers() {
+
+        List<User> users  = new ArrayList<>();
+
+                this.userRepo.findAll().forEach(users::add);
+        return users.stream().map(UserMapper::toDto).toList();
     }
 
 
@@ -86,7 +90,7 @@ public class UserService {
             throw new IncorrectPasswordException("Mot de passe incorrect ! :) Merci réverifier");
         }
 
-        return userMapper.userToDto(user);
+        return UserMapper.toDto(user);
     }
 
     public String changePassword(Long userId, ChangePasswordDTO dto) {

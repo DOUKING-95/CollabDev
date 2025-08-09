@@ -5,6 +5,7 @@ import com.team3.api_collab_dev.dto.CommentDto;
 import com.team3.api_collab_dev.entity.Comment;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
+import com.team3.api_collab_dev.mapper.CommentMapper;
 import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.repository.CommentRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
@@ -29,7 +30,7 @@ public class CommentService {
         User user = this.userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Pas de user avec cet id : " + userId));
 
-        return this.commentRepo.save(userMapper.dtoToComment(comment));
+        return this.commentRepo.save(CommentMapper.toEntity (comment));
     }
 
 

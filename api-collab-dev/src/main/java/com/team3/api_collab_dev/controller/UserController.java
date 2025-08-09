@@ -38,12 +38,13 @@ public class UserController {
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> getUsers() {
         List<User> users = new ArrayList<>();
-         this.userService.getAllUsers().forEach(users::add);
+
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        users.stream().map((user -> userMapper.userToDto(user)))
+                        this.userService.getAllUsers()
+
                 )
         );
     }
@@ -54,7 +55,7 @@ public class UserController {
 
      //   this.mailService.sendEmail(user.email(),
       //          "CollabDev API",String.format("Votre compte a été créer avec success sur CollabDev Mr/Mme  %s ",
-           //             user.speudo()));
+           //              user.speudo()));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiReponse<>(
@@ -88,7 +89,7 @@ public class UserController {
     }
 
     @ResponseStatus(value = HttpStatus.ACCEPTED, code = HttpStatus.ACCEPTED)
-    @PutMapping(path = "/updateUserInfo/{userId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(path = "/{userId}/updateUserInfo", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> updateUserInfo(
             @PathVariable(name = "userId") Long userId,
             @RequestBody @Valid UserUpdateDTO updateDTO) {

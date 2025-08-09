@@ -1,11 +1,16 @@
 package com.team3.api_collab_dev.dto;
 
+import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Role;
 import com.team3.api_collab_dev.enumType.RoleType;
+
+import java.util.List;
 
 public record UserResponseDTO(
         Long id,
         String speudo,
         String email,
+
+        List<ProfilDto> profils,
         RoleType role) {
 }
