@@ -62,8 +62,8 @@ public class ProjectController {
         );
     }
 
-    @GetMapping(path = "/{userId}")
-    public ResponseEntity<ApiReponse<?>> getProjectById(@PathVariable(name = "userId") Long projectId) {
+    @GetMapping(path = "/{projectId}")
+    public ResponseEntity<ApiReponse<?>> getProjectById(@PathVariable(name = "projectId") Long projectId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
@@ -72,6 +72,21 @@ public class ProjectController {
                 )
         );
     }
+    @GetMapping(path = "/{userId}")
+    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDevelopper(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getProjectsByUserAsDesigner(userId)
+                )
+        );
+    }
+
+
+
+
+
 
     // configuration du projet
     @PutMapping("/{id}/configureProject")
@@ -90,7 +105,7 @@ public class ProjectController {
         return projectService.addToPendingProfiles(id, profileId);
     }
 
-
+//TODO: pas de pathVariables des cette fonctions
     @PutMapping(path = "/{projectId}/makeComment")
     public ResponseEntity<ApiReponse<?>> makeComment(
             @PathVariable(name = "projectId") Long projectId,

@@ -47,6 +47,10 @@ public class UserService {
     private ProjectRepo projectRepo;
 
 
+
+
+
+
     public UserResponseDTO createUser(UserCreateDTO userDto) {
         Optional<User> optionalUser = this.userRepo.findByEmail(userDto.email());
 
@@ -113,8 +117,9 @@ public class UserService {
     }
 
 
-    public User getUserById(Long userId) {
-        return this.userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException(" :) Oooops aucun utilisateur trouver avec l'id " + userId));
+    public UserResponseDTO getUserById(Long userId) {
+        User user = this.userRepo.findById(userId).orElseThrow(() -> new EntityNotFoundException(" :) Oooops aucun utilisateur trouver avec l'id " + userId));
+   return  UserMapper.toDto(user);
     }
 
     public String joinProjectAsManager(

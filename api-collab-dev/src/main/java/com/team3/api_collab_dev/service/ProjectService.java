@@ -37,6 +37,59 @@ public class ProjectService {
     private FilterProjectMapper filterProjectMapper;
 
 
+    public List<ProjectDto> getProjectsByUserAsManager(Long userId) {
+        List<Project> allProjects = new ArrayList<>();
+        this.projectRepo.findAll().forEach(allProjects::add);
+
+        List<Project> managerProjects = allProjects.stream()
+                .filter(p -> p.getManager().getId() != null && p.getManager().getId().equals(userId))
+                .toList();
+
+
+      //  new UserProjectsResponse(managerProjects, contributorProjects);
+
+        return managerProjects.stream().map(ProjectMapper::toDto).toList();
+    }
+
+    public List<ProjectDto> getProjectsByUserAsDevelopper(Long userId) {
+        List<Project> allProjects = new ArrayList<>();
+        this.projectRepo.findAll().forEach(allProjects::add);
+
+          List<Project> contributorProjects = allProjects.stream()
+         .filter(p -> p.getMembers().stream()
+         .anyMatch(m -> m.getUser().getId().equals(userId) &&
+         ("DEVELOPER".equalsIgnoreCase(m.getProfilName().toString())
+         )
+         )
+         )
+         .toList();
+
+          return  contributorProjects.stream().map(ProjectMapper::toDto).toList();
+
+
+    }
+
+    public List<ProjectDto> getProjectsByUserAsDesigner(Long userId) {
+        List<Project> allProjects = new ArrayList<>();
+        this.projectRepo.findAll().forEach(allProjects::add);
+
+        List<Project> contributorProjects = allProjects.stream()
+                .filter(p -> p.getMembers().stream()
+                        .anyMatch(m -> m.getUser().getId().equals(userId) &&
+                                (
+                                        "DESIGNER".equalsIgnoreCase(m.getProfilName().toString()))
+                        )
+                )
+                .toList();
+
+        return  contributorProjects.stream().map(ProjectMapper::toDto).toList();
+
+
+    }
+
+
+
+
 
     public List<FilterProjectResponse> filterProjectsByLevel(Level level) {
         // Étape 1 : Récupérer tous les projets
@@ -53,7 +106,7 @@ public class ProjectService {
     public ProjectDto saveProject(ProjectDto projectDto) {
 
         User author = userRepo.findById(projectDto.author().id())
-                .orElseThrow(() -> new EntityNotFoundException("Auteur introuvable avec l'id " + projectDto.author().id()));
+                .orElseThrow(() -> new EntityNotFoundException("Auteur introuvable avec l'id " + projectDto.author()));
 
         Project project = ProjectMapper.toEntity (projectDto);
         project.setAuthor(author); // Remplacer l'auteur DTO par l'auteur récupéré depuis la base

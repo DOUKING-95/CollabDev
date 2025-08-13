@@ -36,7 +36,7 @@ public class CommentTaskService {
         User commenter = userRepo.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouver avec l'Id : " + userId));
 
-        boolean isAuthor = project.getAuthor().getId().equals(userId);
+        boolean isAuthor = project.getAuthor().equals(userId);
 
         boolean isManager = project.getManager() != null &&
                 project.getManager().getId().equals(userId);
