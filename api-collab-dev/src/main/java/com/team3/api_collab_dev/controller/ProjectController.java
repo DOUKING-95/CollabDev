@@ -4,9 +4,7 @@ import com.team3.api_collab_dev.dto.ApiReponse;
 import com.team3.api_collab_dev.dto.CommentDto;
 import com.team3.api_collab_dev.dto.ConfigureProjectDto;
 import com.team3.api_collab_dev.dto.ProjectDto;
-import com.team3.api_collab_dev.entity.Comment;
 import com.team3.api_collab_dev.entity.Project;
-import com.team3.api_collab_dev.mapper.ProjectMapper;
 import com.team3.api_collab_dev.service.CommentService;
 import com.team3.api_collab_dev.service.ProjectService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,9 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Objects;
-
 
 @AllArgsConstructor
 @RestController
@@ -32,11 +28,13 @@ public class ProjectController {
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> getAllProject() {
+
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new ApiReponse<>(
                                 String.valueOf(HttpStatus.ACCEPTED.value()),
                                 HttpStatus.ACCEPTED.getReasonPhrase(),
                                 this.projectService.getAllProjects()
+
                         )
                 );
     }
@@ -63,6 +61,8 @@ public class ProjectController {
                 )
         );
     }
+
+
 
     @GetMapping(path = "/{userId}/projectsUserDevelopper")
     public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDevelopper(@PathVariable(name = "userId") Long userId) {
@@ -99,12 +99,10 @@ public class ProjectController {
 
     @GetMapping(path = "/{userId}/projectsUserAll")
     public ResponseEntity<ApiReponse<?>> getAllProjectsByUser(@PathVariable(name = "userId") Long userId) {
-
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-
                         this.projectService.getAllProjectsByUser(userId)
                 )
         );
@@ -119,6 +117,7 @@ public class ProjectController {
         return projectService.updateProject(id, project, managerProfilId);
     }
 
+
     @PostMapping("/{id}/join")
     public Project addToPendingProfiles(
             @PathVariable Long id,
@@ -126,7 +125,7 @@ public class ProjectController {
         return projectService.addToPendingProfiles(id, profileId);
     }
 
-//TODO: pas de pathVariables des cette fonctions
+    //TODO: pas de pathVariables des cette fonctions
     @PutMapping(path = "/{projectId}/makeComment")
     public ResponseEntity<ApiReponse<?>> makeComment(
             @PathVariable(name = "projectId") Long projectId,
@@ -139,6 +138,8 @@ public class ProjectController {
                         this.commentService.makeComment(projectId,userId,  comment))
 
         );
+
+
     }
 
     @GetMapping(path = "/{projectId}/pendingProfil")
@@ -148,10 +149,13 @@ public class ProjectController {
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
                         this.projectService.getAllPendingProfil(projectId).stream()
-                        .filter(profil -> Objects.equals(profil.getProfilName()
-                        .toString(), "DESIGNER")))
+                                .filter(profil -> Objects.equals(profil.getProfilName()
+                                        .toString(), "DESIGNER")))
+
         );
+
+
     }
+
+
 }
-
-

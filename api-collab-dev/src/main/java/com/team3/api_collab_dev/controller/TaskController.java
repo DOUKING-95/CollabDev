@@ -41,65 +41,19 @@ public class TaskController {
 
 
     @PostMapping(value = "/create-Tasks", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiReponse<TaskDto>> createTasks(
+    public ResponseEntity<ApiReponse<?>> createTasks(
             @RequestBody CreateTasksDTO tasksDTO,
             @RequestParam("managerId") Long managerId) {
 
-        // 1️⃣ Vérification des paramètres
-        if (tasksDTO == null
-                || tasksDTO.projectId() == null
-                || tasksDTO.task() == null
-                || tasksDTO.task().taskName() == null
-                || tasksDTO.task().taskName().isEmpty()) {
-
-            return ResponseEntity.badRequest().body(
-                    new ApiReponse<>(
-                            "400",
-                            "Paramètres manquants ou invalides",
-                            null
-                    )
-            );
-        }
-
-        try {
-            // 2️⃣ Création de la tâche via le service
-            TaskDto createdTask = taskService.createTasks(managerId, tasksDTO);
-
-            // 3️⃣ Retour HTTP 201 avec TaskDto
-            return ResponseEntity.status(HttpStatus.CREATED).body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.CREATED.value()),
-                            HttpStatus.CREATED.getReasonPhrase(),
-                            createdTask
-                    )
-            );
-
-        } catch (SecurityException se) {
-            // Erreur de permission
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    new ApiReponse<>("403", se.getMessage(), null)
-            );
-
-        } catch (EntityNotFoundException enfe) {
-            // Projet ou profil non trouvé
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    new ApiReponse<>("404", enfe.getMessage(), null)
-            );
-
-        } catch (IllegalArgumentException iae) {
-            // Tâche invalide
-            return ResponseEntity.badRequest().body(
-                    new ApiReponse<>("400", iae.getMessage(), null)
-            );
-
-        } catch (Exception e) {
-            // Autres erreurs serveur
-            e.printStackTrace(); // utile pour debug
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ApiReponse<>("500", "Erreur serveur", null)
-            );
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.CREATED.value()),
+                        HttpStatus.CREATED.getReasonPhrase(),
+                        this.taskService.createTasks(managerId, tasksDTO)
+                )
+        );
     }
+
 
 
     @PostMapping(value = "/assignTask", consumes = MediaType.APPLICATION_JSON_VALUE)

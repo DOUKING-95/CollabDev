@@ -27,38 +27,40 @@ public class TaskService {
     private final ProjectRepo projectRepo;
     private final ProfilRepo profilRepo;
 
-    public TaskDto createTasks(Long profilId, CreateTasksDTO tasksDTO) {
+    public TaskDto createTasks(Long managerId, CreateTasksDTO tasksDTO) {
+        if (tasksDTO == null || tasksDTO.projectId() == null || tasksDTO.task() == null) {
+            throw new IllegalArgumentException("Paramètres manquants (projectId ou task).");
+        }
+        TaskInputDTO taskInput = tasksDTO.task();
+        if (taskInput.taskName() == null || taskInput.taskName().isBlank()) {
+            throw new IllegalArgumentException("Le nom de la tâche est obligatoire.");
+        }
 
-        Profil profil = profilRepo.findById(profilId)
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Utilisateur non trouvé avec le profil d'Id : " + profilId));
+        Profil profil = profilRepo.findById(managerId)
+                .orElseThrow(() -> new EntityNotFoundException("Profil non trouvé avec l'ID : " + managerId));
 
         if (!ProfilType.MANAGER.equals(profil.getProfilName())) {
             throw new SecurityException("Seuls les managers peuvent créer des tâches.");
         }
 
         Project project = projectRepo.findById(tasksDTO.projectId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Projet non trouvé avec l'Id : " + tasksDTO.projectId()));
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : " + tasksDTO.projectId()));
 
-        if (!project.getManager().equals(profil)) {
-            throw new SecurityException("Vous n'êtes pas manager de ce projet");
+        if (project.getManager() == null) {
+            throw new IllegalStateException("Le projet n'a pas encore de manager assigné.");
         }
-
-        TaskInputDTO taskInput = tasksDTO.task();
-        if (taskInput == null || taskInput.taskName() == null || taskInput.taskName().isEmpty()) {
-            throw new IllegalArgumentException("Tâche invalide.");
+        if (!project.getManager().getId().equals(profil.getId())) {
+            throw new SecurityException("Vous n'êtes pas le manager de ce projet.");
         }
 
         Task task = new Task();
         task.setTaskName(taskInput.taskName());
         task.setDescription(taskInput.description());
         task.setStatus(Status.TODO);
-        //task.setCoins();
-        //task.setIsValid(ValidationType.TODO);
         task.setCreatedDate(LocalDate.now());
         task.setProject(project);
         task.setProfil(profil);
+
 
         Task savedTask = taskRepo.save(task);
 
