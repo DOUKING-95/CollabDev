@@ -20,7 +20,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.team3.api_collab_dev.enumType.Level.*;
 
@@ -42,14 +44,13 @@ public class ProjectService {
         this.projectRepo.findAll().forEach(allProjects::add);
 
         List<Project> managerProjects = allProjects.stream()
+                .filter(p -> p.getManager() != null) // Vérifie si le manager existe
                 .filter(p -> p.getManager().getId() != null && p.getManager().getId().equals(userId))
                 .toList();
 
-
-      //  new UserProjectsResponse(managerProjects, contributorProjects);
-
         return managerProjects.stream().map(ProjectMapper::toDto).toList();
     }
+
 
     public List<ProjectDto> getProjectsByUserAsDevelopper(Long userId) {
         List<Project> allProjects = new ArrayList<>();
@@ -87,8 +88,19 @@ public class ProjectService {
 
     }
 
+    public List<ProjectDto> getAllProjectsByUser(Long userId) {
+        List<ProjectDto> managerProjects = getProjectsByUserAsManager(userId);
+        List<ProjectDto> developerProjects = getProjectsByUserAsDevelopper(userId);
+        List<ProjectDto> designerProjects = getProjectsByUserAsDesigner(userId);
 
+        // Fusionner et supprimer les doublons
+        Set<ProjectDto> allProjects = new LinkedHashSet<>();
+        allProjects.addAll(managerProjects);
+        allProjects.addAll(developerProjects);
+        allProjects.addAll(designerProjects);
 
+        return new ArrayList<>(allProjects);
+    }
 
 
     public List<FilterProjectResponse> filterProjectsByLevel(Level level) {

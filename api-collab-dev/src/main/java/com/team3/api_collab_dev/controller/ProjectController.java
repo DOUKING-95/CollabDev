@@ -28,24 +28,15 @@ import java.util.Objects;
 public class ProjectController {
 
     private ProjectService projectService;
-
-
-
-
-
-
-
     private CommentService commentService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> getAllProject() {
-
         return ResponseEntity.status(HttpStatus.ACCEPTED)
                 .body(new ApiReponse<>(
                                 String.valueOf(HttpStatus.ACCEPTED.value()),
                                 HttpStatus.ACCEPTED.getReasonPhrase(),
                                 this.projectService.getAllProjects()
-
                         )
                 );
     }
@@ -72,30 +63,19 @@ public class ProjectController {
                 )
         );
     }
-    @GetMapping(path = "/{userId}/userProjectDevelopper")
+
+    @GetMapping(path = "/{userId}/projectsUserDevelopper")
     public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDevelopper(@PathVariable(name = "userId") Long userId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.projectService.getProjectsByUserAsDesigner(userId)
+                        this.projectService.getProjectsByUserAsDevelopper(userId)
                 )
         );
     }
 
-
-    @GetMapping(path = "/{userId}/userProjectManager")
-    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsManager(@PathVariable(name = "userId") Long userId) {
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-                new ApiReponse<>(
-                        String.valueOf(HttpStatus.ACCEPTED.value()),
-                        HttpStatus.ACCEPTED.getReasonPhrase(),
-                        this.projectService.getProjectsByUserAsManager(userId)
-                )
-        );
-    }
-
-    @GetMapping(path = "/{userId}/userProjectDesigner")
+    @GetMapping(path = "/{userId}/projectsUserDesigner")
     public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDesigner(@PathVariable(name = "userId") Long userId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
@@ -106,10 +86,29 @@ public class ProjectController {
         );
     }
 
+    @GetMapping(path = "/{userId}/projectsUserManager")
+    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsManager(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getProjectsByUserAsManager(userId)
+                )
+        );
+    }
 
+    @GetMapping(path = "/{userId}/projectsUserAll")
+    public ResponseEntity<ApiReponse<?>> getAllProjectsByUser(@PathVariable(name = "userId") Long userId) {
 
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
 
-
+                        this.projectService.getAllProjectsByUser(userId)
+                )
+        );
+    }
 
     // configuration du projet
     @PutMapping("/{id}/configureProject")
@@ -119,7 +118,6 @@ public class ProjectController {
             @RequestParam Long managerProfilId) {
         return projectService.updateProject(id, project, managerProfilId);
     }
-
 
     @PostMapping("/{id}/join")
     public Project addToPendingProfiles(
@@ -141,8 +139,6 @@ public class ProjectController {
                         this.commentService.makeComment(projectId,userId,  comment))
 
         );
-
-
     }
 
     @GetMapping(path = "/{projectId}/pendingProfil")
@@ -154,13 +150,8 @@ public class ProjectController {
                         this.projectService.getAllPendingProfil(projectId).stream()
                         .filter(profil -> Objects.equals(profil.getProfilName()
                         .toString(), "DESIGNER")))
-
         );
-
-
     }
-
-
 }
 
 
