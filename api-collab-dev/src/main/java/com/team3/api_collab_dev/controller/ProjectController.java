@@ -72,8 +72,22 @@ public class ProjectController {
                 )
         );
     }
-    @GetMapping(path = "/{userId}")
+
+
+
+    @GetMapping(path = "/{userId}/projectsUserDevelopper")
     public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDevelopper(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getProjectsByUserAsDevelopper(userId)
+                )
+        );
+    }
+
+    @GetMapping(path = "/{userId}/projectsUserDesigner")
+    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDesigner(@PathVariable(name = "userId") Long userId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
@@ -83,7 +97,27 @@ public class ProjectController {
         );
     }
 
+    @GetMapping(path = "/{userId}/projectsUserManager")
+    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsManager(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getProjectsByUserAsManager(userId)
+                )
+        );
+    }
 
+    @GetMapping(path = "/{userId}/projectsUserAll")
+    public ResponseEntity<ApiReponse<?>> getAllProjectsByUser(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getAllProjectsByUser(userId)
+                )
+        );
+    }
 
 
 
