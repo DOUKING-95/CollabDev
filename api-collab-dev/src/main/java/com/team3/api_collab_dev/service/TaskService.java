@@ -2,12 +2,14 @@ package com.team3.api_collab_dev.service;
 
 import com.team3.api_collab_dev.dto.AssignTasksDTO;
 import com.team3.api_collab_dev.dto.CreateTasksDTO;
+import com.team3.api_collab_dev.dto.TaskDto;
 import com.team3.api_collab_dev.dto.TaskInputDTO;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.Task;
 import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.enumType.Status;
+import com.team3.api_collab_dev.enumType.ValidationType;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.repository.TaskRepo;
@@ -21,46 +23,58 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class TaskService {
 
-    private TaskRepo taskRepo;
-    private ProjectRepo projectRepo;
-    private ProfilRepo profilRepo;
+    private final TaskRepo taskRepo;
+    private final ProjectRepo projectRepo;
+    private final ProfilRepo profilRepo;
 
+    public TaskDto createTasks(Long profilId, CreateTasksDTO tasksDTO) {
 
-    public String createTasks(Long profilId, CreateTasksDTO tasksDTO) {
-        // 1. Vérifie si l'utilisateur a un profil manager
         Profil profil = profilRepo.findById(profilId)
-                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec le profil d'Id : " + profilId));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Utilisateur non trouvé avec le profil d'Id : " + profilId));
 
-        if (!profil.getProfilName().equals(ProfilType.MANAGER)) {
+        if (!ProfilType.MANAGER.equals(profil.getProfilName())) {
             throw new SecurityException("Seuls les managers peuvent créer des tâches.");
         }
 
-        // 2. Valide le projet et l'association du profil
         Project project = projectRepo.findById(tasksDTO.projectId())
-                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'Id : " + tasksDTO.projectId()));
+                .orElseThrow(() -> new EntityNotFoundException(
+                        "Projet non trouvé avec l'Id : " + tasksDTO.projectId()));
 
-        if (!(project.getManager() == profil)) {
+        if (!project.getManager().equals(profil)) {
             throw new SecurityException("Vous n'êtes pas manager de ce projet");
         }
 
-        // 3. et 4. Crée et ajoute chaque tâche à la liste du projet
-        for (TaskInputDTO taskInput : tasksDTO.tasks()) {
-            Task task = new Task();
-            task.setTaskName(taskInput.taskName());
-            task.setStatus(Status.TODO);
-            task.setCreatedDate(LocalDate.now());
-            task.setProject(project);
-            project.getTasks().add(task);
+        TaskInputDTO taskInput = tasksDTO.task();
+        if (taskInput == null || taskInput.taskName() == null || taskInput.taskName().isEmpty()) {
+            throw new IllegalArgumentException("Tâche invalide.");
         }
 
-        // 5. Sauvegarde le projet avec les nouvelles tâches
-        projectRepo.save(project);
+        Task task = new Task();
+        task.setTaskName(taskInput.taskName());
+        task.setDescription(taskInput.description());
+        task.setStatus(Status.TODO);
+        //task.setCoins();
+        //task.setIsValid(ValidationType.TODO);
+        task.setCreatedDate(LocalDate.now());
+        task.setProject(project);
+        task.setProfil(profil);
 
-        // 6. Retourne une confirmation
-        return "Tâches créées avec succès pour le projet  : " + project.getTitle();
+        Task savedTask = taskRepo.save(task);
+
+        return new TaskDto(
+                savedTask.getId(),
+                profil.getId(),
+                project.getId(),
+                savedTask.getCoins(),
+                savedTask.getTaskName(),
+                savedTask.getStatus(),
+                savedTask.getIsValid(),
+                savedTask.getCreatedDate()
+        );
     }
 
-    public String assignTasksToProfil(AssignTasksDTO assignDTO, Long managerProfilId) {
+public String assignTasksToProfil(AssignTasksDTO assignDTO, Long managerProfilId) {
 
 
         Profil profilManager = profilRepo.findById(managerProfilId)

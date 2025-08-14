@@ -72,8 +72,31 @@ public class ProjectController {
                 )
         );
     }
-    @GetMapping(path = "/{userId}")
+    @GetMapping(path = "/{userId}/userProjectDevelopper")
     public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDevelopper(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getProjectsByUserAsDesigner(userId)
+                )
+        );
+    }
+
+
+    @GetMapping(path = "/{userId}/userProjectManager")
+    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsManager(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getProjectsByUserAsManager(userId)
+                )
+        );
+    }
+
+    @GetMapping(path = "/{userId}/userProjectDesigner")
+    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDesigner(@PathVariable(name = "userId") Long userId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
