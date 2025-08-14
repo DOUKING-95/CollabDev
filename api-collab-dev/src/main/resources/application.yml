@@ -7,8 +7,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/collabdevDB
     username: root
-    password: rootUser
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    password:
 
   # Configuration de JPA / Hibernate
   jpa:
@@ -40,9 +39,6 @@ server:
     # Configuration du chemin pour le stockage des fichiers dans le bureau :) douking ^_~ 😎😎
 file:
   upload-dir: /Users/MacBookAir/desktop
-
-
-
 
 logging:
   level:

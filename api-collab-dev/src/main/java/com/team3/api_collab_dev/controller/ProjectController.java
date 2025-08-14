@@ -4,9 +4,7 @@ import com.team3.api_collab_dev.dto.ApiReponse;
 import com.team3.api_collab_dev.dto.CommentDto;
 import com.team3.api_collab_dev.dto.ConfigureProjectDto;
 import com.team3.api_collab_dev.dto.ProjectDto;
-import com.team3.api_collab_dev.entity.Comment;
 import com.team3.api_collab_dev.entity.Project;
-import com.team3.api_collab_dev.mapper.ProjectMapper;
 import com.team3.api_collab_dev.service.CommentService;
 import com.team3.api_collab_dev.service.ProjectService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,9 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Objects;
-
 
 @AllArgsConstructor
 @RestController
@@ -28,13 +24,6 @@ import java.util.Objects;
 public class ProjectController {
 
     private ProjectService projectService;
-
-
-
-
-
-
-
     private CommentService commentService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
@@ -72,8 +61,22 @@ public class ProjectController {
                 )
         );
     }
-    @GetMapping(path = "/{userId}")
+
+
+
+    @GetMapping(path = "/{userId}/projectsUserDevelopper")
     public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDevelopper(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getProjectsByUserAsDevelopper(userId)
+                )
+        );
+    }
+
+    @GetMapping(path = "/{userId}/projectsUserDesigner")
+    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsDesigner(@PathVariable(name = "userId") Long userId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.ACCEPTED.value()),
@@ -83,10 +86,27 @@ public class ProjectController {
         );
     }
 
+    @GetMapping(path = "/{userId}/projectsUserManager")
+    public ResponseEntity<ApiReponse<?>> getProjectsByUserAsManager(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getProjectsByUserAsManager(userId)
+                )
+        );
+    }
 
-
-
-
+    @GetMapping(path = "/{userId}/projectsUserAll")
+    public ResponseEntity<ApiReponse<?>> getAllProjectsByUser(@PathVariable(name = "userId") Long userId) {
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        this.projectService.getAllProjectsByUser(userId)
+                )
+        );
+    }
 
     // configuration du projet
     @PutMapping("/{id}/configureProject")
@@ -105,7 +125,7 @@ public class ProjectController {
         return projectService.addToPendingProfiles(id, profileId);
     }
 
-//TODO: pas de pathVariables des cette fonctions
+    //TODO: pas de pathVariables des cette fonctions
     @PutMapping(path = "/{projectId}/makeComment")
     public ResponseEntity<ApiReponse<?>> makeComment(
             @PathVariable(name = "projectId") Long projectId,
@@ -129,8 +149,8 @@ public class ProjectController {
                         String.valueOf(HttpStatus.ACCEPTED.value()),
                         HttpStatus.ACCEPTED.getReasonPhrase(),
                         this.projectService.getAllPendingProfil(projectId).stream()
-                        .filter(profil -> Objects.equals(profil.getProfilName()
-                        .toString(), "DESIGNER")))
+                                .filter(profil -> Objects.equals(profil.getProfilName()
+                                        .toString(), "DESIGNER")))
 
         );
 
@@ -139,5 +159,3 @@ public class ProjectController {
 
 
 }
-
-

@@ -1,6 +1,5 @@
 package com.team3.api_collab_dev.service;
 
-
 import com.team3.api_collab_dev.dto.ConfigureProjectDto;
 import com.team3.api_collab_dev.dto.FilterProjectResponse;
 import com.team3.api_collab_dev.dto.ProjectDto;
@@ -11,16 +10,16 @@ import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.mapper.FilterProjectMapper;
 import com.team3.api_collab_dev.mapper.ProjectMapper;
-import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import static com.team3.api_collab_dev.enumType.Level.*;
 
@@ -31,42 +30,36 @@ import static com.team3.api_collab_dev.enumType.Level.*;
 public class ProjectService {
 
     private ProjectRepo projectRepo;
-
     private UserRepo userRepo;
     private ProfilRepo profilRepo;
     private FilterProjectMapper filterProjectMapper;
-
 
     public List<ProjectDto> getProjectsByUserAsManager(Long userId) {
         List<Project> allProjects = new ArrayList<>();
         this.projectRepo.findAll().forEach(allProjects::add);
 
         List<Project> managerProjects = allProjects.stream()
+                .filter(p -> p.getManager() != null) // Vérifie si le manager existe
                 .filter(p -> p.getManager().getId() != null && p.getManager().getId().equals(userId))
                 .toList();
-
-
-      //  new UserProjectsResponse(managerProjects, contributorProjects);
-
         return managerProjects.stream().map(ProjectMapper::toDto).toList();
     }
+
 
     public List<ProjectDto> getProjectsByUserAsDevelopper(Long userId) {
         List<Project> allProjects = new ArrayList<>();
         this.projectRepo.findAll().forEach(allProjects::add);
 
-          List<Project> contributorProjects = allProjects.stream()
-         .filter(p -> p.getMembers().stream()
-         .anyMatch(m -> m.getUser().getId().equals(userId) &&
-         ("DEVELOPER".equalsIgnoreCase(m.getProfilName().toString())
-         )
-         )
-         )
-         .toList();
+        List<Project> contributorProjects = allProjects.stream()
+                .filter(p -> p.getMembers().stream()
+                        .anyMatch(m -> m.getUser().getId().equals(userId) &&
+                                ("DEVELOPER".equalsIgnoreCase(m.getProfilName().toString())
+                                )
+                        )
+                )
+                .toList();
 
-          return  contributorProjects.stream().map(ProjectMapper::toDto).toList();
-
-
+        return  contributorProjects.stream().map(ProjectMapper::toDto).toList();
     }
 
     public List<ProjectDto> getProjectsByUserAsDesigner(Long userId) {
@@ -81,25 +74,31 @@ public class ProjectService {
                         )
                 )
                 .toList();
-
         return  contributorProjects.stream().map(ProjectMapper::toDto).toList();
-
-
     }
 
+    public List<ProjectDto> getAllProjectsByUser(Long userId) {
+        List<ProjectDto> managerProjects = getProjectsByUserAsManager(userId);
+        List<ProjectDto> developerProjects = getProjectsByUserAsDevelopper(userId);
+        List<ProjectDto> designerProjects = getProjectsByUserAsDesigner(userId);
 
-
-
+        // Fusionner et supprimer les doublons
+        Set<ProjectDto> allProjects = new LinkedHashSet<>();
+        allProjects.addAll(managerProjects);
+        allProjects.addAll(developerProjects);
+        allProjects.addAll(designerProjects);
+        return new ArrayList<>(allProjects);
+    }
 
     public List<FilterProjectResponse> filterProjectsByLevel(Level level) {
-        // Étape 1 : Récupérer tous les projets
+        //Récupérer tous les projets
         List<Project> projects = (List<Project>) projectRepo.findAll();
 
-        // Étape 2 : Filtrer par niveau
+        //Filtrer par niveau
         List<Project> filteredProjects = projects.stream()
                 .filter(project -> project.getLevel() == level).toList();
 
-        // Étape 3 : Retourner la liste filtrée
+        //Retourner la liste filtrée
         return filteredProjects.stream().map(project -> filterProjectMapper.apply(project)).toList();
     }
 
@@ -110,11 +109,11 @@ public class ProjectService {
 
         Project project = ProjectMapper.toEntity (projectDto);
         project.setAuthor(author); // Remplacer l'auteur DTO par l'auteur récupéré depuis la base
-
+        project.setStatus(Status.TODO);
         System.out.println("Description reçue : " + project.getDescription());
 
-         projectRepo.save(project);
-         return ProjectMapper.toDto (project);
+        projectRepo.save(project);
+        return ProjectMapper.toDto (project);
     }
 
 

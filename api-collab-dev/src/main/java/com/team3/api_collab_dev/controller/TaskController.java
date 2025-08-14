@@ -3,6 +3,7 @@ package com.team3.api_collab_dev.controller;
 import com.team3.api_collab_dev.dto.ApiReponse;
 import com.team3.api_collab_dev.dto.AssignTasksDTO;
 import com.team3.api_collab_dev.dto.CreateTasksDTO;
+import com.team3.api_collab_dev.dto.TaskDto;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Task;
 import com.team3.api_collab_dev.repository.ProfilRepo;
@@ -42,49 +43,18 @@ public class TaskController {
     @PostMapping(value = "/create-Tasks", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> createTasks(
             @RequestBody CreateTasksDTO tasksDTO,
-            @RequestParam("managerId") Long userId) {
-        // Vérifie si les données sont valides
-        if (tasksDTO == null || tasksDTO.projectId() == null || tasksDTO.tasks() == null || tasksDTO.tasks().isEmpty()) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", "400");
-            response.put("message", "Paramètres manquants ou invalides");
-            response.put("data", null);
-            return ResponseEntity.badRequest().body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.ACCEPTED.value()),
-                            HttpStatus.ACCEPTED.getReasonPhrase(),
-                            response
-                    )
-            );
-        }
+            @RequestParam("managerId") Long managerId) {
 
-        try {
-            String result = taskService.createTasks(userId, tasksDTO);
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", String.valueOf(HttpStatus.CREATED.value()));
-            response.put("message", HttpStatus.CREATED.getReasonPhrase());
-            response.put("data", result);
-            return ResponseEntity.status(HttpStatus.CREATED).body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.ACCEPTED.value()),
-                            HttpStatus.ACCEPTED.getReasonPhrase(),
-                            response
-                    )
-            );
-        } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", "500");
-            response.put("message", "Erreur serveur");
-            response.put("data", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.ACCEPTED.value()),
-                            HttpStatus.ACCEPTED.getReasonPhrase(),
-                            response
-                    )
-            );
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.CREATED.value()),
+                        HttpStatus.CREATED.getReasonPhrase(),
+                        this.taskService.createTasks(managerId, tasksDTO)
+                )
+        );
     }
+
+
 
     @PostMapping(value = "/assignTask", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> assignTasksToProfil(

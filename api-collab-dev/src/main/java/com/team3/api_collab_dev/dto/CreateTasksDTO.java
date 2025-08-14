@@ -4,7 +4,7 @@ import java.util.List;
 
 public record CreateTasksDTO(
         Long projectId,
-        List<TaskInputDTO> tasks)
+        TaskInputDTO task)
 {
 
 }

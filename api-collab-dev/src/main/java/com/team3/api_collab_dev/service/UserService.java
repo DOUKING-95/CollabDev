@@ -47,10 +47,6 @@ public class UserService {
     private ProjectRepo projectRepo;
 
 
-
-
-
-
     public UserResponseDTO createUser(UserCreateDTO userDto) {
         Optional<User> optionalUser = this.userRepo.findByEmail(userDto.email());
 
