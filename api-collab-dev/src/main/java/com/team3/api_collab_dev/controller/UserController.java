@@ -136,7 +136,6 @@ public class UserController {
     @PostMapping(path = "/joinProjectAsManager")
     private ResponseEntity<ApiReponse<?>> joinProjectAsManager(
             @ModelAttribute JoinProjectRequest request,
-            @RequestBody String  githubLink,
             @RequestPart(value = "file", required = false) MultipartFile file
     ) throws IOException {
 
@@ -149,7 +148,7 @@ public class UserController {
                                 request.projectId(),
                                 request.profilType(),
                                 file,
-                                githubLink
+                                request.githubLink()
 
                         )
                 )

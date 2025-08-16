@@ -16,6 +16,9 @@ import com.team3.api_collab_dev.repository.UserRepo;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -33,6 +36,11 @@ public class ProjectService {
     private UserRepo userRepo;
     private ProfilRepo profilRepo;
     private FilterProjectMapper filterProjectMapper;
+    private FileStorageService fileStorageService;
+
+    public  List<ProjectDto> getDoneProject(Status status){
+        return  this.projectRepo.findByStatus(status).stream().map(ProjectMapper::toDto).toList();
+    }
 
     public List<ProjectDto> getProjectsByUserAsManager(Long userId) {
         List<Project> allProjects = new ArrayList<>();
@@ -132,7 +140,7 @@ public class ProjectService {
         return ProjectMapper.toDto(project);
     }
 
-    public ProjectDto updateProject(Long id, ConfigureProjectDto updatedProject, Long managerProfilId) {
+    public ProjectDto updateProject(Long id, ConfigureProjectDto updatedProject, Long managerProfilId, MultipartFile file) throws IOException {
 
         Profil profil = profilRepo.findById(managerProfilId)
                 .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec le profil d'Id : " + managerProfilId));
@@ -146,9 +154,11 @@ public class ProjectService {
             throw new SecurityException("Seuls le manager de ce projet  peut peut le configurer.");
         }
 
+        String specifationPath = this.fileStorageService.storeFile(file);
+
         //Mettre à jour les champs
         project.setLevel(updatedProject.level());
-        project.setSpecification(updatedProject.specification());
+        project.setSpecification(specifationPath);
         project.setGithubLink(updatedProject.githubLink());
         project.setStatus(Status.TODO);
         //Calculer le nombre de coins

@@ -16,6 +16,7 @@ import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.enumType.RoleType;
 import com.team3.api_collab_dev.mapper.UserMapper;
+import com.team3.api_collab_dev.repository.ManagerInfoRepo;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.repository.UserRepo;
@@ -43,6 +44,7 @@ public class UserService {
     private UserMapper userMapper;
     private ProfilRepo profilRepo;
     private ManagerInfoService managerInfoService;
+    private ManagerInfoRepo managerInfoRepo;
     private FileStorageService fileStorageService;
     private ProjectRepo projectRepo;
 
@@ -230,13 +232,23 @@ public class UserService {
             MultipartFile file,
             ManagerInfo managerInfo) throws IOException {
 
-        if (file != null && !file.isEmpty()) {
-            // utiliser file.getOriginalFilename()
+        if (file == null || file.isEmpty()) {
+            throw new IllegalArgumentException("Merci de charger votre CV");
+        }
+        Optional<ManagerInfo> existing = managerInfoRepo.findByGithubLink(managerInfo.getGithubLink());
+        if (existing.isPresent()) {
+            return "Ce lien GitHub est déjà associé à un manager.";
+        }
+
+
+        // utiliser file.getOriginalFilename()
             String cvPath = this.fileStorageService.storeFile(file);
             managerInfo.setPathCv(cvPath);
-            this.managerInfoService.saveManager(managerInfo);
+        log.info("ManagerInfo à sauvegarder : {}", managerInfo);
+
+        this.managerInfoRepo.save(managerInfo);
             return "Info du Manager" + managerInfo.getManager().getUser().getPseudo() + "Sauvegarder avec Succes ";
-        } else return "Merci de chager un votre Cv ";
+
 
 
     }

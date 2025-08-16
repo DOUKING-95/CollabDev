@@ -1,10 +1,8 @@
 package com.team3.api_collab_dev.controller;
 
-import com.team3.api_collab_dev.dto.ApiReponse;
-import com.team3.api_collab_dev.dto.CommentDto;
-import com.team3.api_collab_dev.dto.ConfigureProjectDto;
-import com.team3.api_collab_dev.dto.ProjectDto;
+import com.team3.api_collab_dev.dto.*;
 import com.team3.api_collab_dev.entity.Project;
+import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.service.CommentService;
 import com.team3.api_collab_dev.service.ProjectService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -14,7 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -25,6 +25,24 @@ public class ProjectController {
 
     private ProjectService projectService;
     private CommentService commentService;
+
+
+
+
+    @GetMapping(path ="/getByStatus", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiReponse<?>> getProjectByStatus(
+            @RequestParam Status status
+            ) {
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED)
+                .body(new ApiReponse<>(
+                                String.valueOf(HttpStatus.ACCEPTED.value()),
+                                HttpStatus.ACCEPTED.getReasonPhrase(),
+                                this.projectService.getDoneProject(status)
+
+                        )
+                );
+    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> getAllProject() {
@@ -112,9 +130,12 @@ public class ProjectController {
     @PutMapping("/{id}/configureProject")
     public ProjectDto updateProject(
             @PathVariable Long id,
-            @Valid @RequestBody ConfigureProjectDto project,
-            @RequestParam Long managerProfilId) {
-        return projectService.updateProject(id, project, managerProfilId);
+           // @Valid @RequestBody ConfigureProjectDto project,
+          @Valid @ModelAttribute ConfigureProjectDto project,
+            @RequestParam Long managerProfilId,
+            @RequestPart(value = "file", required = false) MultipartFile file
+            ) throws IOException {
+        return projectService.updateProject(id, project, managerProfilId,file);
     }
 
 

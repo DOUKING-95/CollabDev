@@ -58,6 +58,7 @@ public class Project {
 
 
 
+
     private String githubLink;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
@@ -94,6 +95,12 @@ public class Project {
 
 
     private LocalDate createdDate;
+    private LocalDate endedDate;
+    List<String> languages;
+    boolean isDelivery;
+    private LocalDate deliveryDate;
+
+
 
     public Project(String title, String description, Domain domain, String specification) {
         this.title = title;

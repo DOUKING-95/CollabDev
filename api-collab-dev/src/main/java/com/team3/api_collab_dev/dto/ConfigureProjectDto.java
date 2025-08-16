@@ -9,8 +9,8 @@ public record ConfigureProjectDto(
         @NotNull(message = "Merci de specifiez lz Niveau")
         Level level,
         @NotNull(message = "Merci Créer un Repo pour ce peojet de spécifier le lien ici")
-        String githubLink,
-        String specification
+        String githubLink
+
 
 
 ) {

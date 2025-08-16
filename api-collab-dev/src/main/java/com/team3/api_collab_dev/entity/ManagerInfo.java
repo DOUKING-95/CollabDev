@@ -24,7 +24,7 @@ public class ManagerInfo {
     @OneToOne
     private  Profil manager;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String githubLink;
 
     @Column(nullable = false)
