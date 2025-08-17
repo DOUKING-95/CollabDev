@@ -19,10 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.team3.api_collab_dev.enumType.Level.*;
 
@@ -48,7 +45,7 @@ public class ProjectService {
 
         List<Project> managerProjects = allProjects.stream()
                 .filter(p -> p.getManager() != null) // Vérifie si le manager existe
-                .filter(p -> p.getManager().getId() != null && p.getManager().getId().equals(userId))
+                .filter(p -> p.getManager().getId() != null && p.getManager().getUser().getId().equals(userId))
                 .toList();
         return managerProjects.stream().map(ProjectMapper::toDto).toList();
     }
@@ -197,5 +194,61 @@ public class ProjectService {
         return project.getPendingProfiles();
     }
 
+    public List<ProjectDto> getProjectsWithUserPendingRequests(Long userId) {
+        // 1. Récupérer TOUS les profils de l'utilisateur
+        List<Profil> userProfiles = profilRepo.findByUserId(userId);
+
+        if (userProfiles.isEmpty()) {
+            return Collections.emptyList();
+        }
+
+        // 2. Récupérer tous les projets (version optimisée)
+        List<Project> allProjects = (List<Project>) projectRepo.findAll();
+
+        // 3. Filtrer les projets où l'utilisateur a des demandes en attente
+        List<Project> pendingProjects = allProjects.stream()
+                .filter(project ->
+                        project.getPendingProfiles().stream()
+                                .anyMatch(pendingProfile ->
+                                        userProfiles.stream()
+                                                .anyMatch(userProfile ->
+                                                        userProfile.getId().equals(pendingProfile.getId())
+                                                )
+                                )
+                )
+                .toList();
+
+        // 4. Convertir en DTO
+        return pendingProjects.stream()
+                .map(ProjectMapper::toDto)
+                .toList();
+    }
+
+    public String removePendingRequestByUser(Long projectId, Long userId) {
+        // 1. Récupérer le projet
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : " + projectId));
+
+        // 2. Récupérer l'utilisateur
+        User user = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur non trouvé avec l'ID : " + userId));
+
+        // 3. Supprimer les demandes
+        boolean removed = project.getPendingProfiles()
+                .removeIf(pendingProfile ->
+                        pendingProfile.getUser().getId().equals(userId)
+                );
+
+        if (!removed) {
+            throw new IllegalStateException("Cet utilisateur n'avait pas de demande en attente");
+        }
+
+        // 4. Sauvegarder
+        projectRepo.save(project);
+
+        return String.format("La demande de %s a été supprimée avec succès du projet %s",
+                user.getPseudo(),
+                project.getTitle());
+    }
 
 }

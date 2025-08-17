@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 @AllArgsConstructor
@@ -177,6 +178,42 @@ public class ProjectController {
 
 
     }
+
+    @GetMapping(path = "/{userId}/userAllpendingProjects")
+    public ResponseEntity<ApiReponse<?>> getProjectsWithPendingRequests(
+            @PathVariable(name = "userId") Long userId) {
+
+        List<ProjectDto> projects = this.projectService.getProjectsWithUserPendingRequests(userId);
+        String message = String.format("%d projet(s) trouvé(s) avec des demandes en attente", projects.size());
+
+        System.out.println(message); // Affiche dans les logs du serveur
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        message, // Message dynamique avec le count
+                        projects)
+        );
+    }
+
+    @DeleteMapping(path = "/{projectId}/removeUsertoPending/{userId}")
+    public ResponseEntity<ApiReponse<?>> removePendingRequest(
+            @PathVariable(name = "projectId") Long projectId,
+            @PathVariable(name = "userId") Long userId) {
+
+        String message = this.projectService.removePendingRequestByUser(projectId, userId);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        message)
+        );
+    }
+
+
+
+
 
 
 }
