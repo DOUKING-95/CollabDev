@@ -1,14 +1,14 @@
 package com.team3.api_collab_dev.service;
 
-import com.team3.api_collab_dev.dto.ConfigureProjectDto;
-import com.team3.api_collab_dev.dto.FilterProjectResponse;
-import com.team3.api_collab_dev.dto.ProjectDto;
+import com.team3.api_collab_dev.dto.*;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.Level;
+import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.mapper.FilterProjectMapper;
+import com.team3.api_collab_dev.mapper.ProfilMapper;
 import com.team3.api_collab_dev.mapper.ProjectMapper;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
@@ -249,6 +249,41 @@ public class ProjectService {
         return String.format("La demande de %s a été supprimée avec succès du projet %s",
                 user.getPseudo(),
                 project.getTitle());
+    }
+
+    public List<ProjectDto> getProjectsWithManagerPendingRequests() {
+        // Récupérer tous les projets
+        List<Project> allProjects = (List<Project>) projectRepo.findAll();
+
+        // Filtrer les projets ayant au moins une demande de profil MANAGER
+        List<Project> projectsWithManagerRequests = allProjects.stream()
+                .filter(project -> project.getPendingProfiles().stream()
+                        .anyMatch(profile -> "MANAGER".equalsIgnoreCase(profile.getProfilName().toString()))).toList();
+
+        // Convertir en DTO
+        return projectsWithManagerRequests.stream()
+                .map(ProjectMapper::toDto)
+                .toList();
+    }
+
+    public List<ProfilDto> getManagerPendingProfilesForProject(Long projectId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : " + projectId));
+
+        return project.getPendingProfiles().stream()
+                .filter(profil -> ProfilType.MANAGER.equals(profil.getProfilName()))
+                .map(ProfilMapper::toDto)
+                .toList();
+    }
+
+
+    public List<ProfilDto> getPendingContributors(Long projectId) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec ID : " + projectId));
+
+        return project.getPendingProfiles().stream()
+                .map(ProfilMapper::toDto) //
+                .toList();
     }
 
 }

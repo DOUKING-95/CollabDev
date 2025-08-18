@@ -19,6 +19,7 @@ public class ProfilMapper {
         return new ProfilDto(
                 profil.getId(),
                 profil.getUser() != null ? profil.getUser().getId() : null,
+                profil.getUser() != null ? profil.getUser().getPseudo() : "Utilisateur inconnu",
                 profil.getLevel(),
                 profil.getCoins(),
                 profil.getValidatedProjects(),
