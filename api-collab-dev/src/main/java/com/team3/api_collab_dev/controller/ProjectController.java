@@ -1,6 +1,7 @@
 package com.team3.api_collab_dev.controller;
 
 import com.team3.api_collab_dev.dto.*;
+import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.service.CommentService;
@@ -164,7 +165,7 @@ public class ProjectController {
 
     }
 
-    @GetMapping(path = "/{projectId}/pendingProfil")
+    @GetMapping(path = "/{projectId}/pendingDesigners")
     public ResponseEntity<ApiReponse<?>> getPendingProfil(@PathVariable(name = "projectId") Long projectId) {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
@@ -211,7 +212,51 @@ public class ProjectController {
         );
     }
 
+    @GetMapping(path = "/withManagerRequests")
+    public ResponseEntity<ApiReponse<?>> getProjectsWithManagerPendingRequests() {
+        List<ProjectDto> projects = this.projectService.getProjectsWithManagerPendingRequests();
+        String message = String.format("%d projet(s) trouvé(s) avec des demandes MANAGER en attente", projects.size());
 
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        message,
+                        projects)
+        );
+    }
+
+    // Récupérer tous les managers en attente pour un projet
+    @GetMapping(path = "/{projectId}/pendingManagers")
+    public ResponseEntity<ApiReponse<?>> getManagerPendingProfilesForProject(
+            @PathVariable(name = "projectId") Long projectId) {
+        List<ProfilDto> pendingManagers = this.projectService.getManagerPendingProfilesForProject(projectId);
+        String message = String.format("%d demande(s) MANAGER en attente pour ce projet", pendingManagers.size());
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        message,
+                        pendingManagers)
+        );
+    }
+
+
+
+    // Récupérer tous les contributeurs en attente pour un projet
+    @GetMapping(path = "/{projectId}/pendingContributors")
+    public ResponseEntity<ApiReponse<?>> getPendingContributorsForProject(
+            @PathVariable(name = "projectId") Long projectId) {
+
+        List<ProfilDto> pendingContributors = this.projectService.getPendingContributors(projectId);
+        String message = String.format("%d contributeur(s) en attente pour ce projet", pendingContributors.size());
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        message,
+                        pendingContributors)
+        );
+    }
 
 
 

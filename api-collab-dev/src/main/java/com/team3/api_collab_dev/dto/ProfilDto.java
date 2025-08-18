@@ -10,6 +10,7 @@ import java.util.List;
 public record ProfilDto(
         Long id,
         Long userId,
+        String pseudo,
         Level level,
         double coins,
         int validatedProjects,

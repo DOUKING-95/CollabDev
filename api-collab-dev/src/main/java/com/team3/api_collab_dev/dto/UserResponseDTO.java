@@ -10,7 +10,6 @@ public record UserResponseDTO(
         Long id,
         String speudo,
         String email,
-
         List<ProfilDto> profils,
         RoleType role) {
 }
