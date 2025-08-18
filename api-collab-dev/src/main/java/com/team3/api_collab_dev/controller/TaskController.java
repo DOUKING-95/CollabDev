@@ -40,20 +40,19 @@ public class TaskController {
 
 
 
-    @PostMapping(value = "/create-Tasks", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ApiReponse<?>> createTasks(
-            @RequestBody CreateTasksDTO tasksDTO,
-            @RequestParam("managerId") Long managerId) {
+    @PostMapping(value = "/{projectId}/create-task", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ApiReponse<?>> createTask(
+            @PathVariable Long projectId,
+            @RequestBody CreateTasksDTO dto) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(
                 new ApiReponse<>(
                         String.valueOf(HttpStatus.CREATED.value()),
                         HttpStatus.CREATED.getReasonPhrase(),
-                        this.taskService.createTasks(managerId, tasksDTO)
+                        this.taskService.createTask(projectId, dto)
                 )
         );
     }
-
 
 
     @PostMapping(value = "/assignTask", consumes = MediaType.APPLICATION_JSON_VALUE)

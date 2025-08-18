@@ -4,14 +4,7 @@ import com.team3.api_collab_dev.dto.ProjectDto;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
 import com.team3.api_collab_dev.entity.Task;
-import org.springframework.stereotype.Component;
-
-
-import java.util.function.Function;
-
 import com.team3.api_collab_dev.dto.*;
-import com.team3.api_collab_dev.entity.Project;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -126,7 +119,6 @@ public class ProjectMapper {
         return project;
     }
 
-
     public static TaskDto toDto(Task task) {
         if (task == null) return null;
 
@@ -185,7 +177,6 @@ public class ProjectMapper {
                 profil.getCreatedDate()
         );
     }
-
 
     public static Profil toEntity(ProfilDto dto) {
         if (dto == null) return null;

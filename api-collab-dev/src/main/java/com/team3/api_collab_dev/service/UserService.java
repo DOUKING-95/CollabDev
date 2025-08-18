@@ -3,10 +3,7 @@ package com.team3.api_collab_dev.service;
 
 import com.team3.api_collab_dev.Exception.ExistSameEmailException;
 import com.team3.api_collab_dev.Exception.IncorrectPasswordException;
-import com.team3.api_collab_dev.dto.ChangePasswordDTO;
-import com.team3.api_collab_dev.dto.UserCreateDTO;
-import com.team3.api_collab_dev.dto.UserResponseDTO;
-import com.team3.api_collab_dev.dto.UserUpdateDTO;
+import com.team3.api_collab_dev.dto.*;
 import com.team3.api_collab_dev.entity.ManagerInfo;
 import com.team3.api_collab_dev.entity.Profil;
 import com.team3.api_collab_dev.entity.Project;
@@ -15,6 +12,7 @@ import com.team3.api_collab_dev.enumType.BadgeType;
 import com.team3.api_collab_dev.enumType.Level;
 import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.enumType.RoleType;
+import com.team3.api_collab_dev.mapper.ProjectMapper;
 import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.repository.ManagerInfoRepo;
 import com.team3.api_collab_dev.repository.ProfilRepo;
@@ -252,4 +250,27 @@ public class UserService {
 
 
     }
+
+    public List<ProjectDto> getProjectsByAuthor(Long userId) {
+        // Vérifier si l'utilisateur existe
+        User author = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur introuvable avec l'id " + userId));
+
+        // Récupérer les projets où l'utilisateur est l'auteur
+        List<Project> projects = projectRepo.findByAuthor(author);
+
+        // Mapper en DTO
+        return projects.stream()
+                .map(ProjectMapper::toDto)
+                .toList();
+    }
+
+    public long countProjectsByAuthor(Long userId) {
+        // Vérifier si l'utilisateur existe
+        User author = userRepo.findById(userId)
+                .orElseThrow(() -> new EntityNotFoundException("Utilisateur introuvable avec l'id " + userId));
+
+        return projectRepo.countByAuthor(author);
+    }
+
 }
