@@ -47,6 +47,9 @@ public class Task {
 
     private LocalDate createdDate;
 
+    private LocalDate DeadLine;
+
+
     @PrePersist
     protected void onCreate() {
         this.createdDate = LocalDate.now();

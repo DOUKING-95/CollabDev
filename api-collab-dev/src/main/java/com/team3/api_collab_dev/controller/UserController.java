@@ -9,6 +9,8 @@ import com.team3.api_collab_dev.entity.User;
 import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.mapper.UserMapper;
 import com.team3.api_collab_dev.service.MailService;
+import com.team3.api_collab_dev.service.ProfilService;
+import com.team3.api_collab_dev.service.ProjectService;
 import com.team3.api_collab_dev.service.UserService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -151,6 +153,30 @@ public class UserController {
                                 request.githubLink()
 
                         )
+                )
+        );
+    }
+
+    @GetMapping(path = "/{userId}/projectsByAuthor")
+    public ResponseEntity<ApiReponse<?>> getProjectsByAuthor(@PathVariable(name = "userId") Long userId) {
+        List<ProjectDto> projects = userService.getProjectsByAuthor(userId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        projects
+                )
+        );
+    }
+
+    @GetMapping(path = "/{userId}/countProjectsByAuthor")
+    public ResponseEntity<ApiReponse<?>> countProjectsByAuthor(@PathVariable(name = "userId") Long userId) {
+        long count = userService.countProjectsByAuthor(userId);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.ACCEPTED.value()),
+                        HttpStatus.ACCEPTED.getReasonPhrase(),
+                        count
                 )
         );
     }

@@ -27,46 +27,39 @@ public class TaskService {
     private final ProjectRepo projectRepo;
     private final ProfilRepo profilRepo;
 
-    public TaskDto createTasks(Long managerId, CreateTasksDTO tasksDTO) {
-        if (tasksDTO == null || tasksDTO.projectId() == null || tasksDTO.task() == null) {
-            throw new IllegalArgumentException("Paramètres manquants (projectId ou task).");
-        }
-        TaskInputDTO taskInput = tasksDTO.task();
-        if (taskInput.taskName() == null || taskInput.taskName().isBlank()) {
+    public TaskDto createTask(Long projectId, CreateTasksDTO dto) {
+        if (dto == null || dto.taskName() == null || dto.taskName().isBlank()) {
             throw new IllegalArgumentException("Le nom de la tâche est obligatoire.");
         }
 
-        Profil profil = profilRepo.findById(managerId)
-                .orElseThrow(() -> new EntityNotFoundException("Profil non trouvé avec l'ID : " + managerId));
+        // Récupérer le projet via projectId passé dans l'URL
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : " + projectId));
 
-        if (!ProfilType.MANAGER.equals(profil.getProfilName())) {
-            throw new SecurityException("Seuls les managers peuvent créer des tâches.");
-        }
-
-        Project project = projectRepo.findById(tasksDTO.projectId())
-                .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : " + tasksDTO.projectId()));
-
-        if (project.getManager() == null) {
+        // Vérifier le manager du projet
+        Profil manager = project.getManager();
+        if (manager == null) {
             throw new IllegalStateException("Le projet n'a pas encore de manager assigné.");
         }
-        if (!project.getManager().getId().equals(profil.getId())) {
-            throw new SecurityException("Vous n'êtes pas le manager de ce projet.");
+        if (!ProfilType.MANAGER.equals(manager.getProfilName())) {
+            throw new SecurityException("Le profil assigné n'est pas un manager.");
         }
 
+        // Création de la tâche
         Task task = new Task();
-        task.setTaskName(taskInput.taskName());
-        task.setDescription(taskInput.description());
+        task.setTaskName(dto.taskName());
+        task.setDescription(dto.description());
         task.setStatus(Status.TODO);
         task.setCreatedDate(LocalDate.now());
+        task.setDeadLine(dto.deadLine());
         task.setProject(project);
-        task.setProfil(profil);
-
+        task.setProfil(manager);
 
         Task savedTask = taskRepo.save(task);
 
         return new TaskDto(
                 savedTask.getId(),
-                profil.getId(),
+                manager.getId(),
                 project.getId(),
                 savedTask.getCoins(),
                 savedTask.getTaskName(),
@@ -76,7 +69,8 @@ public class TaskService {
         );
     }
 
-public String assignTasksToProfil(AssignTasksDTO assignDTO, Long managerProfilId) {
+
+    public String assignTasksToProfil(AssignTasksDTO assignDTO, Long managerProfilId) {
 
 
         Profil profilManager = profilRepo.findById(managerProfilId)
