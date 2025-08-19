@@ -52,7 +52,7 @@ public class AdminService {
                 .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé"));
 
         Profil managerProfil = profilRepo.findById(managerProfilId)
-                .orElseThrow(() -> new EntityNotFoundException("Aucun manager trouver avec avec le profil id" + managerProfilId));
+                .orElseThrow(() -> new EntityNotFoundException("Aucun manager trouver  avec le profil id" + managerProfilId));
 
         if (project.getManager() == null) {
 

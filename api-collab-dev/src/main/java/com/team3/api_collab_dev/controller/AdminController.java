@@ -31,6 +31,7 @@ public class AdminController {
     private MailService mailService;
     private ProjectRepo projectRepo;
     private UserRepo userRepo;
+    private ProfilRepo profilRepo;
 
 
 
@@ -53,12 +54,12 @@ public class AdminController {
 
         String projectName = targetProject.getTitle();
 
-        User targetUser = this.userRepo.findById(managerId)
+        Profil targetUser = this.profilRepo.findById(managerId)
                 .orElseThrow(()-> new EntityNotFoundException("Manager non trouver avec id " + managerId));
 
-        String email = targetUser.getEmail();
-
-        this.mailService.sendEmail(email, "CollabDev", String.format("Félicitations, vous avez étez choisir comme Gestionnaire de Projet dans %s", projectName));
+//        String email = targetUser.getEmail();
+//
+//        this.mailService.sendEmail(email, "CollabDev", String.format("Félicitations, vous avez étez choisir comme Gestionnaire de Projet dans %s", projectName));
 
         return  ResponseEntity.status(HttpStatus.ACCEPTED).body(
                 new ApiReponse<>(
