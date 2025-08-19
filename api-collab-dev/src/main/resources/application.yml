@@ -37,7 +37,7 @@ server:
   servlet:
     context-path: /api/collab-dev/v1
     # Configuration du chemin pour le stockage des fichiers dans le bureau :) douking ^_~ 😎😎
-file.upload-dir: /Users/MacBookAir/desktop
+file.upload-dir: C:/Users/Kalandew20/Desktop/uploads
 
 logging:
   level:
