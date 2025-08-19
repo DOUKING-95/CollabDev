@@ -18,8 +18,8 @@ public class TaskMapper {
                 task.getProject() != null ? task.getProject().getId() : null,
                 task.getCoins(),
                 task.getTaskName(),
+                task.getDescription(),
                 task.getStatus(),
-                task.getIsValid(),
                 task.getCreatedDate()
         );
     }
@@ -48,7 +48,6 @@ public class TaskMapper {
         task.setCoins(dto.coins());
         task.setTaskName(dto.taskName());
         task.setStatus(dto.status());
-        task.setIsValid(dto.isValid());
         task.setCreatedDate(dto.createdDate());
 
         return task;

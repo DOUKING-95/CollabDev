@@ -10,6 +10,7 @@ import com.team3.api_collab_dev.entity.Task;
 import com.team3.api_collab_dev.enumType.ProfilType;
 import com.team3.api_collab_dev.enumType.Status;
 import com.team3.api_collab_dev.enumType.ValidationType;
+import com.team3.api_collab_dev.mapper.TaskMapper;
 import com.team3.api_collab_dev.repository.ProfilRepo;
 import com.team3.api_collab_dev.repository.ProjectRepo;
 import com.team3.api_collab_dev.repository.TaskRepo;
@@ -36,59 +37,43 @@ public class TaskService {
         Project project = projectRepo.findById(projectId)
                 .orElseThrow(() -> new EntityNotFoundException("Projet non trouvé avec l'ID : " + projectId));
 
-        // Vérifier le manager du projet
-        Profil manager = project.getManager();
-        if (manager == null) {
-            throw new IllegalStateException("Le projet n'a pas encore de manager assigné.");
-        }
-        if (!ProfilType.MANAGER.equals(manager.getProfilName())) {
-            throw new SecurityException("Le profil assigné n'est pas un manager.");
-        }
+
 
         // Création de la tâche
         Task task = new Task();
+        task.setProject(project);
         task.setTaskName(dto.taskName());
         task.setDescription(dto.description());
         task.setStatus(Status.TODO);
         task.setCreatedDate(LocalDate.now());
         task.setDeadLine(dto.deadLine());
-        task.setProject(project);
-        task.setProfil(manager);
+
 
         Task savedTask = taskRepo.save(task);
 
-        return new TaskDto(
-                savedTask.getId(),
-                manager.getId(),
-                project.getId(),
-                savedTask.getCoins(),
-                savedTask.getTaskName(),
-                savedTask.getStatus(),
-                savedTask.getIsValid(),
-                savedTask.getCreatedDate()
-        );
+        return TaskMapper.toDto(savedTask);
     }
 
 
     public String assignTasksToProfil(AssignTasksDTO assignDTO, Long managerProfilId) {
 
 
-        Profil profilManager = profilRepo.findById(managerProfilId)
-                .orElseThrow(() -> new EntityNotFoundException("Profil non trouvé pour le manager ID : " + managerProfilId));
+        /*Profil profilManager = profilRepo.findById(managerProfilId)
+                .orElseThrow(() -> new EntityNotFoundException("Profil non trouvé pour le manager ID : " + managerProfilId));*/
 
         Project project = projectRepo.findById(assignDTO.projectId())
                 .orElseThrow(() -> new EntityNotFoundException("Project  non trouvé avec ID : " + assignDTO.projectId()));
 
         if (project.getStatus() == Status.VALIDATED) {
-            throw new RuntimeException("Projet déjà terminé :) Veillez faire demande de Re-Ouvertir avec les Admins ");
+            throw new RuntimeException("Projet déjà terminé :) Veillez faire demande de Re-Ouverture avec les Admins ");
         }
 
-        if (!profilManager.getProfilName().equals(ProfilType.MANAGER)) {
+        /*if (!profilManager.getProfilName().equals(ProfilType.MANAGER)) {
             throw new SecurityException("Seuls les managers peuvent attribuer des tâches.");
         }
         if (!(profilManager == project.getManager())) {
             throw new SecurityException("Vous n'êtes pas manager de ce projet");
-        }
+        }*/
 
         // 2. Validation des entrées
         Profil profilCible = profilRepo.findById(assignDTO.profilIdCible())
@@ -103,13 +88,13 @@ public class TaskService {
 
         // 3. Attribution des tâches
         int tasksAssigned = 0;
-        for (Long taskId : assignDTO.taskIds()) {
-            Task task = taskRepo.findById(taskId)
-                    .orElseThrow(() -> new EntityNotFoundException("Tâche inexistante avec l'Id : " + taskId));
+
+            Task task = taskRepo.findById(assignDTO.taskId())
+                    .orElseThrow(() -> new EntityNotFoundException("Tâche inexistante avec l'Id : " + assignDTO.taskId()));
 
             if (task.getProject().getId().equals(project.getId())) {
                 if (task.getProfil() != null) {
-                    throw new IllegalStateException("Tâche déjà attribuée avec l'Id : " + taskId);
+                    throw new IllegalStateException("Tâche déjà attribuée avec l'Id : " + assignDTO.taskId());
                 }
                 task.setProfil(profilCible);
                 profilCible.getTasks().add(task);
@@ -117,9 +102,9 @@ public class TaskService {
                 project.setStatus(Status.IN_PROGRESS);
                 tasksAssigned++;
             } else {
-                throw new IllegalArgumentException("Tâche avec l'Id : " + taskId + " non associée au projet");
+                throw new IllegalArgumentException("Tâche avec l'Id : " + assignDTO.taskId() + " non associée au projet");
             }
-        }
+
 
         // 4. Persistance
         projectRepo.save(project);

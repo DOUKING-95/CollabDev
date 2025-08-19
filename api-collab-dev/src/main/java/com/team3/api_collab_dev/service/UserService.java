@@ -159,7 +159,7 @@ public class UserService {
                 log.info(project.getPendingProfiles().toString());
                 saveManagerDetail(file, managerInfo);
                 projectRepo.save(project);
-                return "Vous avez été ajouter à listre d'attente du Projet" + project.getTitle();
+                return "Vous avez été ajouter à liste d'attente du Projet" + project.getTitle();
 
             }
             return "Vous êtes déjà sur la liste d'attenete de projet " + project.getTitle();

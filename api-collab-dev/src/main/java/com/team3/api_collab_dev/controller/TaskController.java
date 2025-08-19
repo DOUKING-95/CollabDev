@@ -21,10 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @AllArgsConstructor
@@ -55,12 +52,11 @@ public class TaskController {
     }
 
 
-    @PostMapping(value = "/assignTask", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/assignTask/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> assignTasksToProfil(
-            @RequestBody AssignTasksDTO assignDTO,
-            @RequestParam("managerId") Long userId) {
+            @RequestBody AssignTasksDTO assignDTO) {
         // Vérifie si les données sont valides
-        if (assignDTO == null || assignDTO.projectId() == null || assignDTO.profilIdCible() == null || assignDTO.taskIds() == null || assignDTO.taskIds().isEmpty()) {
+        if (assignDTO == null || assignDTO.projectId() == null || assignDTO.profilIdCible() == null || assignDTO.taskId() == null) {
             Map<String, Object> response = new HashMap<>();
             response.put("code", "400");
             response.put("message", "Paramètres manquants ou invalides");
@@ -75,13 +71,13 @@ public class TaskController {
         }
 
         try {
-            String result = taskService.assignTasksToProfil(assignDTO, userId );
+            String result = taskService.assignTasksToProfil(assignDTO, assignDTO.profilIdCible() );
             Map<String, Object> response = new HashMap<>();
             response.put("code", String.valueOf(HttpStatus.OK.value()));
             response.put("message", HttpStatus.OK.getReasonPhrase());
             response.put("data", result);
 
-            Iterable<Task> assignedTask = this.taskRepo.findAllById(assignDTO.taskIds());
+            Iterable<Task> assignedTask = this.taskRepo.findAllById(Collections.singleton(assignDTO.taskId()));
             List<String> taskTitles = new ArrayList<>();
             assignedTask.forEach((task -> taskTitles.add(task.getTaskName())));
 

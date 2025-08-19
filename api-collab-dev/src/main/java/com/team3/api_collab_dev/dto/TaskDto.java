@@ -11,7 +11,7 @@ public record TaskDto(
         Long projectId,
         double coins,
         String taskName,
+        String taskDescription,
         Status status,
-        ValidationType isValid,
         LocalDate createdDate
 ) {}
