@@ -21,10 +21,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 @AllArgsConstructor
@@ -55,63 +52,17 @@ public class TaskController {
     }
 
 
-    @PostMapping(value = "/assignTask", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/assignTask/", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ApiReponse<?>> assignTasksToProfil(
-            @RequestBody AssignTasksDTO assignDTO,
-            @RequestParam("managerId") Long userId) {
-        // Vérifie si les données sont valides
-        if (assignDTO == null || assignDTO.projectId() == null || assignDTO.profilIdCible() == null || assignDTO.taskIds() == null || assignDTO.taskIds().isEmpty()) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", "400");
-            response.put("message", "Paramètres manquants ou invalides");
-            response.put("data", null);
-            return ResponseEntity.badRequest().body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.ACCEPTED.value()),
-                            HttpStatus.ACCEPTED.getReasonPhrase(),
-                            response
-                    )
-                    );
-        }
+            @RequestBody AssignTasksDTO assignDTO) {
 
-        try {
-            String result = taskService.assignTasksToProfil(assignDTO, userId );
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", String.valueOf(HttpStatus.OK.value()));
-            response.put("message", HttpStatus.OK.getReasonPhrase());
-            response.put("data", result);
-
-            Iterable<Task> assignedTask = this.taskRepo.findAllById(assignDTO.taskIds());
-            List<String> taskTitles = new ArrayList<>();
-            assignedTask.forEach((task -> taskTitles.add(task.getTaskName())));
-
-            Profil targetProfil = this.profilRepo.findById(assignDTO.profilIdCible())
-                    .orElseThrow(()-> new EntityNotFoundException("Profil non trouver avec id " + assignDTO.profilIdCible()));
-
-            String email = targetProfil.getUser().getEmail();
-
-
-            this.mailService.sendEmail(email, "CollabDev API", String.format("Une nouvelle tâche vous a été assigner %s", String.join("|", taskTitles)));
-            return ResponseEntity.ok().body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.ACCEPTED.value()),
-                            HttpStatus.ACCEPTED.getReasonPhrase(),
-                            response
-                    )
-            );
-        } catch (Exception e) {
-            Map<String, Object> response = new HashMap<>();
-            response.put("code", "500");
-            response.put("message", "Erreur serveur");
-            response.put("data", e.getMessage());
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
-                    new ApiReponse<>(
-                            String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()),
-                            HttpStatus.ACCEPTED.getReasonPhrase(),
-                            response
-                    )
-            );
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(
+                new ApiReponse<>(
+                        String.valueOf(HttpStatus.CREATED.value()),
+                        HttpStatus.CREATED.getReasonPhrase(),
+                        this.taskService.assignTasksToProfil(assignDTO, assignDTO.profilIdCible() )
+                )
+        );
     }
 
     @PutMapping("/{taskId}/submitTask")

@@ -5,5 +5,5 @@ import java.util.List;
 public record AssignTasksDTO(
         Long projectId,
         Long profilIdCible,
-        List<Long> taskIds) {
+        Long taskId) {
 }

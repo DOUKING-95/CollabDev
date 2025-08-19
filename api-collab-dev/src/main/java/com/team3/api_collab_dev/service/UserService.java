@@ -159,7 +159,7 @@ public class UserService {
                 log.info(project.getPendingProfiles().toString());
                 saveManagerDetail(file, managerInfo);
                 projectRepo.save(project);
-                return "Vous avez été ajouter à listre d'attente du Projet" + project.getTitle();
+                return "Vous avez été ajouter à liste d'attente du Projet" + project.getTitle();
 
             }
             return "Vous êtes déjà sur la liste d'attenete de projet " + project.getTitle();
@@ -204,6 +204,16 @@ public class UserService {
                 profil.setCoins(50);
                 profil.setValidatedProjects(0);
                 profil = profilRepo.save(profil);
+            }
+
+
+            if (project.getLevel() == Level.FREE){
+                if (!project.getPendingProfiles().contains(profil)) {
+                    project.getPendingProfiles().add(profil);
+                    log.info(project.getPendingProfiles().toString());
+                    projectRepo.save(project);
+                }
+                return "Demande envoyer avec  succès pour le  projet" + project.getTitle();
             }
 
             if (profil.getLevel() == project.getLevel() && profil.getCoins() >= project.getCoins()) {
