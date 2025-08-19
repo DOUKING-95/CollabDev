@@ -206,6 +206,16 @@ public class UserService {
                 profil = profilRepo.save(profil);
             }
 
+
+            if (project.getLevel() == Level.FREE){
+                if (!project.getPendingProfiles().contains(profil)) {
+                    project.getPendingProfiles().add(profil);
+                    log.info(project.getPendingProfiles().toString());
+                    projectRepo.save(project);
+                }
+                return "Demande envoyer avec  succès pour le  projet" + project.getTitle();
+            }
+
             if (profil.getLevel() == project.getLevel() && profil.getCoins() >= project.getCoins()) {
 
                 if (!project.getPendingProfiles().contains(profil)) {
